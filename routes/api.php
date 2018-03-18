@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Resources\TransactionCollection;
+use App\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,9 +24,10 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::middleware('auth:api')->get('/transaction', function (Request $request) {
 
-    $user = \Illuminate\Support\Facades\Auth::user();
-    $transactions = \App\Transaction::find(['user_id' => $user->id]);
+    $user = Auth::user();
 
-    return new \App\Http\Resources\TransactionCollection($transactions);
+    $transactions = Transaction::find(['user_id' => $user->id]);
+
+    return new TransactionCollection($transactions);
 
 });

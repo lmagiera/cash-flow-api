@@ -2,9 +2,10 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithFaker;
+use App\Transaction;
+use App\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Tests\TestCase;
 
 class TransactionApiTest extends TestCase
 {
@@ -43,11 +44,11 @@ class TransactionApiTest extends TestCase
     public function testTransactionWithGuard() {
 
         // create user first
-        $user = factory(\App\User::class, 1)
+        $user = factory(User::class, 1)
             ->create()
-            ->each(function (\App\User $u) {
+            ->each(function (User $u) {
 
-                $transactions = factory(\App\Transaction::class, 10)->create(['user_id' => $u->id]);
+                $transactions = factory(Transaction::class, 10)->create(['user_id' => $u->id]);
                 $u->transactions()->saveMany($transactions);
         })->first();
 
@@ -55,7 +56,6 @@ class TransactionApiTest extends TestCase
             ->withSession([])
             ->json('GET', '/api/transaction');
 
-        dd($response);
 
         $response->assertStatus(200);
 
