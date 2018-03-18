@@ -26,7 +26,7 @@ Route::middleware('auth:api')->get('/transaction', function (Request $request) {
 
     $user = Auth::user();
 
-    $transactions = Transaction::find(['user_id' => $user->id]);
+    $transactions = Transaction::where('user_id', $user->id)->get();
 
     return new TransactionCollection($transactions);
 
