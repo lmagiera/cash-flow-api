@@ -14,5 +14,16 @@ use Illuminate\Http\Request;
 */
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
+
     return $request->user();
+
+});
+
+Route::middleware('auth:api')->get('/transaction', function (Request $request) {
+
+    $user = \Illuminate\Support\Facades\Auth::user();
+    $transactions = \App\Transaction::find(['user_id' => $user->id]);
+
+    return new \App\Http\Resources\TransactionCollection($transactions);
+
 });

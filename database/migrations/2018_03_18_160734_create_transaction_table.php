@@ -13,16 +13,17 @@ class CreateTransactionTable extends Migration
      */
     public function up()
     {
-        Schema::create('transaction', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->increments('id');
             $table->timestamps();
 
             $table->decimal('amount', 15, 2);
-            $table->boolean('varying');
+            $table->boolean('varying')->default(false);
             $table->dateTime('planned_at');
-            $table->dateTime('actual_at');
+            $table->dateTime('actual_at')->nullable();
             $table->integer('user_id')->unsigned();
-            $table->integer('repeating_id')->unsigned();
+            $table->integer('repeating_id')->unsigned()->nullable();
+            $table->string('repeating_interval', 30)->nullable();
 
             $table->foreign('user_id')
                 ->references('id')->on('users')
@@ -42,6 +43,6 @@ class CreateTransactionTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('transaction');
+        Schema::dropIfExists('transactions');
     }
 }
