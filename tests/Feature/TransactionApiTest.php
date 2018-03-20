@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Transaction;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use TestDataSeeder;
@@ -21,7 +22,10 @@ class TransactionApiTest extends TestCase
         $this->seed(TestDataSeeder::class);
     }
 
-    public function testTransactionWithGuard() {
+    /**
+     *
+     */
+    public function testGetTransactions() {
 
         $intRandomNoOfTransactions = rand(10,20);
 
@@ -30,6 +34,35 @@ class TransactionApiTest extends TestCase
 
         // make a call
         $response = $this->json('GET', '/api/transaction');
+
+        // check response
+        $response->assertStatus(200);
+        $response->assertJsonCount($intRandomNoOfTransactions, 'data');
+
+
+    }
+
+    //TODO: rename this method
+    //TODO: add php doc
+    public function testTransactionWithGuard() {
+
+        $intRandomNoOfTransactions = rand(10,20);
+
+        $from = Carbon::now()->startOfMonth();
+        $to = Carbon::now()->endOfMonth();
+
+        // we have one and only user now
+        factory(Transaction::class, $intRandomNoOfTransactions)->create([
+                'user_id' => 1,
+                'planned_at' => function () {
+                    return Carbon::now()->startOfMonth()->addDays(rand(0, 30));
+            }]
+        );
+
+        // make a call
+        $response = $this->json('GET',
+            "/api/transaction?from={$from->format('Y-m-d')}&to={$to->format('Y-m-d')}");
+
 
         // check response
         $response->assertStatus(200);
