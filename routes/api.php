@@ -41,7 +41,8 @@ Route::middleware([])->get('/transaction/{id}', function(Request $request, $id) 
 
 Route::middleware([])->post('/transaction', function(PostTransactionRequest $request) {
 
-    dd($request->json()->get('transaction'));
+    $transaction = new Transaction($request->json()->get('transaction'));
+    $transaction->save();
 
 });
 
