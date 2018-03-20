@@ -25,12 +25,17 @@ class TransactionApiTest extends TestCase
     /**
      *
      */
-    public function testGetTransactions() {
+    public function testGetTransactions()
+    {
 
-        $intRandomNoOfTransactions = rand(10,20);
+        $intRandomNoOfTransactions = rand(10, 20);
 
         // we have one and only user now
-        factory(Transaction::class, $intRandomNoOfTransactions)->create(['user_id' => 1]);
+        factory(Transaction::class, $intRandomNoOfTransactions)->create([
+            'user_id' => 1,
+            'planned_at' => function () {
+                return Carbon::now()->startOfMonth()->addDays(rand(0, 30));
+        }]);
 
         // make a call
         $response = $this->json('GET', '/api/transaction');
@@ -44,20 +49,20 @@ class TransactionApiTest extends TestCase
 
     //TODO: rename this method
     //TODO: add php doc
-    public function testTransactionWithGuard() {
+    public function testTransactionWithGuard()
+    {
 
-        $intRandomNoOfTransactions = rand(10,20);
+        $intRandomNoOfTransactions = rand(10, 20);
 
         $from = Carbon::now()->startOfMonth();
         $to = Carbon::now()->endOfMonth();
 
         // we have one and only user now
         factory(Transaction::class, $intRandomNoOfTransactions)->create([
-                'user_id' => 1,
-                'planned_at' => function () {
-                    return Carbon::now()->startOfMonth()->addDays(rand(0, 30));
-            }]
-        );
+            'user_id' => 1,
+            'planned_at' => function () {
+                return Carbon::now()->startOfMonth()->addDays(rand(0, 30));
+        }]);
 
         // make a call
         $response = $this->json('GET',
@@ -71,13 +76,14 @@ class TransactionApiTest extends TestCase
 
     }
 
-    public function testGetSingleTransaction() {
+    public function testGetSingleTransaction()
+    {
 
 
-        $transaction = factory(Transaction::class, 1) ->create(['user_id' => 1])->first();
+        $transaction = factory(Transaction::class, 1)->create(['user_id' => 1])->first();
         $id = $transaction->id;
 
-        $response = $this->json('GET', '/api/transaction/'.$id);
+        $response = $this->json('GET', '/api/transaction/' . $id);
 
 
         $response->assertStatus(200);
@@ -90,11 +96,10 @@ class TransactionApiTest extends TestCase
         ]]);
 
 
-
-
     }
 
-    public function testPostSimpleTransaction() {
+    public function testPostSimpleTransaction()
+    {
 
         $transaction = factory(Transaction::class, 1)->make(['user_id' => 1])->first();
 
@@ -104,7 +109,8 @@ class TransactionApiTest extends TestCase
 
     }
 
-    public function testPostTransactionValidation() {
+    public function testPostTransactionValidation()
+    {
 
         $response = $this->json('POST', '/api/transaction', []); // send empty request
 
