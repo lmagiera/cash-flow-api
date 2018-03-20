@@ -14,9 +14,11 @@ class CreateTransactionTable extends Migration
     public function up()
     {
         Schema::create('transactions', function (Blueprint $table) {
-            $table->increments('id');
-            $table->timestamps();
 
+            $table->increments('id');
+
+
+            $table->string('description', 150);
             $table->decimal('amount', 15, 2);
             $table->boolean('varying')->default(false);
             $table->dateTime('planned_at');
@@ -25,12 +27,12 @@ class CreateTransactionTable extends Migration
             $table->integer('repeating_id')->unsigned()->nullable();
             $table->string('repeating_interval', 30)->nullable();
 
+            $table->timestamps();
+
             $table->foreign('user_id')
                 ->references('id')->on('users')
                 ->onDelete('restrict')
                 ->inUpdate('cascade');
-
-
 
 
         });

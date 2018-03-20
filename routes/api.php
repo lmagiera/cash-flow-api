@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Requests\PostTransactionRequest;
 use App\Http\Resources\TransactionCollection;
+use App\Http\Resources\TransactionResource;
 use App\Transaction;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,12 +24,25 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 });
 
-Route::middleware('auth:api')->get('/transaction', function (Request $request) {
+Route::middleware([])->get('/transaction', function (Request $request) {
 
-    $user = Auth::user();
-
-    $transactions = Transaction::where('user_id', $user->id)->get();
+    $transactions = Transaction::where('user_id', 1)->get();
 
     return new TransactionCollection($transactions);
 
 });
+
+Route::middleware([])->get('/transaction/{id}', function(Request $request, $id) {
+
+    $transaction = Transaction::where(['user_id' => 1, 'id' => $id])->firstOrFail();
+    return new TransactionResource($transaction);
+
+});
+
+Route::middleware([])->post('/transaction', function(PostTransactionRequest $request) {
+
+    dd($request->json()->get('transaction'));
+
+});
+
+
