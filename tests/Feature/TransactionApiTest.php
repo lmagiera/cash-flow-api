@@ -49,7 +49,7 @@ class TransactionApiTest extends TestCase
 
     //TODO: rename this method
     //TODO: add php doc
-    public function testTransactionWithGuard()
+    public function testGetTransactionsBetweenValidDates()
     {
 
         $intRandomNoOfTransactions = rand(10, 20);
@@ -72,6 +72,22 @@ class TransactionApiTest extends TestCase
         // check response
         $response->assertStatus(200);
         $response->assertJsonCount($intRandomNoOfTransactions, 'data');
+
+
+    }
+
+    public function testGetTransactionListBetweenInvalidDates() {
+
+        $response = $this->json('GET',
+            "/api/transaction?from=2018-03-20&to=2017-01-01");
+
+
+        $response->assertStatus(422);
+        $response->assertJsonFragment(['message']);
+        $response->assertJsonFragment(['errors']);
+        $response->assertJsonFragment(['from']);
+        $response->assertJsonFragment(['to']);
+
 
 
     }
