@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Requests\GetTransactionsRequest;
 use App\Http\Requests\PostTransactionRequest;
 use App\Http\Resources\TransactionCollection;
 use App\Http\Resources\TransactionResource;
 use App\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Validator;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,7 +28,21 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::middleware([])->get('/transaction', function (Request $request) {
 
-    $transactions = Transaction::where('user_id', 1)->get();
+    $getRequest = new GetTransactionsRequest();
+
+
+    $validator = Validator::make($request->query(), $getRequest->rules());
+
+    $dateStart = $request->query('from');
+    $dateEnd = $request->query('to');
+
+    if ( !$validator->validate() ) {
+        $dateStart = \Carbon\Carbon::now()->startOfMonth();
+        $dateEnd = \Carbon\Carbon::now()->endOfMonth();
+    }
+
+
+    $transactions = Transaction::between($dateStart, $dateEnd)->get();
 
     return new TransactionCollection($transactions);
 
@@ -41,7 +57,8 @@ Route::middleware([])->get('/transaction/{id}', function(Request $request, $id) 
 
 Route::middleware([])->post('/transaction', function(PostTransactionRequest $request) {
 
-    dd($request->json()->get('transaction'));
+    $transaction = new Transaction($request->json()->get('transaction'));
+    $transaction->save();
 
 });
 
