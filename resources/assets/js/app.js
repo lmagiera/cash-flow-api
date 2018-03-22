@@ -16,7 +16,27 @@ window.Vue = require('vue');
  */
 
 Vue.component('example-component', require('./components/ExampleComponent.vue'));
+Vue.component('date-selector', require('./components/DateSelector.vue'));
+Vue.component('user-saldo', require('./components/UsersSaldo.vue'));
+//Vue.component('tool-bar', require('./components/ToolBar.vue'));
+Vue.component('cash-flow-graph', require('./components/CashFlowGraph.vue'));
+
+Vue.prototype.$http = axios;
 
 const app = new Vue({
-    el: '#app'
+
+    el: '#app',
+
+    methods: {
+        addTransaction: function(data) {
+
+            console.log("Adding Transaction with data: " + data.transaction);
+
+
+        }
+    },
+    components: {
+        'tool-bar': require('./components/ToolBar.vue')
+    }
+
 });
