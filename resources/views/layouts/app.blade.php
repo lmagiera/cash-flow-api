@@ -46,7 +46,7 @@
                         @else
 
                             <li class="nav-item active">
-                                <tool-bar v-on:transaction="addTransaction"></tool-bar>
+                                <tool-bar dusk="tool-bar-component" v-on:transaction="addTransaction"></tool-bar>
                             </li>
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>

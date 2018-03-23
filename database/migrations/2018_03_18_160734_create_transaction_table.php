@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
 
 class CreateTransactionTable extends Migration
 {
@@ -21,8 +21,8 @@ class CreateTransactionTable extends Migration
             $table->string('description', 150);
             $table->decimal('amount', 15, 2);
             $table->boolean('varying')->default(false);
-            $table->dateTime('planned_at');
-            $table->dateTime('actual_at')->nullable();
+            $table->dateTime('planned_on');
+            $table->dateTime('actual_on')->nullable();
             $table->integer('user_id')->unsigned();
             $table->integer('repeating_id')->unsigned()->nullable();
             $table->string('repeating_interval', 30)->nullable();
