@@ -14304,7 +14304,6 @@ window.Vue = __webpack_require__(39);
 Vue.component('example-component', __webpack_require__(42));
 Vue.component('date-selector', __webpack_require__(45));
 Vue.component('user-saldo', __webpack_require__(51));
-//Vue.component('tool-bar', require('./components/ToolBar.vue'));
 Vue.component('cash-flow-graph', __webpack_require__(56));
 
 Vue.prototype.$http = axios;
@@ -14314,6 +14313,7 @@ var app = new Vue({
     el: '#app',
 
     methods: {
+
         addTransaction: function addTransaction(data) {
 
             console.log("Adding Transaction with data: " + data.transaction);
@@ -48151,7 +48151,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -48162,6 +48162,11 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
 //
 //
 //
@@ -48240,22 +48245,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 amount: 0,
                 description: '',
                 planned_on: '',
-                actual_on: ''
+                actual_on: '',
+                repeating_interval: 3
             }
         };
     },
 
     methods: {
 
-        showModal: function showModal() {},
+        showModal: function showModal() {
+
+            // should clear transaction object here
+
+        },
+
+        selectRepeating: function selectRepeating(data) {
+            console.log('Receive repeating info: ' + data.repeating_interval);
+            this.transaction.repeating_interval = data.repeating_interval;
+        },
 
         /**
          * Sends transation event up
          */
         sendTransaction: function sendTransaction() {
-            console.log('Emmiting Transation');
             this.$emit('transaction', { transaction: 'test' });
         }
+    },
+
+    components: {
+        'repeat-selector': __webpack_require__(70)
     }
 });
 
@@ -48485,7 +48503,22 @@ var render = function() {
                     ]
                   ),
                   _vm._v(" "),
-                  _vm._m(2)
+                  _vm._m(2),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    {
+                      staticClass: "form-group",
+                      attrs: { dusk: "input-repeating" }
+                    },
+                    [
+                      _c("repeat-selector", {
+                        attrs: { transaction: _vm.transaction },
+                        on: { select: _vm.selectRepeating }
+                      })
+                    ],
+                    1
+                  )
                 ])
               ]),
               _vm._v(" "),
@@ -48600,6 +48633,211 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 67 */,
+/* 68 */,
+/* 69 */,
+/* 70 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(71)
+}
+var normalizeComponent = __webpack_require__(2)
+/* script */
+var __vue_script__ = __webpack_require__(73)
+/* template */
+var __vue_template__ = __webpack_require__(74)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-6d6aa391"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/RepeatSelector.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6d6aa391", Component.options)
+  } else {
+    hotAPI.reload("data-v-6d6aa391", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 71 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(72);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(4)("0bf1cdfd", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6d6aa391\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./RepeatSelector.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6d6aa391\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./RepeatSelector.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 72 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 73 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: "repeat-selector",
+
+    props: ['transaction'],
+
+    data: function data() {
+        return { repeating_interval: this.transaction.repeating_interval };
+    },
+
+    watch: { repeating_interval: function repeating_interval() {
+            console.log('Repeating interval Changed');
+            this.$emit('select', { repeating_interval: this.repeating_interval });
+        } }
+
+});
+
+/***/ }),
+/* 74 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { attrs: { id: "repeat-selector" } }, [
+    _c(
+      "label",
+      { staticClass: "col-form-label", attrs: { for: "transaction-repeat" } },
+      [_vm._v("Repeat:")]
+    ),
+    _vm._v(" "),
+    _c(
+      "select",
+      {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.repeating_interval,
+            expression: "repeating_interval"
+          }
+        ],
+        staticClass: "custom-select",
+        attrs: { id: "transaction-repeat", dusk: "input-repeating-control" },
+        on: {
+          change: function($event) {
+            var $$selectedVal = Array.prototype.filter
+              .call($event.target.options, function(o) {
+                return o.selected
+              })
+              .map(function(o) {
+                var val = "_value" in o ? o._value : o.value
+                return val
+              })
+            _vm.repeating_interval = $event.target.multiple
+              ? $$selectedVal
+              : $$selectedVal[0]
+          }
+        }
+      },
+      [
+        _c("option", { attrs: { selected: "", value: "0" } }, [_vm._v("None")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "1" } }, [_vm._v("Monthly")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "2" } }, [_vm._v("Every 2 Months")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "3" } }, [_vm._v("Every 3 Months")])
+      ]
+    ),
+    _vm._v(
+      "\n    " +
+        _vm._s(_vm.transaction) +
+        " " +
+        _vm._s(_vm.repeating_interval) +
+        "\n"
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-6d6aa391", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

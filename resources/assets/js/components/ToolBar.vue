@@ -50,6 +50,11 @@
             </div>
         </div>
 
+        <div class="form-group" dusk="input-repeating">
+            <repeat-selector v-bind:transaction="transaction" v-on:select="selectRepeating"></repeat-selector>
+        </div>
+
+
     </form>
     </div>
 
@@ -76,7 +81,8 @@
                     amount: 0,
                     description: '',
                     planned_on: '',
-                    actual_on: ''
+                    actual_on: '',
+                    repeating_interval: 3
                 }
             }
         },
@@ -85,6 +91,13 @@
 
             showModal: function () {
 
+                // should clear transaction object here
+
+            },
+
+            selectRepeating: function(data) {
+              console.log('Receive repeating info: ' + data.repeating_interval);
+              this.transaction.repeating_interval = data.repeating_interval;
             },
 
 
@@ -92,9 +105,12 @@
              * Sends transation event up
              */
             sendTransaction: function () {
-                console.log('Emmiting Transation');
                 this.$emit('transaction', {transaction: 'test'});
             }
+        },
+
+        components: {
+            'repeat-selector': require('./RepeatSelector.vue')
         }
     }
 </script>

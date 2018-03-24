@@ -84,6 +84,9 @@ class HomePage extends Page
             ->assertVisible('@input-varying')
             ->assertSeeIn('@input-varying', 'Varying')
 
+            ->assertVisible('@input-repeating')
+            ->assertSeeIn('@input-repeating', 'Repeat')
+
             // confirm and cancel buttons
 
             ->assertVisible('@btn-save-transaction')
@@ -125,9 +128,12 @@ class HomePage extends Page
             ->type('@input-actual-on-control', $t->actual_on)
             ->assertVue('transaction.actual_on', $t->actual_on, '@tool-bar-component')
 
+            ->select('@input-repeating-control', 3)
+            ->assertVue('transaction.repeating_interval', 3, '@tool-bar-component')
 
 
-            ->driver->takeScreenshot($screenShotName)
+
+           ->driver->takeScreenshot($screenShotName)
 
 
         ;
