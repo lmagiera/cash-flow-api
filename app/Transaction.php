@@ -42,4 +42,13 @@ class Transaction extends Model
         $query->whereBetween('planned_on', [$from, $to]);
 
     }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     */
+    public function scopeOrdered($query) {
+
+        $query->orderBy('planned_on', 'ASC');
+
+    }
 }

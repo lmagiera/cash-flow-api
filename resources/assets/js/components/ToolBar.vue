@@ -75,7 +75,7 @@
                              v-bind:errors="errors"
                              v-bind:validation="validation"
                              v-bind:transaction="transaction"
-                             v-on:select="selectRepeating" dusk="repeat-interval-component"></repeat-selector>
+                             v-on:select="selectRepeating" dusk="repeat-interval-component">test</repeat-selector>
         </div>
 
 
@@ -183,8 +183,12 @@
 
                         console.log(response.status);
 
+                        this.$bus.$emit('new-transaction', {transaction: this.transaction});
+
                         this.$emit('transaction', {transaction: this.transaction});
-                        $('#exampleModal').modal('hide');
+
+                        $('#modal-add-transaction').modal('hide');
+
                     })
                     .catch(e => {
 

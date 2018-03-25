@@ -37,12 +37,12 @@ Route::middleware([])->get('/transaction', function (Request $request) {
     $dateEnd = $request->query('to');
 
     if ( !$validator->validate() ) {
-        $dateStart = \Carbon\Carbon::now()->startOfMonth();
-        $dateEnd = \Carbon\Carbon::now()->endOfMonth();
+        $dateStart = \Carbon\Carbon::now()->startOfMonth()->subMonth(6);
+        $dateEnd = \Carbon\Carbon::now()->endOfMonth()->addMonth(6);
     }
 
 
-    $transactions = Transaction::between($dateStart, $dateEnd)->get();
+    $transactions = Transaction::between($dateStart, $dateEnd)->ordered()->get();
 
     return new TransactionCollection($transactions);
 
