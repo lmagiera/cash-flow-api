@@ -13,8 +13,8 @@ class Transaction extends Model
         'description',
         'amount',
         'varying',
-        'planned_at',
-        'actual_at',
+        'planned_on',
+        'actual_on',
         'user_id'
     ];
 
@@ -39,7 +39,7 @@ class Transaction extends Model
      */
     public function scopeBetween($query, $from, $to) {
 
-        $query->whereBetween('planned_at', [$from, $to]);
+        $query->whereBetween('planned_on', [$from, $to]);
 
     }
 }
