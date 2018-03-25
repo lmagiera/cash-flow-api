@@ -93,9 +93,28 @@ class ExampleTest extends DuskTestCase
 
     }
 
+    /**
+     * @throws \Exception
+     * @throws \Throwable
+     */
     public function testUserSeeHisTransactionList() {
 
+
+        $user = $this->getUser();
+
+        $this->browse(function(Browser $browser) use ($user) {
+
+            $browser
+                ->loginAs($user)
+                ->visit(new HomePage())
+                ->browseTransationList()
+
+                ;
+
+        });
+
     }
+
 
 
 

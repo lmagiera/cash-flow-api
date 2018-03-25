@@ -20,7 +20,16 @@ Vue.component('date-selector', require('./components/DateSelector.vue'));
 Vue.component('user-saldo', require('./components/UsersSaldo.vue'));
 Vue.component('cash-flow-graph', require('./components/CashFlowGraph.vue'));
 
+Object.defineProperty(Vue.prototype, '$bus', {
+    get() {
+        return this.$root.bus;
+    }
+});
+
+let bus = new Vue({});
+
 Vue.prototype.HTTP = axios.create({
+
     baseURL: 'http://cash-flow-api.a6.net/api/',
     headers: {
 
@@ -32,7 +41,10 @@ const app = new Vue({
     el: '#app',
 
     data() {
-        return {HTTP: this.HTTP}
+        return {
+            bus: bus,
+            HTTP: this.HTTP
+        }
 
     },
 
@@ -46,7 +58,8 @@ const app = new Vue({
         }
     },
     components: {
-        'tool-bar': require('./components/ToolBar.vue')
+        'tool-bar': require('./components/ToolBar.vue'),
+        'transaction-list': require('./components/TransactionList.vue')
     }
 
 });

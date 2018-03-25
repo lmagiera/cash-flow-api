@@ -45,11 +45,14 @@ class HomePage extends Page
         ];
     }
 
-    public function hasTransactionListVisible(Browser $browser) {
+    public function browseTransationList(Browser $browser) {
 
 
         $browser
-            ->assertVisible('@tab-transation-list');
+            ->assertVisible('@tab-transaction-list')
+            ->assertVisible('@table-transaction-list')
+
+        ;
 
 
 
