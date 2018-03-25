@@ -40,8 +40,20 @@ class HomePage extends Page
             '@input-amount-control' => 'input[id="transaction-amount"]',
             '@input-description-control' => 'input[id="transaction-description"]',
             '@input-planned-on-control' => 'input[id="transaction-planned-on"]',
-            '@input-actual-on-control' => 'input[id="transaction-actual-on"]'
+            '@input-actual-on-control' => 'input[id="transaction-actual-on"]',
+            '@modal-add-transaction-title' => '.modal-title'
         ];
+    }
+
+    public function hasTransactionListVisible(Browser $browser) {
+
+
+        $browser
+            ->assertVisible('@tab-transation-list');
+
+
+
+
     }
 
     /**
@@ -51,6 +63,8 @@ class HomePage extends Page
     function openNewTransactionModal(Browser $browser) {
 
 
+
+
         $browser
             ->assertSeeIn('@btn-add-transaction', 'Add New Transaction')
 
@@ -58,7 +72,7 @@ class HomePage extends Page
             ->waitFor('@modal-add-transaction')
 
             ->assertVisible('@modal-add-transaction')
-            ->assertSeeIn('@modal-add-transaction', 'Add New Transaction')
+            //->assertSeeIn('@modal-add-transaction-title', 'Add New Transaction')
 
 
             /* Check for all fields */
@@ -107,10 +121,6 @@ class HomePage extends Page
 
     public function inputTransaction(Browser $browser, Transaction $t) {
 
-
-        $screenShotName = 'screenshots/'.date("YmdHis").'.png';
-        echo $screenShotName;
-
         $browser
 
             ->waitFor('@modal-add-transaction')
@@ -128,16 +138,56 @@ class HomePage extends Page
             ->type('@input-actual-on-control', $t->actual_on)
             ->assertVue('transaction.actual_on', $t->actual_on, '@tool-bar-component')
 
-            ->select('@input-repeating-control', 3)
-            ->assertVue('transaction.repeating_interval', 3, '@tool-bar-component')
-
-
-
-           ->driver->takeScreenshot($screenShotName)
+            ->select('@input-repeating-control', $t->repeating_interval)
+            ->assertVue('transaction.repeating_interval', $t->repeating_interval, '@tool-bar-component')
 
 
         ;
 
+
+
+
+    }
+
+    public function saveInvalidTransaction(Browser $browser) {
+
+        $browser
+            ->waitFor('@modal-add-transaction')
+            ->assertVisible('@modal-add-transaction')
+            ->select('@input-repeating-control', 4) // some invalid value
+
+            ->click('@btn-save-transaction')
+
+            ->waitFor('@alert-invalid-transaction')
+
+            ->assertVisible('@feedback-invalid-description')
+            ->assertVisible('@feedback-invalid-amount')
+            ->assertVisible('@feedback-invalid-planned-on')
+            ->assertVisible('@feedback-invalid-repeating-interval')
+
+            ->assertVue('errors["transaction.description"][0]',
+                'The transaction.description field is required.', '@tool-bar-component')
+            ->assertVue('errors["transaction.amount"][0]',
+                'The selected transaction.amount is invalid.', '@tool-bar-component')
+            ->assertVue('errors["transaction.planned_on"][0]',
+                'The transaction.planned on field is required.', '@tool-bar-component')
+            ->assertVue('errors["transaction.repeating_interval"][0]',
+                'The selected transaction.repeating interval is invalid.', '@tool-bar-component')
+            ;
+
+
+    }
+
+    public function saveNewTransaction(Browser $browser) {
+
+        $browser
+            ->waitFor('@modal-add-transaction')
+            ->assertVisible('@modal-add-transaction')
+
+            ->click('@btn-save-transaction')
+            ->waitUntilMissing('@modal-add-transaction')
+
+        ;
 
 
 

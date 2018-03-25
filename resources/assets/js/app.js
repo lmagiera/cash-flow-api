@@ -20,11 +20,21 @@ Vue.component('date-selector', require('./components/DateSelector.vue'));
 Vue.component('user-saldo', require('./components/UsersSaldo.vue'));
 Vue.component('cash-flow-graph', require('./components/CashFlowGraph.vue'));
 
-Vue.prototype.$http = axios;
+Vue.prototype.HTTP = axios.create({
+    baseURL: 'http://cash-flow-api.a6.net/api/',
+    headers: {
+
+    }
+});
 
 const app = new Vue({
 
     el: '#app',
+
+    data() {
+        return {HTTP: this.HTTP}
+
+    },
 
     methods: {
 

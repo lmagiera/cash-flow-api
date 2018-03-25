@@ -377,33 +377,6 @@ module.exports = {
 /* 1 */
 /***/ (function(module, exports) {
 
-var g;
-
-// This works in non-strict mode
-g = (function() {
-	return this;
-})();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
 /* globals __VUE_SSR_CONTEXT__ */
 
 // IMPORTANT: Do NOT use ES2015 features in this file.
@@ -507,6 +480,33 @@ module.exports = function normalizeComponent (
     options: options
   }
 }
+
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() {
+	return this;
+})();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
 
 
 /***/ }),
@@ -3441,7 +3441,7 @@ Popper.Defaults = Defaults;
 /* harmony default export */ __webpack_exports__["default"] = (Popper);
 //# sourceMappingURL=popper.js.map
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(2)))
 
 /***/ }),
 /* 7 */
@@ -14277,7 +14277,7 @@ module.exports = Cancel;
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__(15);
-module.exports = __webpack_require__(66);
+module.exports = __webpack_require__(71);
 
 
 /***/ }),
@@ -14306,11 +14306,19 @@ Vue.component('date-selector', __webpack_require__(45));
 Vue.component('user-saldo', __webpack_require__(51));
 Vue.component('cash-flow-graph', __webpack_require__(56));
 
-Vue.prototype.$http = axios;
+Vue.prototype.HTTP = axios.create({
+    baseURL: 'http://cash-flow-api.a6.net/api/',
+    headers: {}
+});
 
 var app = new Vue({
 
     el: '#app',
+
+    data: function data() {
+        return { HTTP: this.HTTP };
+    },
+
 
     methods: {
 
@@ -31489,7 +31497,7 @@ if (token) {
   }
 }.call(this));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(18)(module)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(18)(module)))
 
 /***/ }),
 /* 18 */
@@ -47271,7 +47279,7 @@ Vue.compile = compileToFunctions;
 
 module.exports = Vue;
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(40).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(40).setImmediate))
 
 /***/ }),
 /* 40 */
@@ -47338,7 +47346,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
                          (typeof global !== "undefined" && global.clearImmediate) ||
                          (this && this.clearImmediate);
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2)))
 
 /***/ }),
 /* 41 */
@@ -47531,14 +47539,14 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
     attachTo.clearImmediate = clearImmediate;
 }(typeof self === "undefined" ? typeof global === "undefined" ? this : global : self));
 
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1), __webpack_require__(9)))
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(2), __webpack_require__(9)))
 
 /***/ }),
 /* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(43)
 /* template */
@@ -47661,7 +47669,7 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(46)
 }
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(49)
 /* template */
@@ -47822,7 +47830,7 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(52)
 }
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(54)
 /* template */
@@ -47948,7 +47956,7 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(57)
 }
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(59)
 /* template */
@@ -48074,11 +48082,11 @@ function injectStyle (ssrContext) {
   if (disposed) return
   __webpack_require__(62)
 }
-var normalizeComponent = __webpack_require__(2)
+var normalizeComponent = __webpack_require__(1)
 /* script */
 var __vue_script__ = __webpack_require__(64)
 /* template */
-var __vue_template__ = __webpack_require__(65)
+var __vue_template__ = __webpack_require__(70)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -48151,7 +48159,7 @@ exports = module.exports = __webpack_require__(3)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -48233,6 +48241,31 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 
@@ -48241,22 +48274,63 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     data: function data() {
 
         return {
+
             transaction: {
+
                 amount: 0,
                 description: '',
                 planned_on: '',
                 actual_on: '',
-                repeating_interval: 3
+                repeating_interval: 0
+            },
+
+            hasErrors: false,
+
+            errors: {
+                'transaction.description': false,
+                'transaction.amount': false,
+                'transaction.planned_on': false,
+                //'transaction.actual_on': false,
+                'transaction.repeating_interval': false
             }
+
         };
     },
+
+    computed: {
+        validation: function validation() {
+            return {
+                transaction: {
+                    description: {
+                        'is-invalid': this.errors['transaction.description']
+                    },
+                    amount: {
+                        'is-invalid': this.errors['transaction.amount']
+                    },
+                    planned_on: {
+                        'is-invalid': this.errors['transaction.planned_on']
+                    },
+                    /*
+                    actual_on: {
+                        'is-invalid': this.errors['transaction.actual_on']
+                    },
+                    */
+                    repeating_interval: {
+                        'is-invalid': this.errors['transaction.repeating_interval']
+                    }
+                }
+            };
+        }
+    },
+
+    props: ['http'],
 
     methods: {
 
         showModal: function showModal() {
 
             // should clear transaction object here
-
+            console.log("Clear transaction Object here");
         },
 
         selectRepeating: function selectRepeating(data) {
@@ -48268,17 +48342,250 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
          * Sends transation event up
          */
         sendTransaction: function sendTransaction() {
-            this.$emit('transaction', { transaction: 'test' });
+            var _this = this;
+
+            console.log('Sending transaction on amount: ' + this.transaction.amount + " PLN");
+
+            this.http.post('transaction', { transaction: this.transaction }).then(function (response) {
+
+                console.log(response.status);
+
+                _this.$emit('transaction', { transaction: _this.transaction });
+                $('#exampleModal').modal('hide');
+            }).catch(function (e) {
+
+                _this.hasErrors = true;
+
+                _this.errors = e.response.data.errors;
+            });
         }
     },
 
     components: {
-        'repeat-selector': __webpack_require__(70)
+        'repeat-selector': __webpack_require__(65)
     }
 });
 
 /***/ }),
 /* 65 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(66)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+var __vue_script__ = __webpack_require__(68)
+/* template */
+var __vue_template__ = __webpack_require__(69)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-6d6aa391"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/RepeatSelector.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-6d6aa391", Component.options)
+  } else {
+    hotAPI.reload("data-v-6d6aa391", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 66 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(67);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(4)("0bf1cdfd", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6d6aa391\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./RepeatSelector.vue", function() {
+     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6d6aa391\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./RepeatSelector.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 67 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(3)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 68 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    name: "repeat-selector",
+
+    props: ['transaction', 'hasErrors', 'validation', 'errors'],
+
+    data: function data() {
+        return { repeating_interval: this.transaction.repeating_interval };
+    },
+
+    watch: { repeating_interval: function repeating_interval() {
+            console.log('Repeating interval Changed');
+            this.$emit('select', { repeating_interval: this.repeating_interval });
+        } }
+
+});
+
+/***/ }),
+/* 69 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { attrs: { id: "repeat-selector" } }, [
+    _c(
+      "label",
+      { staticClass: "col-form-label", attrs: { for: "transaction-repeat" } },
+      [_vm._v("Repeat:")]
+    ),
+    _vm._v(" "),
+    _c(
+      "select",
+      {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.repeating_interval,
+            expression: "repeating_interval"
+          }
+        ],
+        staticClass: "custom-select",
+        class: _vm.validation.transaction.repeating_interval,
+        attrs: { id: "transaction-repeat", dusk: "input-repeating-control" },
+        on: {
+          change: function($event) {
+            var $$selectedVal = Array.prototype.filter
+              .call($event.target.options, function(o) {
+                return o.selected
+              })
+              .map(function(o) {
+                var val = "_value" in o ? o._value : o.value
+                return val
+              })
+            _vm.repeating_interval = $event.target.multiple
+              ? $$selectedVal
+              : $$selectedVal[0]
+          }
+        }
+      },
+      [
+        _c("option", { attrs: { selected: "", value: "0" } }, [_vm._v("None")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "1" } }, [_vm._v("Monthly")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "2" } }, [_vm._v("Every 2 Months")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "3" } }, [_vm._v("Every 3 Months")]),
+        _vm._v(" "),
+        _c("option", { attrs: { value: "4" } }, [_vm._v("TEST")])
+      ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "invalid-feedback",
+        attrs: { dusk: "feedback-invalid-repeating-interval" }
+      },
+      [
+        _vm._v(
+          _vm._s(
+            _vm.errors["transaction.repeating_interval"]
+              ? _vm.errors["transaction.repeating_interval"].toString()
+              : ""
+          )
+        )
+      ]
+    )
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-6d6aa391", module.exports)
+  }
+}
+
+/***/ }),
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -48292,7 +48599,7 @@ var render = function() {
         staticClass: "btn btn-primary",
         attrs: {
           "data-toggle": "modal",
-          "data-target": "#exampleModal",
+          "data-target": "#modal-add-transaction",
           href: "#",
           dusk: "btn-add-transaction"
         }
@@ -48305,7 +48612,7 @@ var render = function() {
       {
         staticClass: "modal fade",
         attrs: {
-          id: "exampleModal",
+          id: "modal-add-transaction",
           tabindex: "-1",
           role: "dialog",
           "aria-labelledby": "exampleModalLabel",
@@ -48322,6 +48629,26 @@ var render = function() {
               _vm._m(0),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
+                _vm.hasErrors
+                  ? _c(
+                      "div",
+                      {
+                        staticClass:
+                          "alert alert-danger alert-dismissible fade show",
+                        attrs: {
+                          role: "alert",
+                          dusk: "alert-invalid-transaction"
+                        }
+                      },
+                      [
+                        _vm._v(
+                          "\n            There were errors processing your request\n            "
+                        ),
+                        _vm._m(1)
+                      ]
+                    )
+                  : _vm._e(),
+                _vm._v(" "),
                 _c("form", [
                   _c(
                     "div",
@@ -48349,6 +48676,7 @@ var render = function() {
                           }
                         ],
                         staticClass: "form-control",
+                        class: _vm.validation.transaction.description,
                         attrs: { type: "text", id: "transaction-description" },
                         domProps: { value: _vm.transaction.description },
                         on: {
@@ -48363,7 +48691,16 @@ var render = function() {
                             )
                           }
                         }
-                      })
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "invalid-feedback",
+                          attrs: { dusk: "feedback-invalid-description" }
+                        },
+                        [_vm._v(_vm._s(_vm.errors["transaction.description"]))]
+                      )
                     ]
                   ),
                   _vm._v(" "),
@@ -48394,6 +48731,7 @@ var render = function() {
                             }
                           ],
                           staticClass: "form-control",
+                          class: _vm.validation.transaction.amount,
                           attrs: { type: "text", id: "transaction-amount" },
                           domProps: { value: _vm.transaction.amount },
                           on: {
@@ -48410,7 +48748,16 @@ var render = function() {
                           }
                         }),
                         _vm._v(" "),
-                        _vm._m(1)
+                        _vm._m(2),
+                        _vm._v(" "),
+                        _c(
+                          "div",
+                          {
+                            staticClass: "invalid-feedback",
+                            attrs: { dusk: "feedback-invalid-amount" }
+                          },
+                          [_vm._v(_vm._s(_vm.errors["transaction.amount"]))]
+                        )
                       ])
                     ]
                   ),
@@ -48441,6 +48788,7 @@ var render = function() {
                           }
                         ],
                         staticClass: "form-control",
+                        class: _vm.validation.transaction.planned_on,
                         attrs: { type: "text", id: "transaction-planned-on" },
                         domProps: { value: _vm.transaction.planned_on },
                         on: {
@@ -48455,7 +48803,16 @@ var render = function() {
                             )
                           }
                         }
-                      })
+                      }),
+                      _vm._v(" "),
+                      _c(
+                        "div",
+                        {
+                          staticClass: "invalid-feedback",
+                          attrs: { dusk: "feedback-invalid-planned-on" }
+                        },
+                        [_vm._v(_vm._s(_vm.errors["transaction.planned_on"]))]
+                      )
                     ]
                   ),
                   _vm._v(" "),
@@ -48499,11 +48856,13 @@ var render = function() {
                             )
                           }
                         }
-                      })
+                      }),
+                      _vm._v(" "),
+                      _c("div", { staticClass: "invalid-feedback" })
                     ]
                   ),
                   _vm._v(" "),
-                  _vm._m(2),
+                  _vm._m(3),
                   _vm._v(" "),
                   _c(
                     "div",
@@ -48513,7 +48872,13 @@ var render = function() {
                     },
                     [
                       _c("repeat-selector", {
-                        attrs: { transaction: _vm.transaction },
+                        attrs: {
+                          hasErrors: _vm.hasErrors,
+                          errors: _vm.errors,
+                          validation: _vm.validation,
+                          transaction: _vm.transaction,
+                          dusk: "repeat-interval-component"
+                        },
                         on: { select: _vm.selectRepeating }
                       })
                     ],
@@ -48522,7 +48887,30 @@ var render = function() {
                 ])
               ]),
               _vm._v(" "),
-              _vm._m(3)
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-secondary",
+                    attrs: {
+                      type: "button",
+                      "data-dismiss": "modal",
+                      dusk: "btn-close-add-new-transaction"
+                    }
+                  },
+                  [_vm._v("Cancel")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-success",
+                    attrs: { type: "button", dusk: "btn-save-transaction" },
+                    on: { click: _vm.sendTransaction }
+                  },
+                  [_vm._v("Save")]
+                )
+              ])
             ])
           ]
         )
@@ -48560,6 +48948,23 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "alert",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
     return _c("div", { staticClass: "input-group-append" }, [
       _c("div", { staticClass: "input-group-text" }, [_vm._v("PLN")])
     ])
@@ -48589,34 +48994,6 @@ var staticRenderFns = [
         ])
       ]
     )
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-footer" }, [
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-secondary",
-          attrs: {
-            type: "button",
-            "data-dismiss": "modal",
-            dusk: "btn-close-add-new-transaction"
-          }
-        },
-        [_vm._v("Cancel")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-success",
-          attrs: { type: "button", dusk: "btn-save-transaction" }
-        },
-        [_vm._v("Save")]
-      )
-    ])
   }
 ]
 render._withStripped = true
@@ -48629,215 +49006,10 @@ if (false) {
 }
 
 /***/ }),
-/* 66 */
+/* 71 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 67 */,
-/* 68 */,
-/* 69 */,
-/* 70 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(71)
-}
-var normalizeComponent = __webpack_require__(2)
-/* script */
-var __vue_script__ = __webpack_require__(73)
-/* template */
-var __vue_template__ = __webpack_require__(74)
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = "data-v-6d6aa391"
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __vue_script__,
-  __vue_template__,
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "resources/assets/js/components/RepeatSelector.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-6d6aa391", Component.options)
-  } else {
-    hotAPI.reload("data-v-6d6aa391", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-module.exports = Component.exports
-
-
-/***/ }),
-/* 71 */
-/***/ (function(module, exports, __webpack_require__) {
-
-// style-loader: Adds some css to the DOM by adding a <style> tag
-
-// load the styles
-var content = __webpack_require__(72);
-if(typeof content === 'string') content = [[module.i, content, '']];
-if(content.locals) module.exports = content.locals;
-// add the styles to the DOM
-var update = __webpack_require__(4)("0bf1cdfd", content, false, {});
-// Hot Module Replacement
-if(false) {
- // When the styles change, update the <style> tags
- if(!content.locals) {
-   module.hot.accept("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6d6aa391\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./RepeatSelector.vue", function() {
-     var newContent = require("!!../../../../node_modules/css-loader/index.js!../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-6d6aa391\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./RepeatSelector.vue");
-     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
-     update(newContent);
-   });
- }
- // When the module is disposed, remove the <style> tags
- module.hot.dispose(function() { update(); });
-}
-
-/***/ }),
-/* 72 */
-/***/ (function(module, exports, __webpack_require__) {
-
-exports = module.exports = __webpack_require__(3)(false);
-// imports
-
-
-// module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
-
-// exports
-
-
-/***/ }),
-/* 73 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-
-/* harmony default export */ __webpack_exports__["default"] = ({
-    name: "repeat-selector",
-
-    props: ['transaction'],
-
-    data: function data() {
-        return { repeating_interval: this.transaction.repeating_interval };
-    },
-
-    watch: { repeating_interval: function repeating_interval() {
-            console.log('Repeating interval Changed');
-            this.$emit('select', { repeating_interval: this.repeating_interval });
-        } }
-
-});
-
-/***/ }),
-/* 74 */
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", { attrs: { id: "repeat-selector" } }, [
-    _c(
-      "label",
-      { staticClass: "col-form-label", attrs: { for: "transaction-repeat" } },
-      [_vm._v("Repeat:")]
-    ),
-    _vm._v(" "),
-    _c(
-      "select",
-      {
-        directives: [
-          {
-            name: "model",
-            rawName: "v-model",
-            value: _vm.repeating_interval,
-            expression: "repeating_interval"
-          }
-        ],
-        staticClass: "custom-select",
-        attrs: { id: "transaction-repeat", dusk: "input-repeating-control" },
-        on: {
-          change: function($event) {
-            var $$selectedVal = Array.prototype.filter
-              .call($event.target.options, function(o) {
-                return o.selected
-              })
-              .map(function(o) {
-                var val = "_value" in o ? o._value : o.value
-                return val
-              })
-            _vm.repeating_interval = $event.target.multiple
-              ? $$selectedVal
-              : $$selectedVal[0]
-          }
-        }
-      },
-      [
-        _c("option", { attrs: { selected: "", value: "0" } }, [_vm._v("None")]),
-        _vm._v(" "),
-        _c("option", { attrs: { value: "1" } }, [_vm._v("Monthly")]),
-        _vm._v(" "),
-        _c("option", { attrs: { value: "2" } }, [_vm._v("Every 2 Months")]),
-        _vm._v(" "),
-        _c("option", { attrs: { value: "3" } }, [_vm._v("Every 3 Months")])
-      ]
-    ),
-    _vm._v(
-      "\n    " +
-        _vm._s(_vm.transaction) +
-        " " +
-        _vm._s(_vm.repeating_interval) +
-        "\n"
-    )
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-6d6aa391", module.exports)
-  }
-}
 
 /***/ })
 /******/ ]);

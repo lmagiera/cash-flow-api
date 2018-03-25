@@ -15,17 +15,18 @@ class CreateTransactionTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
 
+
             $table->increments('id');
 
 
             $table->string('description', 150);
             $table->decimal('amount', 15, 2);
             $table->boolean('varying')->default(false);
-            $table->dateTime('planned_on');
-            $table->dateTime('actual_on')->nullable();
+            $table->date('planned_on');
+            $table->date('actual_on')->nullable();
             $table->integer('user_id')->unsigned();
             $table->integer('repeating_id')->unsigned()->nullable();
-            $table->string('repeating_interval', 30)->nullable();
+            $table->integer('repeating_interval')->unsigned()->nullable();
 
             $table->timestamps();
 

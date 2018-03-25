@@ -42,7 +42,7 @@ class ExampleTest extends DuskTestCase
      * @throws \Exception
      * @throws \Throwable
      */
-    public function testUserCanClickAddTransactionButton() {
+    public function testUserCanAddValidTransaction() {
 
 
         $user = $this->getUser();
@@ -51,15 +51,53 @@ class ExampleTest extends DuskTestCase
 
         $this->browse(function (Browser $b) use ($user, $transaction) {
 
+            $fpScreenshots = storage_path('framework/testing/screenshots'.date("YmdHis").'.png');
+
+            echo "Screen Shot Path: ".$fpScreenshots, "\n";
+
             $b->loginAs($user)
                 ->visit(new HomePage())
                 ->openNewTransactionModal()
                 ->inputTransaction($transaction)
+                ->saveNewTransaction()
             ;
+
+            $b->driver->takeScreenshot($fpScreenshots);
 
 
         });
 
 
     }
+
+    /**
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    public function testUserSeesValidationErrors() {
+
+        $user = $this->getUser();
+
+        $this->browse(function (Browser $browser) use ($user) {
+
+            $browser
+                ->loginAs($user)
+                ->visit(new HomePage())
+                ->openNewTransactionModal()
+                ->saveInvalidTransaction();
+
+
+
+
+        });
+
+    }
+
+    public function testUserSeeHisTransactionList() {
+
+    }
+
+
+
+
 }
