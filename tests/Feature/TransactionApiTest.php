@@ -33,7 +33,7 @@ class TransactionApiTest extends TestCase
         // we have one and only user now
         factory(Transaction::class, $intRandomNoOfTransactions)->create([
             'user_id' => 1,
-            'planned_at' => function () {
+            'planned_on' => function () {
                 return Carbon::now()->startOfMonth()->addDays(rand(0, 30));
         }]);
 
@@ -60,7 +60,7 @@ class TransactionApiTest extends TestCase
         // we have one and only user now
         factory(Transaction::class, $intRandomNoOfTransactions)->create([
             'user_id' => 1,
-            'planned_at' => function () {
+            'planned_on' => function () {
                 return Carbon::now()->startOfMonth()->addDays(rand(0, 30));
         }]);
 
