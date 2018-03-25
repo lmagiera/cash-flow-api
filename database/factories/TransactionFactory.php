@@ -9,7 +9,7 @@ $factory->define(App\Transaction::class, function (Faker $faker) {
         'amount' => $faker->randomFloat(2, -2300, 2300),
         'varying' => $faker->boolean(),
 
-        'planned_on' => $faker->dateTimeBetween('now', '+1 year')->format('Y-m-d'),
+        'planned_on' => $faker->dateTimeBetween('now', '+1 month')->format('Y-m-d'),
         'actual_on' => $faker->dateTimeBetween('now', '+1 year')->format('Y-m-d'),
 
         'user_id' => function () {

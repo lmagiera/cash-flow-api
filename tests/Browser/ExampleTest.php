@@ -115,6 +115,30 @@ class ExampleTest extends DuskTestCase
 
     }
 
+    /**
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    public function testUserSeesTransactionAdded() {
+
+        $user = $this->getUser();
+        $transaction = factory(Transaction::class)->make();
+
+        $this->browse(function (Browser $browser) use ($user, $transaction) {
+
+            $browser->loginAs($user)
+                ->visit(new HomePage())
+                ->openNewTransactionModal()
+                ->inputTransaction($transaction)
+                ->saveNewTransaction()
+                ->validateTransactionOnList($transaction)
+
+                ;
+
+        });
+
+    }
+
 
 
 

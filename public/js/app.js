@@ -49111,7 +49111,7 @@ exports = module.exports = __webpack_require__(2)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -49122,6 +49122,11 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
 //
 //
 //
@@ -49223,13 +49228,13 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
+  return _c("div", { staticClass: "container-fluid" }, [
     _vm._m(0),
     _vm._v(" "),
     _c(
       "div",
       {
-        staticClass: "tab-content",
+        staticClass: "tab-content mt-1",
         attrs: { id: "transaction-list-tab-content" }
       },
       [
@@ -49240,32 +49245,35 @@ var render = function() {
             attrs: { id: "tab-transaction-list", role: "tabpanel" }
           },
           [
-            _c("table", { staticClass: "table table-sm table-striped" }, [
-              _vm._m(1),
-              _vm._v(" "),
-              _c(
-                "tbody",
-                _vm._l(_vm.transactions.data, function(item, index) {
-                  return _c("tr", { attrs: { scope: "row" } }, [
-                    _c("td", { attrs: { scope: "col" } }, [
-                      _vm._v(_vm._s(index))
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { attrs: { scope: "col" } }, [
-                      _vm._v(_vm._s(item.description))
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { attrs: { scope: "col" } }, [
-                      _vm._v(_vm._s(item.planned_on))
-                    ]),
-                    _vm._v(" "),
-                    _c("td", { attrs: { scope: "col" } }, [
-                      _vm._v(_vm._s(item.amount))
+            _c("h5", { staticClass: "display-5 p-2" }, [
+              _vm._v("Transaction List")
+            ]),
+            _vm._v(" "),
+            _c(
+              "table",
+              {
+                staticClass: "table table-sm table-striped",
+                attrs: { dusk: "table-transaction-list" }
+              },
+              [
+                _vm._m(1),
+                _vm._v(" "),
+                _c(
+                  "tbody",
+                  _vm._l(_vm.transactions.data, function(item, index) {
+                    return _c("tr", { attrs: { scope: "row" } }, [
+                      _c("td", [_vm._v(_vm._s(index + 1))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(item.description))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(item.planned_on))]),
+                      _vm._v(" "),
+                      _c("td", [_vm._v(_vm._s(item.amount))])
                     ])
-                  ])
-                })
-              )
-            ])
+                  })
+                )
+              ]
+            )
           ]
         ),
         _vm._v(" "),
@@ -49326,15 +49334,17 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", { attrs: { scope: "row" } }, [
-        _c("td", [_vm._v("#")]),
+    return _c("thead", { staticClass: "thead-dark font-weight-bold" }, [
+      _c("tr", [
+        _c("td", { attrs: { scope: "col" } }, [_vm._v("#")]),
         _vm._v(" "),
-        _c("td", [_vm._v("Description")]),
+        _c("td", { staticStyle: { width: "75%" }, attrs: { scope: "col" } }, [
+          _vm._v("Description")
+        ]),
         _vm._v(" "),
-        _c("td", [_vm._v("Planned On")]),
+        _c("td", { attrs: { scope: "col" } }, [_vm._v("Planned On")]),
         _vm._v(" "),
-        _c("td", [_vm._v("Amount")])
+        _c("td", { attrs: { scope: "col" } }, [_vm._v("Amount")])
       ])
     ])
   }

@@ -1,6 +1,8 @@
 <template>
 
-    <div>
+    <div class="container-fluid">
+
+
 
         <ul class="nav nav-tabs" role="tablist" dusk="tab-nav-transaction-list">
             <li class="nav-item">
@@ -13,23 +15,26 @@
 
         </ul>
 
-        <div class="tab-content" id="transaction-list-tab-content">
+        <div class="tab-content mt-1" id="transaction-list-tab-content">
             <div class="tab-pane show fade active" id="tab-transaction-list" role="tabpanel">
-                <table class="table table-sm table-striped">
-                    <thead>
-                        <tr scope="row">
-                            <td>#</td>
-                            <td>Description</td>
-                            <td>Planned On</td>
-                            <td>Amount</td>
+
+                <h5 class="display-5 p-2">Transaction List</h5>
+
+                <table class="table table-sm table-striped" dusk="table-transaction-list">
+                    <thead class="thead-dark font-weight-bold">
+                        <tr>
+                            <td scope="col">#</td>
+                            <td scope="col" style="width: 75%">Description</td>
+                            <td scope="col">Planned On</td>
+                            <td scope="col">Amount</td>
                         </tr>
                     </thead>
                     <tbody>
                     <tr scope="row" v-for="(item, index) in transactions.data">
-                        <td scope="col">{{index}}</td>
-                        <td scope="col">{{item.description}}</td>
-                        <td scope="col">{{item.planned_on}}</td>
-                        <td scope="col">{{item.amount}}</td>
+                        <td >{{index+1}}</td>
+                        <td>{{item.description}}</td>
+                        <td>{{item.planned_on}}</td>
+                        <td>{{item.amount}}</td>
                     </tr>
                     </tbody>
                 </table>
