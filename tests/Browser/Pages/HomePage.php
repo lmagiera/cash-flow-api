@@ -49,7 +49,7 @@ class HomePage extends Page
 
 
         $browser
-            ->assertVisible('@tab-transaction-list')
+            ->assertVisible('@tab-nav-transaction-list')
             ->assertVisible('@table-transaction-list')
 
         ;
@@ -191,6 +191,21 @@ class HomePage extends Page
             ->waitUntilMissing('@modal-add-transaction')
 
         ;
+
+
+
+    }
+
+
+    public function validateTransactionOnList(Browser $browser, Transaction $transaction) {
+
+
+        $browser
+            ->assertSeeIn('@table-transaction-list', $transaction->description)
+            ->assertSeeIn('@table-transaction-list', $transaction->amount)
+            ->assertSeeIn('@table-transaction-list', $transaction->planned_on)
+            ;
+
 
 
 
