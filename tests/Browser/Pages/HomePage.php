@@ -45,7 +45,7 @@ class HomePage extends Page
         ];
     }
 
-    public function browseTransationList(Browser $browser) {
+    public function browseTransactionList(Browser $browser) {
 
 
         $browser
