@@ -201,6 +201,8 @@ class HomePage extends Page
 
 
         $browser
+            ->waitUntilMissing('@modal-add-transaction')
+            ->pause(2000)
             ->assertSeeIn('@table-transaction-list', $transaction->description)
             ->assertSeeIn('@table-transaction-list', $transaction->amount)
             ->assertSeeIn('@table-transaction-list', $transaction->planned_on)

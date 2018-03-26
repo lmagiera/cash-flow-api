@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Transaction;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -30,15 +31,19 @@ class TransactionApiTest extends TestCase
 
         $intRandomNoOfTransactions = rand(10, 20);
 
+        $user = factory(User::class)->create();
+
         // we have one and only user now
         factory(Transaction::class, $intRandomNoOfTransactions)->create([
-            'user_id' => 1,
+            'user_id' => $user->id,
             'planned_on' => function () {
                 return Carbon::now()->startOfMonth()->addDays(rand(0, 30));
         }]);
 
         // make a call
-        $response = $this->json('GET', '/api/transaction');
+        $response = $this
+            ->actingAs($user, 'api')
+            ->json('GET', '/api/transaction');
 
         // check response
         $response->assertStatus(200);
@@ -57,15 +62,19 @@ class TransactionApiTest extends TestCase
         $from = Carbon::now()->startOfMonth();
         $to = Carbon::now()->endOfMonth();
 
+        $user = factory(User::class)->create();
+
         // we have one and only user now
         factory(Transaction::class, $intRandomNoOfTransactions)->create([
-            'user_id' => 1,
+            'user_id' => $user->id,
             'planned_on' => function () {
                 return Carbon::now()->startOfMonth()->addDays(rand(0, 30));
         }]);
 
         // make a call
-        $response = $this->json('GET',
+        $response = $this
+            ->actingAs($user, 'api')
+            ->json('GET',
             "/api/transaction?from={$from->format('Y-m-d')}&to={$to->format('Y-m-d')}");
 
 
@@ -78,7 +87,12 @@ class TransactionApiTest extends TestCase
 
     public function testGetTransactionListBetweenInvalidDates() {
 
-        $response = $this->json('GET',
+        $user = factory(User::class)->create();
+
+
+        $response = $this
+            ->actingAs($user, 'api')
+            ->json('GET',
             "/api/transaction?from=2018-03-20&to=2017-01-01");
 
 
@@ -95,11 +109,14 @@ class TransactionApiTest extends TestCase
     public function testGetSingleTransaction()
     {
 
+        $user = factory(User::class)->create();
 
-        $transaction = factory(Transaction::class, 1)->create(['user_id' => 1])->first();
+        $transaction = factory(Transaction::class)->create(['user_id' => $user->id]);
         $id = $transaction->id;
 
-        $response = $this->json('GET', '/api/transaction/' . $id);
+        $response = $this
+            ->actingAs($user, 'api')
+            ->json('GET', '/api/transaction/' . $id);
 
 
         $response->assertStatus(200);
@@ -117,9 +134,13 @@ class TransactionApiTest extends TestCase
     public function testPostSimpleTransaction()
     {
 
-        $transaction = factory(Transaction::class, 1)->make(['user_id' => 1])->first();
+        $user = factory(User::class)->create();
 
-        $response = $this->json('POST', '/api/transaction', ['transaction' => $transaction]);
+        $transaction = factory(Transaction::class)->make(['user_id' => $user->id]);
+
+        $response = $this
+            ->actingAs($user, 'api')
+            ->json('POST', '/api/transaction', ['transaction' => $transaction]);
 
         $response->assertStatus(200);
 
@@ -128,11 +149,70 @@ class TransactionApiTest extends TestCase
     public function testPostTransactionValidation()
     {
 
-        $response = $this->json('POST', '/api/transaction', []); // send empty request
+        $user = factory(User::class)->create();
+
+        $response = $this
+            ->actingAs($user, 'api')
+            ->json('POST', '/api/transaction', []); // send empty request
 
         $response->assertStatus(422); // expect validation errors
 
         $response->assertJsonValidationErrors(['transaction']);
+
+
+    }
+
+    public function testUserSeesOnlyHisTransactions() {
+
+
+        $userOne = factory(User::class)->create();
+        $transactionOne = factory(Transaction::class)->create(['user_id' => $userOne->id]);
+
+        $userTwo = factory(User::class)->create();
+        $transactionTwo = factory(Transaction::class)->create(['user_id' => $userTwo->id]);
+
+        $response = $this
+            ->actingAs($userOne, 'api')
+            ->json('GET', '/api/transaction/'.$transactionTwo->id);
+
+        $response->assertStatus(404);
+
+        $response = $this
+            ->actingAs($userTwo, 'api')
+            ->json('GET', '/api/transaction/'.$transactionOne->id);
+
+        $response->assertStatus(404);
+
+
+    }
+
+    public function testUserCanOnlyAddTransactionToHisOwnAccount() {
+
+        $userOne = factory(User::class)->create();
+        $userTwo = factory(User::class)->create();
+
+        $transactionOne = factory(Transaction::class)->make(['user_id' => $userTwo->id]); // intentionally wrong user ID
+
+        $response = $this
+            ->actingAs($userOne, 'api')
+            ->json('POST', '/api/transaction', ['transaction' => $transactionOne]);
+
+        $response->assertStatus(200);
+
+        $response = $this
+            ->actingAs($userOne, 'api')
+            ->json('GET', '/api/transaction/'.$transactionOne->id);
+
+        $response->assertStatus(200);
+
+        $response = $this
+            ->actingAs($userTwo, 'api')
+            ->json('GET', '/api/transaction/'.$transactionOne->id);
+
+        $response->assertStatus(200);
+        $response->assertJsonFragment(['data' => []]);
+
+
 
 
     }
