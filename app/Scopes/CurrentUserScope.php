@@ -12,6 +12,7 @@ namespace App\Scopes;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
+use Illuminate\Support\Facades\Auth;
 
 class CurrentUserScope implements Scope
 {
@@ -27,6 +28,6 @@ class CurrentUserScope implements Scope
     {
         // TODO: Implement apply() method.
 
-        $builder->where('user_id', '=', 1);
+        $builder->where('user_id', '=', Auth::id());
     }
 }

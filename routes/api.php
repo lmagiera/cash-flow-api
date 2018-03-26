@@ -6,6 +6,7 @@ use App\Http\Resources\TransactionCollection;
 use App\Http\Resources\TransactionResource;
 use App\Transaction;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
 
@@ -26,7 +27,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 });
 
-Route::middleware([])->get('/transaction', function (Request $request) {
+Route::middleware(['auth:api'])->get('/transaction', function (Request $request) {
 
     $getRequest = new GetTransactionsRequest();
 
@@ -48,17 +49,17 @@ Route::middleware([])->get('/transaction', function (Request $request) {
 
 });
 
-Route::middleware([])->get('/transaction/{id}', function(Request $request, $id) {
+Route::middleware(['auth:api'])->get('/transaction/{id}', function(Request $request, $id) {
 
-    $transaction = Transaction::where(['user_id' => 1, 'id' => $id])->firstOrFail();
+    $transaction = Transaction::where(['id' => $id])->firstOrFail();
     return new TransactionResource($transaction);
 
 });
 
-Route::middleware([])->post('/transaction', function(PostTransactionRequest $request) {
+Route::middleware(['auth:api'])->post('/transaction', function(PostTransactionRequest $request) {
 
     $transaction = new Transaction($request->json()->get('transaction'));
-    $transaction->user_id = 1;
+    $transaction->user_id = Auth::id();
     $transaction->save();
 
 });
