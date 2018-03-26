@@ -4,7 +4,6 @@ namespace Tests\Browser;
 
 use App\Transaction;
 use App\User;
-use function foo\func;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Dusk\Browser;
@@ -123,7 +122,7 @@ class ExampleTest extends DuskTestCase
             $browser
                 ->loginAs($user)
                 ->visit(new HomePage())
-                ->browseTransationList()
+                ->browseTransactionList()
 
                 ;
 
