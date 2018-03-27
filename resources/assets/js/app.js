@@ -5,6 +5,8 @@
  * building robust, powerful web applications using Vue and Laravel.
  */
 
+
+
 require('./bootstrap');
 
 window.Vue = require('vue');
@@ -15,10 +17,10 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component('example-component', require('./components/ExampleComponent.vue'));
-Vue.component('date-selector', require('./components/DateSelector.vue'));
-Vue.component('user-saldo', require('./components/UsersSaldo.vue'));
-Vue.component('cash-flow-graph', require('./components/CashFlowGraph.vue'));
+// should check if safari ...
+window.onbeforeunload=function(e){};
+
+let bus = new Vue({});
 
 Object.defineProperty(Vue.prototype, '$bus', {
     get() {
@@ -26,7 +28,7 @@ Object.defineProperty(Vue.prototype, '$bus', {
     }
 });
 
-let bus = new Vue({});
+
 
 Vue.prototype.HTTP = axios.create({
 
@@ -59,7 +61,16 @@ const app = new Vue({
     },
     components: {
         'tool-bar': require('./components/ToolBar.vue'),
-        'transaction-list': require('./components/TransactionList.vue')
+        'transaction-list': require('./components/TransactionList.vue'),
+        'date-range-selector': require('./components/DateRangeSelector.vue')
+    },
+
+    mounted() {
+
+
+
+
+
     }
 
 });
