@@ -4,7 +4,6 @@ namespace Tests\Browser;
 
 use App\Transaction;
 use App\User;
-use function foo\func;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Dusk\Browser;
@@ -12,8 +11,18 @@ use TestDataSeeder;
 use Tests\Browser\Pages\HomePage;
 use Tests\DuskTestCase;
 
+/**
+ * Class ExampleTest
+ *
+ * @todo Rename this class
+ * @todo Add Comment
+ *
+ * @package Tests\Browser
+ */
 class ExampleTest extends DuskTestCase
 {
+
+
 
     use DatabaseMigrations;
     use RefreshDatabase;
@@ -26,7 +35,12 @@ class ExampleTest extends DuskTestCase
     }
 
 
-
+    /**
+     *
+     * @todo Add phpdoc
+     * @param array $attributes
+     * @return mixed
+     */
     protected function getUser($attributes = array()) {
 
         return factory(User::class)->create($attributes);
@@ -36,6 +50,7 @@ class ExampleTest extends DuskTestCase
     /**
      * A basic browser test example.
      *
+     * @todo invalid phpdoc
      * @return void
      * @throws \Throwable
      */
@@ -55,6 +70,7 @@ class ExampleTest extends DuskTestCase
     }
 
     /**
+     * @todo Add phpdoc
      * @throws \Exception
      * @throws \Throwable
      */
@@ -67,26 +83,19 @@ class ExampleTest extends DuskTestCase
 
         $this->browse(function (Browser $b) use ($user, $transaction) {
 
-            $fpScreenshots = storage_path('framework/testing/screenshots'.date("YmdHis").'.png');
-
-            echo "Screen Shot Path: ".$fpScreenshots, "\n";
-
             $b->loginAs($user)
                 ->visit(new HomePage())
                 ->openNewTransactionModal()
                 ->inputTransaction($transaction)
                 ->saveNewTransaction()
             ;
-
-            $b->driver->takeScreenshot($fpScreenshots);
-
-
         });
 
 
     }
 
     /**
+     * @todo Add phpdoc
      * @throws \Exception
      * @throws \Throwable
      */
@@ -110,6 +119,7 @@ class ExampleTest extends DuskTestCase
     }
 
     /**
+     * @todo Add phpdoc
      * @throws \Exception
      * @throws \Throwable
      */
@@ -123,7 +133,7 @@ class ExampleTest extends DuskTestCase
             $browser
                 ->loginAs($user)
                 ->visit(new HomePage())
-                ->browseTransationList()
+                ->browseTransactionList()
 
                 ;
 
@@ -132,6 +142,7 @@ class ExampleTest extends DuskTestCase
     }
 
     /**
+     * @todo Add phpdoc
      * @throws \Exception
      * @throws \Throwable
      */
@@ -156,6 +167,7 @@ class ExampleTest extends DuskTestCase
     }
 
     /**
+     * @todo Add phpdoc
      * @throws \Exception
      * @throws \Throwable
      */
@@ -204,13 +216,6 @@ class ExampleTest extends DuskTestCase
                 ;
 
         });
-
-
-
     }
-
-
-
-
 
 }

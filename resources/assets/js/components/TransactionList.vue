@@ -1,6 +1,6 @@
 <template>
 
-    <div class="container-fluid">
+    <div>
 
 
 
@@ -59,7 +59,9 @@
         data() {
 
             return {
-                transactions: []
+                transactions: [],
+                from: '',
+                to: ''
             }
 
         },
@@ -68,7 +70,15 @@
 
             refresh : function () {
 
-                this.http.get('transaction').then(response => {
+                let url = 'transaction';
+
+                if (this.from != '' && this.to != '') {
+                    url += '?from=' + this.from + '&to=' + this.to;
+                }
+
+                console.log('Refersh ' + url);
+
+                this.http.get(url).then(response => {
 
                     this.transactions = response.data;
                     console.log(response.data);
@@ -88,9 +98,21 @@
         },
 
         mounted() {
+
             console.log('Subscribing to transactions!');
 
             this.$bus.$on('new-transaction', event => {
+
+                this.refresh();
+
+            });
+
+            console.log('Subscribing to date-range-applied!');
+
+            this.$bus.$on('date-range-applied', event => {
+
+                this.from = event.from;
+                this.to = event.to;
 
                 this.refresh();
 
