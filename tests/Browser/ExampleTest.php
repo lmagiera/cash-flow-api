@@ -4,6 +4,7 @@ namespace Tests\Browser;
 
 use App\Transaction;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Dusk\Browser;
@@ -149,7 +150,9 @@ class ExampleTest extends DuskTestCase
     public function testUserSeesTransactionAdded() {
 
         $user = $this->getUser();
-        $transaction = factory(Transaction::class)->make();
+        $transaction = factory(Transaction::class)->make([
+            'planned_on' => Carbon::now()->startOfMonth()->addDays(rand(0,15))->format('Y-m-d')
+        ]);
 
         $this->browse(function (Browser $browser) use ($user, $transaction) {
 
@@ -175,7 +178,9 @@ class ExampleTest extends DuskTestCase
 
 
         $firstUser = $this->getUser();
-        $firstTransaction = factory(Transaction::class)->make();
+        $firstTransaction = factory(Transaction::class)->make([
+            'planned_on' => Carbon::now()->startOfMonth()->addDays(rand(0,15))->format('Y-m-d')
+        ]);
 
         $this->browse(function (Browser $browser) use ($firstUser, $firstTransaction) {
 
@@ -191,7 +196,9 @@ class ExampleTest extends DuskTestCase
         });
 
         $secondUser = $this->getUser();
-        $secondTransaction = factory(Transaction::class)->make();
+        $secondTransaction = factory(Transaction::class)->make([
+            'planned_on' => Carbon::now()->startOfMonth()->addDays(rand(0,15))->format('Y-m-d')
+        ]);
 
         $this->browse(function (Browser $browser) use ($secondUser, $secondTransaction, $firstTransaction) {
 

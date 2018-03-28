@@ -3,6 +3,7 @@
 namespace Tests\Browser\Pages;
 
 use App\Transaction;
+use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Laravel\Dusk\Browser;
 
@@ -259,6 +260,26 @@ class HomePage extends Page
 
         ;
 
+
+
+    }
+
+    public function validateDateRangeIsOnCurrentMonth(Browser $browser) {
+
+        $from = Carbon::now()->startOfMonth()->format('Y-m-d');
+        $to = Carbon::now()->endOfMonth()->format('Y-m-d');
+
+        $browser
+
+            ->assertVue('from', $from, '@date-range-selector-component')
+            ->assertVue('to', $to, '@date-range-selector-component')
+
+            ->assertValue( '@input-date-from-control', $from)
+            ->assertValue('@input-date-to-control', $to)
+
+
+
+            ;
 
 
     }

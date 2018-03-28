@@ -37,7 +37,7 @@ class SelectDateRangeTest extends DuskTestCase
 
             $transactions = factory(Transaction::class, 2)->create([
                 'planned_on' => function(array $t) use ($from) {
-                    return (new Carbon($from))->addDays(rand(0,30));
+                    return (new Carbon($from))->addDays(rand(0,30))->format('Y-m-d');
                 },
                 'user_id' => $user->id
             ]);
@@ -46,9 +46,11 @@ class SelectDateRangeTest extends DuskTestCase
             // add one transaction outside tested date range
 
             $transaction = factory(Transaction::class)->create([
-                'planned_on' => (new Carbon($to))->addDays(2),
+                'planned_on' => (new Carbon($to))->addDays(2)->format('Y-m-d'),
                 'user_id' => $user->id
             ]);
+
+            echo $transaction->planned_on;
 
 
             $browser
@@ -65,5 +67,31 @@ class SelectDateRangeTest extends DuskTestCase
 
 
         });
+
+
+    }
+
+
+    /**
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    public function testDatesHaveDefaultValuesOfCurrentMonth() {
+
+
+        $this->browse(function (Browser $browser) {
+
+            $user = factory(User::class)->create();
+
+            $browser
+                ->loginAs($user)
+                ->visit(new HomePage())
+                ->validateDateRangeIsOnCurrentMonth()
+                ;
+
+
+        });
+
+
     }
 }
