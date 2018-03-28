@@ -93,11 +93,7 @@
 
         created() {
 
-            this.refresh();
-
-        },
-
-        mounted() {
+            //this.refresh();
 
             console.log('Subscribing to transactions!');
 
@@ -116,8 +112,9 @@
 
                 this.refresh();
 
-            });
+                console.log('Refreshed on date range applied');
 
+            });
 
 
         }

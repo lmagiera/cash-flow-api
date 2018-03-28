@@ -10,6 +10,7 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
+window.moment = require('moment');
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -17,7 +18,7 @@ window.Vue = require('vue');
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-// should check if safari ...
+// TODO: should check if safari ...
 window.onbeforeunload=function(e){};
 
 let bus = new Vue({});
@@ -29,8 +30,8 @@ Object.defineProperty(Vue.prototype, '$bus', {
 });
 
 
-
 Vue.prototype.HTTP = axios.create({
+
 
     baseURL: 'http://cash-flow-api.a6.net/api/',
     headers: {

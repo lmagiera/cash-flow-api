@@ -28,6 +28,16 @@
         },
 
 
+        mounted() {
+
+            this.from = moment().startOf('month').format('YYYY-MM-DD');
+            this.to = moment().endOf('month').format('YYYY-MM-DD');
+
+            this.applyDateRange();
+
+        },
+
+
         methods: {
 
             applyDateRange: function() {
