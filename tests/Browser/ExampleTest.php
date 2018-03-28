@@ -5,6 +5,7 @@ namespace Tests\Browser;
 use App\Transaction;
 use App\User;
 use Carbon\Carbon;
+use function foo\func;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Dusk\Browser;
@@ -223,6 +224,52 @@ class ExampleTest extends DuskTestCase
                 ;
 
         });
+    }
+
+    /**
+     * @throws \Exception
+     * @throws \Throwable
+     */
+    public function testUserCanEnterRepeatingTransaction() {
+
+
+
+        $this->browse(function (Browser $browser){
+
+            $user = $this->getUser();
+
+            $datePlanned = Carbon::now()
+                ->startOfMonth()
+                ->addDays(rand(0,15))
+                ->format('Y-m-d')
+            ;
+
+            $transaction = factory(Transaction::class)->make([
+                'planned_on' => $datePlanned,
+                'repeating_interval' => 1 // monthly
+            ]);
+
+            $from = Carbon::now()->startOfMonth()->addMonth(1)->format('Y-m-d');
+            $to = (new Carbon($from))->endOfMonth()->format('Y-m-d');
+
+            $nextTransaction = clone($transaction);
+            $nextTransaction->planned_on = (new Carbon($datePlanned))->addMonth(1)->format('Y-m-d');
+
+
+            $browser
+                ->loginAs($user)
+                ->visit(new HomePage())
+                ->openNewTransactionModal()
+                ->inputTransaction($transaction)
+                ->saveNewTransaction()
+                ->validateTransactionOnList($transaction)
+                ->selectValidDateRange(['from' => $from, 'to' => $to])
+                ->pause(1000)
+                ->validateTransactionOnList($nextTransaction)
+                ;
+
+        });
+
     }
 
 }

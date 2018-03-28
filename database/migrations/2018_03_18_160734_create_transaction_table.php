@@ -25,7 +25,7 @@ class CreateTransactionTable extends Migration
             $table->date('planned_on');
             $table->date('actual_on')->nullable();
             $table->integer('user_id')->unsigned();
-            $table->integer('repeating_id')->unsigned()->nullable();
+            $table->string('repeating_id', 32)->nullable();
             $table->integer('repeating_interval')->unsigned()->nullable();
 
             $table->timestamps();

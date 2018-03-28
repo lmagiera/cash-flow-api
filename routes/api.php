@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
+use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,9 +59,40 @@ Route::middleware(['auth:api'])->get('/transaction/{id}', function(Request $requ
 
 Route::middleware(['auth:api'])->post('/transaction', function(PostTransactionRequest $request) {
 
-    $transaction = new Transaction($request->json()->get('transaction'));
-    $transaction->user_id = Auth::id();
-    $transaction->save();
+    $transactionData =
+        $request->json()->get('transaction');
+
+    if ($transactionData['repeating_interval'] != 0) {
+
+        $firstDate = (new Carbon($transactionData['planned_on']))->format('Y-m-d');
+
+        //TODO: this do not scale well..
+        //TODO: get better at generating this number/id
+        $uiq = uniqid('RPT-', true);
+
+        for ($c = 0; $c < 50; $c++) {
+
+            $transaction = new Transaction($transactionData);
+            $transaction->planned_on = $firstDate;
+            $transaction->user_id = Auth::id();
+            $transaction->repeating_id = $uiq;
+
+            $transaction->save();
+
+            $firstDate = (new Carbon($firstDate))->addMonth($transactionData['repeating_interval'])->format('Y-m-d');
+
+        }
+
+
+    }
+    else {
+        $transaction = new Transaction();
+        $transaction->user_id = Auth::id();
+        $transaction->save();
+    }
+
+
+
 
 });
 
