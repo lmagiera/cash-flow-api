@@ -4,6 +4,7 @@ namespace Tests\Browser;
 
 use App\Transaction;
 use App\User;
+use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Dusk\Browser;
@@ -11,8 +12,18 @@ use TestDataSeeder;
 use Tests\Browser\Pages\HomePage;
 use Tests\DuskTestCase;
 
+/**
+ * Class ExampleTest
+ *
+ * @todo Rename this class
+ * @todo Add Comment
+ *
+ * @package Tests\Browser
+ */
 class ExampleTest extends DuskTestCase
 {
+
+
 
     use DatabaseMigrations;
     use RefreshDatabase;
@@ -25,7 +36,12 @@ class ExampleTest extends DuskTestCase
     }
 
 
-
+    /**
+     *
+     * @todo Add phpdoc
+     * @param array $attributes
+     * @return mixed
+     */
     protected function getUser($attributes = array()) {
 
         return factory(User::class)->create($attributes);
@@ -35,6 +51,7 @@ class ExampleTest extends DuskTestCase
     /**
      * A basic browser test example.
      *
+     * @todo invalid phpdoc
      * @return void
      * @throws \Throwable
      */
@@ -54,6 +71,7 @@ class ExampleTest extends DuskTestCase
     }
 
     /**
+     * @todo Add phpdoc
      * @throws \Exception
      * @throws \Throwable
      */
@@ -66,26 +84,19 @@ class ExampleTest extends DuskTestCase
 
         $this->browse(function (Browser $b) use ($user, $transaction) {
 
-            $fpScreenshots = storage_path('framework/testing/screenshots'.date("YmdHis").'.png');
-
-            echo "Screen Shot Path: ".$fpScreenshots, "\n";
-
             $b->loginAs($user)
                 ->visit(new HomePage())
                 ->openNewTransactionModal()
                 ->inputTransaction($transaction)
                 ->saveNewTransaction()
             ;
-
-            $b->driver->takeScreenshot($fpScreenshots);
-
-
         });
 
 
     }
 
     /**
+     * @todo Add phpdoc
      * @throws \Exception
      * @throws \Throwable
      */
@@ -109,6 +120,7 @@ class ExampleTest extends DuskTestCase
     }
 
     /**
+     * @todo Add phpdoc
      * @throws \Exception
      * @throws \Throwable
      */
@@ -131,13 +143,16 @@ class ExampleTest extends DuskTestCase
     }
 
     /**
+     * @todo Add phpdoc
      * @throws \Exception
      * @throws \Throwable
      */
     public function testUserSeesTransactionAdded() {
 
         $user = $this->getUser();
-        $transaction = factory(Transaction::class)->make();
+        $transaction = factory(Transaction::class)->make([
+            'planned_on' => Carbon::now()->startOfMonth()->addDays(rand(0,15))->format('Y-m-d')
+        ]);
 
         $this->browse(function (Browser $browser) use ($user, $transaction) {
 
@@ -155,6 +170,7 @@ class ExampleTest extends DuskTestCase
     }
 
     /**
+     * @todo Add phpdoc
      * @throws \Exception
      * @throws \Throwable
      */
@@ -162,7 +178,9 @@ class ExampleTest extends DuskTestCase
 
 
         $firstUser = $this->getUser();
-        $firstTransaction = factory(Transaction::class)->make();
+        $firstTransaction = factory(Transaction::class)->make([
+            'planned_on' => Carbon::now()->startOfMonth()->addDays(rand(0,15))->format('Y-m-d')
+        ]);
 
         $this->browse(function (Browser $browser) use ($firstUser, $firstTransaction) {
 
@@ -178,7 +196,9 @@ class ExampleTest extends DuskTestCase
         });
 
         $secondUser = $this->getUser();
-        $secondTransaction = factory(Transaction::class)->make();
+        $secondTransaction = factory(Transaction::class)->make([
+            'planned_on' => Carbon::now()->startOfMonth()->addDays(rand(0,15))->format('Y-m-d')
+        ]);
 
         $this->browse(function (Browser $browser) use ($secondUser, $secondTransaction, $firstTransaction) {
 
@@ -203,13 +223,6 @@ class ExampleTest extends DuskTestCase
                 ;
 
         });
-
-
-
     }
-
-
-
-
 
 }

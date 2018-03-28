@@ -3,6 +3,8 @@
 namespace Tests\Browser\Pages;
 
 use App\Transaction;
+use Carbon\Carbon;
+use Illuminate\Support\Collection;
 use Laravel\Dusk\Browser;
 
 class HomePage extends Page
@@ -156,6 +158,7 @@ class HomePage extends Page
     public function saveInvalidTransaction(Browser $browser) {
 
         $browser
+
             ->waitFor('@modal-add-transaction')
             ->assertVisible('@modal-add-transaction')
             ->select('@input-repeating-control', 4) // some invalid value
@@ -190,6 +193,7 @@ class HomePage extends Page
 
             ->click('@btn-save-transaction')
             ->waitUntilMissing('@modal-add-transaction')
+            ->pause(2000) // wait for server call
 
         ;
 
@@ -202,14 +206,81 @@ class HomePage extends Page
 
 
         $browser
-            ->waitUntilMissing('@modal-add-transaction')
-            ->pause(2000)
             ->assertSeeIn('@table-transaction-list', $transaction->description)
             ->assertSeeIn('@table-transaction-list', $transaction->amount)
             ->assertSeeIn('@table-transaction-list', $transaction->planned_on)
             ;
 
 
+
+
+    }
+
+    public function validateTransactionNotOnList(Browser $browser, Transaction $transaction) {
+
+        $browser
+            //->assertDontSeeIn('@table-transaction-list', $transaction->description)
+            //->assertDontSeeIn('@table-transaction-list', $transaction->amount)
+            ->assertDontSeeIn('@table-transaction-list', $transaction->planned_on)
+        ;
+
+
+    }
+
+    public function validateTransactionsOnList(Browser $browser, Collection $transactions) {
+
+        $transactions->each(function ($transaction) use ($browser) {
+
+            $this->validateTransactionOnList($browser, $transaction);
+
+        });
+
+    }
+
+    public function selectValidDateRange(Browser $browser, array $dates) {
+
+
+        $browser
+
+            ->assertVisible('@input-date-from-control')
+            ->assertVisible('@input-date-to-control')
+            ->assertVisible('@btn-apply-control')
+
+            ->type('@input-date-from-control', $dates['from'])
+            ->type('@input-date-to-control', $dates['to'])
+
+            ->screenshot(date('YmdHis'))
+
+            ->assertMissing('@feedback-invalid-dates')
+
+            ->click('@btn-apply-control')
+
+
+            ->assertVue('from', $dates['from'], '@date-range-selector-component')
+            ->assertVue('to', $dates['to'], '@date-range-selector-component')
+
+        ;
+
+
+
+    }
+
+    public function validateDateRangeIsOnCurrentMonth(Browser $browser) {
+
+        $from = Carbon::now()->startOfMonth()->format('Y-m-d');
+        $to = Carbon::now()->endOfMonth()->format('Y-m-d');
+
+        $browser
+
+            ->assertVue('from', $from, '@date-range-selector-component')
+            ->assertVue('to', $to, '@date-range-selector-component')
+
+            ->assertValue( '@input-date-from-control', $from)
+            ->assertValue('@input-date-to-control', $to)
+
+
+
+            ;
 
 
     }
