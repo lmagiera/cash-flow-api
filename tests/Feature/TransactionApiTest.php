@@ -106,6 +106,33 @@ class TransactionApiTest extends TestCase
 
     }
 
+    /**
+     * @fixes CFA-18
+     */
+    public function testGetTransactionFromSameDates() {
+
+        $user = factory(User::class)->create();
+        $transaction = factory(Transaction::class)->create([
+            'planned_on' => '2018-03-01',
+            'user_id' => $user->id
+        ]);
+
+        $response = $this
+            ->actingAs($user, 'api')
+            ->json('GET',
+                "/api/transaction?from=2018-03-01&to=2018-03-01");
+
+        $response->assertStatus(200);
+
+
+        //TODO: add other fields to test
+        $response->assertJsonFragment(['id' => $transaction->id]);
+        $response->assertJsonFragment(['amount' => (string)$transaction->amount]);
+
+
+
+    }
+
     public function testGetSingleTransaction()
     {
 
