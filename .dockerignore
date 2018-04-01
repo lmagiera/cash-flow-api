@@ -1,0 +1,14 @@
+.git
+.idea
+.env
+.rnd
+tests
+node_modules
+.DS_Store
+vendor
+storage/oauth-private.key
+storage/oauth-public.key
+storage/framework/cache/**
+storage/framework/sessions/**
+storage/framework/views/**
+storage/framework/testing/**
