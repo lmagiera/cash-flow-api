@@ -112,6 +112,14 @@
                     repeating_interval: 0
                 },
 
+                pristineTransaction: {
+                    amount: 0,
+                    description: '',
+                    planned_on: '',
+                    actual_on: '',
+                    repeating_interval: 0
+                },
+
                 hasErrors: false,
 
                 errors: {
@@ -152,6 +160,19 @@
         },
 
         props: ['http'],
+
+        mounted() {
+
+            console.log('Tool bar mounted');
+
+            const toolbar = this;
+
+            $('#modal-add-transaction').on('show.bs.modal', function () {
+                console.log('Modal shown!');
+                toolbar.transaction = jQuery.extend({}, toolbar.pristineTransaction);
+                console.log(toolbar.transaction);
+            })
+        },
 
         methods: {
 
