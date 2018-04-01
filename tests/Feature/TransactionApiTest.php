@@ -68,7 +68,7 @@ class TransactionApiTest extends TestCase
         factory(Transaction::class, $intRandomNoOfTransactions)->create([
             'user_id' => $user->id,
             'planned_on' => function () {
-                return Carbon::now()->startOfMonth()->addDays(rand(0, 30));
+                return Carbon::now()->startOfMonth()->addDays(rand(0, 25));
         }]);
 
         // make a call
