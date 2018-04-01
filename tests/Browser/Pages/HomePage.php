@@ -195,7 +195,7 @@ class HomePage extends Page
 
             ->click('@btn-save-transaction')
             ->waitUntilMissing('@modal-add-transaction')
-            ->pause(2000) // wait for server call
+            ->pause(1000) // wait for server call
 
         ;
 
