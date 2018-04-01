@@ -185,6 +185,8 @@ class HomePage extends Page
 
     }
 
+
+
     public function saveNewTransaction(Browser $browser) {
 
         $browser
@@ -281,6 +283,17 @@ class HomePage extends Page
 
 
             ;
+
+
+    }
+
+
+    public function saveTransaction(Browser $browser, Transaction $transaction) {
+        
+        $this->openNewTransactionModal($browser);
+        $this->inputTransaction($browser, $transaction);
+        $this->saveNewTransaction($browser);
+        $this->validateTransactionOnList($browser, $transaction);
 
 
     }
