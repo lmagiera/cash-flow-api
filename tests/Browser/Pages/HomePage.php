@@ -185,6 +185,19 @@ class HomePage extends Page
 
     }
 
+    public function attemptSaveTransaction(Browser $browser) {
+
+        $browser
+            ->waitFor('@modal-add-transaction')
+            ->assertVisible('@modal-add-transaction')
+
+            ->click('@btn-save-transaction')
+
+
+        ;
+
+    }
+
 
 
     public function saveNewTransaction(Browser $browser) {
@@ -251,7 +264,7 @@ class HomePage extends Page
             ->type('@input-date-from-control', $dates['from'])
             ->type('@input-date-to-control', $dates['to'])
 
-            ->screenshot(date('YmdHis'))
+            //->screenshot(date('YmdHis'))
 
             ->assertMissing('@feedback-invalid-dates')
 
