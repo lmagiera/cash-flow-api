@@ -86,7 +86,7 @@ Route::middleware(['auth:api'])->post('/transaction', function(PostTransactionRe
 
     }
     else {
-        $transaction = new Transaction();
+        $transaction = new Transaction($transactionData);
         $transaction->user_id = Auth::id();
         $transaction->save();
     }
