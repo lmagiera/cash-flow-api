@@ -97,12 +97,13 @@ class HomePage extends Page
             ->assertSeeIn('@input-planned-on', 'Date Planned')
 
             // Transaction Date Actual
-            ->assertVisible('@input-actual-on')
-            ->assertSeeIn('@input-actual-on', 'Date Actual')
+
+            //->assertVisible('@input-actual-on')
+            //->assertSeeIn('@input-actual-on', 'Date Actual')
 
             // Varying transaction
-            ->assertVisible('@input-varying')
-            ->assertSeeIn('@input-varying', 'Varying')
+            //->assertVisible('@input-varying')
+            //->assertSeeIn('@input-varying', 'Varying')
 
             ->assertVisible('@input-repeating')
             ->assertSeeIn('@input-repeating', 'Repeat')
@@ -141,8 +142,8 @@ class HomePage extends Page
             ->type('@input-planned-on-control', $t->planned_on)
             ->assertVue('transaction.planned_on', $t->planned_on, '@tool-bar-component')
 
-            ->type('@input-actual-on-control', $t->actual_on)
-            ->assertVue('transaction.actual_on', $t->actual_on, '@tool-bar-component')
+            //->type('@input-actual-on-control', $t->actual_on)
+            //->assertVue('transaction.actual_on', $t->actual_on, '@tool-bar-component')
 
             ->select('@input-repeating-control', $t->repeating_interval)
             ->assertVue('transaction.repeating_interval', $t->repeating_interval, '@tool-bar-component')
