@@ -19,7 +19,10 @@ if (!mix.inProduction()) {
     }).sourceMaps()
 }
 
-mix.js('resources/assets/js/app.js', 'public/js')
-   .sass('resources/assets/sass/app.scss', 'public/css');
+mix
+    .js('resources/assets/js/app.js', 'public/js')
+    /*.copy('node_modules/font-awesome/fonts/', 'public/fonts')*/
+    .sass('resources/assets/sass/app.scss', 'public/css')
+;
 
 
