@@ -10,7 +10,7 @@
 require('./bootstrap');
 
 window.Vue = require('vue');
-window.moment = require('moment');
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -33,7 +33,8 @@ Object.defineProperty(Vue.prototype, '$bus', {
 Vue.prototype.HTTP = axios.create({
 
 
-    baseURL: 'https://cfa-beta.avrosix.net:6080/api/',
+    //baseURL: 'https://cfa-beta.avrosix.net:6080/api/',
+    baseURL: 'http://cash-flow-api.a6.net/api/',
     headers: {
 
     }

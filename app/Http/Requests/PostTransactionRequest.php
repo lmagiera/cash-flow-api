@@ -28,7 +28,7 @@ class PostTransactionRequest extends FormRequest
 
             'transaction' => 'required',
             'transaction.description' => 'required|max:150',
-            'transaction.amount' => ['required', Rule::notIn([0])],
+            'transaction.amount' => ['required', Rule::notIn([0]), 'numeric'],
             'transaction.planned_on' => 'required|date_format:"Y-m-d"',
             'transaction.repeating_interval' => ['required', Rule::in([0, 1, 2, 3])]
 

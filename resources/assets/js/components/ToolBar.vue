@@ -1,7 +1,12 @@
 <template>
 <span class="align-items-center">
 
-<a class="btn btn-primary" data-toggle="modal" data-target="#modal-add-transaction" href="#" dusk="btn-add-transaction">Add New Transaction</a>
+<a class="btn btn-primary" data-toggle="modal" data-target="#modal-add-transaction" href="#" dusk="btn-add-transaction">
+    <span class="d-none d-md-inline">Add New Transaction</span>
+    <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+</a>
+
+
 
 <div class="modal fade" id="modal-add-transaction"
      tabindex="-1" role="dialog"
@@ -51,11 +56,19 @@
 
         <div class="form-group" dusk="input-planned-on">
             <label for="transaction-planned-on" class="col-form-label">Date Planned At:</label>
-            <input type="text" class="form-control" id="transaction-planned-on"
-                   v-bind:class="validation.transaction.planned_on" v-model="transaction.planned_on">
-            <div class="invalid-feedback" dusk="feedback-invalid-planned-on">{{ errors["transaction.planned_on"] }}</div>
+            <div class="input-group">
+                <input type="text" class="form-control" id="transaction-planned-on" v-bind:class="validation.transaction.planned_on" v-model="transaction.planned_on">
+                <div class="input-group-append">
+                    <div class="input-group-text">
+                        <i class="fa fa-calendar" aria-hidden="true"></i>
+                    </div>
+                </div>
+                <div class="invalid-feedback" dusk="feedback-invalid-planned-on">{{ errors["transaction.planned_on"] }}</div>
+            </div>
+
         </div>
 
+        <!--
         <div class="form-group" dusk="input-actual-on">
             <label for="transaction-actual-on" class="col-form-label">Date Actual At:</label>
             <input type="text" class="form-control" id="transaction-actual-on"
@@ -69,6 +82,7 @@
                 <label class="custom-control-label" for="transaction-varying">Varying</label>
             </div>
         </div>
+        -->
 
         <div class="form-group" dusk="input-repeating">
             <repeat-selector v-bind:hasErrors="hasErrors"
@@ -95,6 +109,9 @@
 </template>
 
 <script>
+
+
+
     export default {
 
         name: "tool-bar",
@@ -105,6 +122,14 @@
 
                 transaction: {
 
+                    amount: 0,
+                    description: '',
+                    planned_on: '',
+                    actual_on: '',
+                    repeating_interval: 0
+                },
+
+                pristineTransaction: {
                     amount: 0,
                     description: '',
                     planned_on: '',
@@ -130,13 +155,13 @@
                 return {
                     transaction: {
                         description: {
-                            'is-invalid': this.errors['transaction.description']
+                            'is-invalid': this.errors['transaction.description'] ? true : false
                         },
                         amount: {
-                            'is-invalid': this.errors['transaction.amount']
+                            'is-invalid': this.errors['transaction.amount'] ? true : false
                         },
                         planned_on: {
-                            'is-invalid': this.errors['transaction.planned_on']
+                            'is-invalid': this.errors['transaction.planned_on'] ? true : false
                         },
                         /*
                         actual_on: {
@@ -144,7 +169,7 @@
                         },
                         */
                         repeating_interval: {
-                            'is-invalid': this.errors['transaction.repeating_interval']
+                            'is-invalid': this.errors['transaction.repeating_interval'] ? true : false
                         }
                     }
                 }
@@ -152,6 +177,38 @@
         },
 
         props: ['http'],
+
+        mounted() {
+
+            console.log('Tool bar mounted');
+
+            const toolbar = this;
+
+
+            $("#transaction-planned-on").datepicker({
+                format: "yyyy-mm-dd",
+                autoclose: true
+            }).on('show.bs.modal', function(event) {
+                // prevent datepicker from firing bootstrap modal "show.bs.modal"
+                event.preventDefault();
+                event.stopPropagation();
+            }).on('changeDate', function() {
+                toolbar.transaction.planned_on = $('#transaction-planned-on').val();
+            });
+
+            $('#modal-add-transaction').on('show.bs.modal', function () {
+
+                // clear transaction
+                toolbar.transaction = jQuery.extend({}, toolbar.pristineTransaction);
+
+                // set date to today
+                $('#transaction-planned-on').datepicker('update', new Date());
+
+            });
+
+
+
+        },
 
         methods: {
 
@@ -175,7 +232,8 @@
             sendTransaction: function () {
 
 
-                console.log('Sending transaction on amount: ' + this.transaction.amount + " PLN");
+                console.log('Sending transaction on amount');
+                console.log(this.transaction);
 
                 this.http.post('transaction', {transaction: this.transaction})
 
@@ -195,6 +253,9 @@
                         this.hasErrors = true;
 
                         this.errors = e.response.data.errors;
+
+                        console.log(e.response.data);
+
 
 
                     });
