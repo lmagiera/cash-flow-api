@@ -66140,7 +66140,7 @@ exports = module.exports = __webpack_require__(3)(true);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"ToolBar.vue","sourceRoot":""}]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"ToolBar.vue","sourceRoot":""}]);
 
 // exports
 
@@ -66184,6 +66184,9 @@ module.exports = function listToStyles (parentId, list) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
 //
 //
 //
@@ -66661,19 +66664,7 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("span", { staticClass: "align-items-center" }, [
-    _c(
-      "a",
-      {
-        staticClass: "btn btn-primary",
-        attrs: {
-          "data-toggle": "modal",
-          "data-target": "#modal-add-transaction",
-          href: "#",
-          dusk: "btn-add-transaction"
-        }
-      },
-      [_vm._v("Add New Transaction")]
-    ),
+    _vm._m(0),
     _vm._v(" "),
     _c(
       "div",
@@ -66694,7 +66685,7 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(0),
+              _vm._m(1),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _vm.hasErrors
@@ -66712,7 +66703,7 @@ var render = function() {
                         _vm._v(
                           "\n            There were errors processing your request\n            "
                         ),
-                        _vm._m(1)
+                        _vm._m(2)
                       ]
                     )
                   : _vm._e(),
@@ -66816,7 +66807,7 @@ var render = function() {
                           }
                         }),
                         _vm._v(" "),
-                        _vm._m(2),
+                        _vm._m(3),
                         _vm._v(" "),
                         _c(
                           "div",
@@ -66874,7 +66865,7 @@ var render = function() {
                           }
                         }),
                         _vm._v(" "),
-                        _vm._m(3),
+                        _vm._m(4),
                         _vm._v(" "),
                         _c(
                           "div",
@@ -66947,6 +66938,33 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "a",
+      {
+        staticClass: "btn btn-primary",
+        attrs: {
+          "data-toggle": "modal",
+          "data-target": "#modal-add-transaction",
+          href: "#",
+          dusk: "btn-add-transaction"
+        }
+      },
+      [
+        _c("span", { staticClass: "d-none d-md-inline" }, [
+          _vm._v("Add New Transaction")
+        ]),
+        _vm._v(" "),
+        _c("i", {
+          staticClass: "fa fa-plus-square-o",
+          attrs: { "aria-hidden": "true" }
+        })
+      ]
+    )
+  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -67459,7 +67477,7 @@ exports = module.exports = __webpack_require__(3)(true);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"DateRangeSelector.vue","sourceRoot":""}]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"DateRangeSelector.vue","sourceRoot":""}]);
 
 // exports
 
@@ -67470,6 +67488,20 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -67533,10 +67565,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         var $this = this;
 
         $('.input-daterange').datepicker({ format: "yyyy-mm-dd", autoclose: true }).on('changeDate', function (e) {
+
             console.log('Date from changed!');
             console.log(e);
             $this.from = $('#input-date-from-control').val();
             $this.to = $('#input-date-to-control').val();
+            $this.applyDateRange();
         });
 
         this.from = moment().startOf('month').format('YYYY-MM-DD');
@@ -67619,112 +67653,106 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _c("form", { staticClass: "form-inline" }, [
-      _c("label", { staticClass: "mr-2" }, [_vm._v("Select Date Range")]),
-      _vm._v(" "),
-      _c("div", { staticClass: "input-group input-daterange" }, [
-        _c("div", { staticClass: "input-group-prepend" }, [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-outline-secondary",
-              attrs: { type: "button", dusk: "btn-date-range-prev-control" },
-              on: { click: _vm.prev }
-            },
-            [
-              _c("i", {
-                staticClass: "fa fa-lg fa-arrow-circle-left",
-                attrs: { "aria-hidden": "true" }
-              })
-            ]
-          )
-        ]),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.from,
-              expression: "from"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: {
-            name: "from",
-            id: "input-date-from-control",
-            type: "text",
-            dusk: "input-date-from-control"
-          },
-          domProps: { value: _vm.from },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.from = $event.target.value
-            }
-          }
-        }),
-        _vm._v(" "),
-        _vm._m(0),
-        _vm._v(" "),
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.to,
-              expression: "to"
-            }
-          ],
-          staticClass: "form-control",
-          attrs: {
-            name: "to",
-            id: "input-date-to-control",
-            type: "text",
-            dusk: "input-date-to-control"
-          },
-          domProps: { value: _vm.to },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.to = $event.target.value
-            }
-          }
-        }),
-        _vm._v(" "),
-        _vm._m(1),
-        _vm._v(" "),
-        _c("div", { staticClass: "input-group-append" }, [
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-outline-secondary",
-              attrs: { type: "button", dusk: "btn-date-range-next-control" },
-              on: { click: _vm.next }
-            },
-            [
-              _c("i", {
-                staticClass: "fa fa-lg fa-arrow-circle-right",
-                attrs: { "aria-hidden": "true" }
-              })
-            ]
-          )
-        ])
+    _c("form", { staticClass: "form-inline d-flex flex-row" }, [
+      _c("h6", { staticClass: "d-md-none d-sm-inline mr-4 text-primary" }, [
+        _vm._v(_vm._s(_vm.from) + " - " + _vm._s(_vm.to))
       ]),
       _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "btn btn-primary ml-2",
-          attrs: { type: "button", dusk: "btn-apply-control" },
-          on: { click: _vm.applyDateRange }
-        },
-        [_vm._v("Apply")]
-      )
+      _c("div", [
+        _c("div", { staticClass: "input-group input-daterange float-right" }, [
+          _c("div", { staticClass: "input-group-prepend" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-outline-secondary",
+                attrs: { type: "button", dusk: "btn-date-range-prev-control" },
+                on: { click: _vm.prev }
+              },
+              [
+                _c("i", {
+                  staticClass: "fa fa-lg fa-arrow-circle-left",
+                  attrs: { "aria-hidden": "true" }
+                })
+              ]
+            )
+          ]),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.from,
+                expression: "from"
+              }
+            ],
+            staticClass: "d-none d-md-inline form-control",
+            attrs: {
+              name: "from",
+              id: "input-date-from-control",
+              type: "text",
+              dusk: "input-date-from-control"
+            },
+            domProps: { value: _vm.from },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.from = $event.target.value
+              }
+            }
+          }),
+          _vm._v(" "),
+          _vm._m(0),
+          _vm._v(" "),
+          _c("input", {
+            directives: [
+              {
+                name: "model",
+                rawName: "v-model",
+                value: _vm.to,
+                expression: "to"
+              }
+            ],
+            staticClass: "d-none d-md-inline form-control",
+            attrs: {
+              name: "to",
+              id: "input-date-to-control",
+              type: "text",
+              dusk: "input-date-to-control"
+            },
+            domProps: { value: _vm.to },
+            on: {
+              input: function($event) {
+                if ($event.target.composing) {
+                  return
+                }
+                _vm.to = $event.target.value
+              }
+            }
+          }),
+          _vm._v(" "),
+          _vm._m(1),
+          _vm._v(" "),
+          _c("div", { staticClass: "input-group-append" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-outline-secondary",
+                attrs: { type: "button", dusk: "btn-date-range-next-control" },
+                on: { click: _vm.next }
+              },
+              [
+                _c("i", {
+                  staticClass: "fa fa-lg fa-arrow-circle-right",
+                  attrs: { "aria-hidden": "true" }
+                })
+              ]
+            )
+          ])
+        ])
+      ])
     ])
   ])
 }
@@ -67733,7 +67761,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input-group-append" }, [
+    return _c("div", { staticClass: "input-group-append d-none d-md-flex" }, [
       _c("div", { staticClass: "input-group-text" }, [
         _c("i", {
           staticClass: "fa fa-calendar",
@@ -67746,7 +67774,7 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "input-group-append" }, [
+    return _c("div", { staticClass: "input-group-append d-none d-md-flex" }, [
       _c("div", { staticClass: "input-group-text" }, [
         _c("i", {
           staticClass: "fa fa-calendar",

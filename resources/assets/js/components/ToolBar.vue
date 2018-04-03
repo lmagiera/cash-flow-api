@@ -1,7 +1,10 @@
 <template>
 <span class="align-items-center">
 
-<a class="btn btn-primary" data-toggle="modal" data-target="#modal-add-transaction" href="#" dusk="btn-add-transaction">Add New Transaction</a>
+<a class="btn btn-primary" data-toggle="modal" data-target="#modal-add-transaction" href="#" dusk="btn-add-transaction">
+    <span class="d-none d-md-inline">Add New Transaction</span>
+    <i class="fa fa-plus-square-o" aria-hidden="true"></i>
+</a>
 
 
 
