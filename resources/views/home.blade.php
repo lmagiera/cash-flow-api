@@ -6,10 +6,10 @@
 <div class="container">
 
     <div class="row mb-4">
-        <div class="col-3">
+        <div class="col-2">
             <tool-bar dusk="tool-bar-component" v-bind:http="HTTP" v-on:transaction="addTransaction"></tool-bar>
         </div>
-        <div class="col-9 d-flex justify-content-end">
+        <div class="col-10 d-flex justify-content-end">
             <date-range-selector dusk="date-range-selector-component"></date-range-selector>
         </div>
     </div>
