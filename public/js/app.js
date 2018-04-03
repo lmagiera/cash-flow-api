@@ -67459,7 +67459,7 @@ exports = module.exports = __webpack_require__(3)(true);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"DateRangeSelector.vue","sourceRoot":""}]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"DateRangeSelector.vue","sourceRoot":""}]);
 
 // exports
 
@@ -67470,6 +67470,22 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -67534,8 +67550,62 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         applyDateRange: function applyDateRange() {
 
+            $('.input-daterange input[name="from"]').datepicker('update', this.from);
+            $('.input-daterange input[name="to"]').datepicker('update', this.to);
+
             this.$bus.$emit('date-range-applied', { from: this.from, to: this.to });
+        },
+
+        diff: function diff(from, to) {
+
+            var differences = ['years', 'months', 'days'];
+
+            var unit = 'days';
+            var diff = 1;
+
+            while (differences.length > 0) {
+
+                unit = differences.shift();
+                diff = to.diff(from, unit);
+
+                if (diff > 0) {
+                    break;
+                }
+            }
+
+            return { diff: diff, unit: unit };
+        },
+
+        next: function next() {
+
+            var mFrom = moment(this.from);
+            var mTo = moment(this.to).add(1, 'days');
+
+            var _diff = this.diff(mFrom, mTo),
+                diff = _diff.diff,
+                unit = _diff.unit;
+
+            this.from = mFrom.add(diff, unit).format('YYYY-MM-DD');
+            this.to = mTo.add(diff, unit).subtract(1, 'days').format('YYYY-MM-DD');
+
+            this.applyDateRange();
+        },
+
+        prev: function prev() {
+
+            var mFrom = moment(this.from);
+            var mTo = moment(this.to).add(1, 'days');;
+
+            var _diff2 = this.diff(mFrom, mTo),
+                diff = _diff2.diff,
+                unit = _diff2.unit;
+
+            this.from = mFrom.subtract(diff, unit).format('YYYY-MM-DD');
+            this.to = mTo.subtract(diff, unit).subtract(1, 'days').format('YYYY-MM-DD');
+
+            this.applyDateRange();
         }
+
     }
 
 });
@@ -67553,6 +67623,23 @@ var render = function() {
       _c("label", { staticClass: "mr-2" }, [_vm._v("Select Date Range")]),
       _vm._v(" "),
       _c("div", { staticClass: "input-group input-daterange" }, [
+        _c("div", { staticClass: "input-group-prepend" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-outline-secondary",
+              attrs: { type: "button", dusk: "btn-date-range-prev-control" },
+              on: { click: _vm.prev }
+            },
+            [
+              _c("i", {
+                staticClass: "fa fa-lg fa-arrow-circle-left",
+                attrs: { "aria-hidden": "true" }
+              })
+            ]
+          )
+        ]),
+        _vm._v(" "),
         _c("input", {
           directives: [
             {
@@ -67609,7 +67696,24 @@ var render = function() {
           }
         }),
         _vm._v(" "),
-        _vm._m(1)
+        _vm._m(1),
+        _vm._v(" "),
+        _c("div", { staticClass: "input-group-append" }, [
+          _c(
+            "button",
+            {
+              staticClass: "btn btn-outline-secondary",
+              attrs: { type: "button", dusk: "btn-date-range-next-control" },
+              on: { click: _vm.next }
+            },
+            [
+              _c("i", {
+                staticClass: "fa fa-lg fa-arrow-circle-right",
+                attrs: { "aria-hidden": "true" }
+              })
+            ]
+          )
+        ])
       ]),
       _vm._v(" "),
       _c(
