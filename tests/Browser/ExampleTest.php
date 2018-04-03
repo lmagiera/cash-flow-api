@@ -232,9 +232,11 @@ class ExampleTest extends DuskTestCase
      */
     public function testUserCanEnterRepeatingTransaction() {
 
+        $this->markTestSkipped();
 
 
-        $this->browse(function (Browser $browser){
+
+        $this->browse(function (Browser $browser) {
 
             $user = $this->getUser();
 
