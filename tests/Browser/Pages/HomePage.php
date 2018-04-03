@@ -260,7 +260,7 @@ class HomePage extends Page
 
             ->assertVisible('@input-date-from-control')
             ->assertVisible('@input-date-to-control')
-            ->assertVisible('@btn-apply-control')
+            //->assertVisible('@btn-apply-control')
 
             ->type('@input-date-from-control', $dates['from'])
             ->type('@input-date-to-control', $dates['to'])
@@ -269,7 +269,7 @@ class HomePage extends Page
 
             ->assertMissing('@feedback-invalid-dates')
 
-            ->click('@btn-apply-control')
+            //->click('@btn-apply-control')
 
 
             ->assertVue('from', $dates['from'], '@date-range-selector-component')
