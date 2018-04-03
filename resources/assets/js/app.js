@@ -33,7 +33,7 @@ Object.defineProperty(Vue.prototype, '$bus', {
 Vue.prototype.HTTP = axios.create({
 
 
-    baseURL: 'http://cash-flow-api.a6.net/api/',
+    baseURL: 'https://cfa-beta.avrosix.net:6080/api/',
     headers: {
 
     }
