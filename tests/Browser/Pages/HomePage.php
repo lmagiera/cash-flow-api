@@ -97,12 +97,13 @@ class HomePage extends Page
             ->assertSeeIn('@input-planned-on', 'Date Planned')
 
             // Transaction Date Actual
-            ->assertVisible('@input-actual-on')
-            ->assertSeeIn('@input-actual-on', 'Date Actual')
+
+            //->assertVisible('@input-actual-on')
+            //->assertSeeIn('@input-actual-on', 'Date Actual')
 
             // Varying transaction
-            ->assertVisible('@input-varying')
-            ->assertSeeIn('@input-varying', 'Varying')
+            //->assertVisible('@input-varying')
+            //->assertSeeIn('@input-varying', 'Varying')
 
             ->assertVisible('@input-repeating')
             ->assertSeeIn('@input-repeating', 'Repeat')
@@ -141,8 +142,8 @@ class HomePage extends Page
             ->type('@input-planned-on-control', $t->planned_on)
             ->assertVue('transaction.planned_on', $t->planned_on, '@tool-bar-component')
 
-            ->type('@input-actual-on-control', $t->actual_on)
-            ->assertVue('transaction.actual_on', $t->actual_on, '@tool-bar-component')
+            //->type('@input-actual-on-control', $t->actual_on)
+            //->assertVue('transaction.actual_on', $t->actual_on, '@tool-bar-component')
 
             ->select('@input-repeating-control', $t->repeating_interval)
             ->assertVue('transaction.repeating_interval', $t->repeating_interval, '@tool-bar-component')
@@ -185,6 +186,19 @@ class HomePage extends Page
 
     }
 
+    public function attemptSaveTransaction(Browser $browser) {
+
+        $browser
+            ->waitFor('@modal-add-transaction')
+            ->assertVisible('@modal-add-transaction')
+
+            ->click('@btn-save-transaction')
+
+
+        ;
+
+    }
+
 
 
     public function saveNewTransaction(Browser $browser) {
@@ -195,7 +209,7 @@ class HomePage extends Page
 
             ->click('@btn-save-transaction')
             ->waitUntilMissing('@modal-add-transaction')
-            ->pause(2000) // wait for server call
+            ->pause(1000) // wait for server call
 
         ;
 
@@ -251,7 +265,7 @@ class HomePage extends Page
             ->type('@input-date-from-control', $dates['from'])
             ->type('@input-date-to-control', $dates['to'])
 
-            ->screenshot(date('YmdHis'))
+            //->screenshot(date('YmdHis'))
 
             ->assertMissing('@feedback-invalid-dates')
 
