@@ -2,14 +2,15 @@
 
 use App\Http\Requests\GetTransactionsRequest;
 use App\Http\Requests\PostTransactionRequest;
+use App\Http\Requests\PutTransactionRequest;
 use App\Http\Resources\TransactionCollection;
 use App\Http\Resources\TransactionResource;
 use App\Transaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
-use Carbon\Carbon;
 
 /*
 |--------------------------------------------------------------------------
@@ -54,6 +55,22 @@ Route::middleware(['auth:api'])->get('/transaction/{id}', function(Request $requ
 
     $transaction = Transaction::where(['id' => $id])->firstOrFail();
     return new TransactionResource($transaction);
+
+});
+
+Route::middleware(['auth:api'])->put('/transaction/{id}', function(PutTransactionRequest $request, $id) {
+
+
+    $transaction = Transaction::where(['id' => $id])->firstOrFail();
+
+    $transactionData =
+        $request->json()->get('transaction');
+
+
+
+
+
+    return new TransactionResource($transaction);;
 
 });
 
