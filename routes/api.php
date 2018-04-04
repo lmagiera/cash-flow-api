@@ -139,5 +139,3 @@ Route::middleware(['auth:api'])->post('/transaction', function(PostTransactionRe
 
 
 });
-
-
