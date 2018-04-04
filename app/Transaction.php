@@ -9,14 +9,19 @@ class Transaction extends Model
 {
     //
 
+
+
     protected $fillable = [
         'description',
         'amount',
-        'varying',
         'planned_on',
-        'actual_on',
-        'user_id'
+        'repeating_id',
+        'repeating_interval'
     ];
+
+
+
+
 
     public function user() {
         return $this->belongsTo(User::class);
@@ -51,4 +56,38 @@ class Transaction extends Model
         $query->orderBy('planned_on', 'ASC');
 
     }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     */
+    public function scopeId($query, $id) {
+
+        $query->where('id', '=', $id);
+
+    }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     */
+    public function scopeWithoutKey($query, $id) {
+
+        $query->whereKeyNot($id);
+
+    }
+
+
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param $repeating_id
+     */
+    public function scopeRepeating($query, $repeating_id) {
+
+        $query->where('repeating_id', '=', $repeating_id);
+
+    }
+
+
 }

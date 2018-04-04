@@ -16,7 +16,7 @@ $factory->define(App\Transaction::class, function (Faker $faker) {
             return factory(\App\User::class)->create()->id;
         },
 
-        'repeating_id' => $faker->randomNumber(5),
+        'repeating_id' => null,
         'repeating_interval' => $faker->randomFloat(0, 0, 3)
     ];
 });
