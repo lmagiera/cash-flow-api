@@ -2,14 +2,16 @@
 
 use App\Http\Requests\GetTransactionsRequest;
 use App\Http\Requests\PostTransactionRequest;
+use App\Http\Requests\PutTransactionRequest;
 use App\Http\Resources\TransactionCollection;
 use App\Http\Resources\TransactionResource;
 use App\Transaction;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Validator;
-use Carbon\Carbon;
+use Ramsey\Uuid\Uuid;
 
 /*
 |--------------------------------------------------------------------------
@@ -53,7 +55,35 @@ Route::middleware(['auth:api'])->get('/transaction', function (Request $request)
 Route::middleware(['auth:api'])->get('/transaction/{id}', function(Request $request, $id) {
 
     $transaction = Transaction::where(['id' => $id])->firstOrFail();
+
     return new TransactionResource($transaction);
+
+});
+
+Route::middleware(['auth:api'])->put('/transaction/{id}', function(PutTransactionRequest $request, $id) {
+
+
+    dd($id);
+
+    $transaction = Transaction::where(['id' => $id])->firstOrFail();
+
+    $transactionData =
+        $request->json()->get('transaction');
+
+    $transaction->fill($transactionData);
+    $transaction->save();
+
+    if ( $transactionData['update_all'] == true) {
+
+        $repeatingId = $transaction->repeating_id;
+        collect($transactionData)->except(['repeating_id', 'repeating_interval']);
+
+        Transaction::repeating($repeatingId)->udpate($transactionData);
+
+    }
+
+    return new TransactionResource($transaction);
+
 
 });
 
@@ -62,36 +92,29 @@ Route::middleware(['auth:api'])->post('/transaction', function(PostTransactionRe
     $transactionData =
         $request->json()->get('transaction');
 
-    if ($transactionData['repeating_interval'] != 0) {
+    $transaction = new Transaction($transactionData);
+    $transaction->user_id = Auth::id();
+    $transaction->repeating_id = $transactionData['repeating_interval'] != 0 ? Uuid::uuid4()->toString() : null;
 
-        $firstDate = (new Carbon($transactionData['planned_on']))->format('Y-m-d');
 
-        //TODO: this do not scale well..
-        //TODO: get better at generating this number/id
-        $uiq = uniqid('RPT-', true);
+    $transaction->save();
 
-        for ($c = 0; $c < 50; $c++) {
+    if ( $transactionData['repeating_interval'] != 0 ) {
 
-            $transaction = new Transaction($transactionData);
-            $transaction->planned_on = $firstDate;
-            $transaction->user_id = Auth::id();
-            $transaction->repeating_id = $uiq;
+        $firstDate = (new Carbon($transaction->planned_on))->addMonth($transactionData['repeating_interval'])->format('Y-m-d');
 
-            $transaction->save();
+        for ($c = 1; $c < 50; $c++) {
 
-            $firstDate = (new Carbon($firstDate))->addMonth($transactionData['repeating_interval'])->format('Y-m-d');
+            $rTransaction = new Transaction($transactionData);
+            $rTransaction->planned_on = $firstDate;
+            $rTransaction->user_id = $transaction->user_id;
+            $rTransaction->repeating_id = $transaction->repeating_id;
 
+            $rTransaction->save();
         }
-
-
-    }
-    else {
-        $transaction = new Transaction($transactionData);
-        $transaction->user_id = Auth::id();
-        $transaction->save();
     }
 
-
+    return new TransactionResource($transaction);;
 
 
 });

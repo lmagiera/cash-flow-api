@@ -9,13 +9,11 @@ class Transaction extends Model
 {
     //
 
+
     protected $fillable = [
         'description',
         'amount',
-        'varying',
         'planned_on',
-        'actual_on',
-        'user_id'
     ];
 
     public function user() {
@@ -51,4 +49,26 @@ class Transaction extends Model
         $query->orderBy('planned_on', 'ASC');
 
     }
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     */
+    public function scopedId($query, $id) {
+
+        $query->where('id', '=', $id);
+
+    }
+
+    /**
+    * @param \Illuminate\Database\Eloquent\Builder $query
+    *
+    */
+    public function scopedRepeating($query, $repeating_id) {
+
+        $query->where('repeating_id', '=', $repeating_id);
+
+    }
+
+
 }

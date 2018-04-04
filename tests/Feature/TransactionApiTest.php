@@ -143,19 +143,19 @@ class TransactionApiTest extends TestCase
         $transaction = factory(Transaction::class)->create(['user_id' => $user->id]);
         $id = $transaction->id;
 
+
         $response = $this
             ->actingAs($user, 'api')
             ->json('GET', '/api/transaction/' . $id);
 
 
         $response->assertStatus(200);
-
-
         //TODO: add other fields to test
-        $response->assertJson(['data' => [
-            'id' => $id,
-            'amount' => $transaction->amount
-        ]]);
+        $response->assertJsonFragment(['amount' => $transaction->amount]);
+        $response->assertJsonFragment(['repeating_interval' => $transaction->repeating_interval]);
+
+
+
 
 
     }
@@ -171,7 +171,10 @@ class TransactionApiTest extends TestCase
             ->actingAs($user, 'api')
             ->json('POST', '/api/transaction', ['transaction' => $transaction]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
+        //TODO: add other fields to test
+        $response->assertJsonFragment(['actual_on' => $transaction->actual_on]);
+        $response->assertJsonFragment(['amount' => (string)$transaction->amount]);
 
     }
 
@@ -226,21 +229,130 @@ class TransactionApiTest extends TestCase
             ->actingAs($userOne, 'api')
             ->json('POST', '/api/transaction', ['transaction' => $transactionOne]);
 
-        $response->assertStatus(200);
+        $response->assertStatus(201);
+
+        $transactionData = $response->json('data');
+
 
         $response = $this
             ->actingAs($userOne, 'api')
-            ->json('GET', '/api/transaction/'.$transactionOne->id);
+            ->json('GET', '/api/transaction/'.$transactionData['id']);
 
         $response->assertStatus(200);
+        $response->assertJsonFragment(['id' => $transactionData['id']]);
 
         $response = $this
             ->actingAs($userTwo, 'api')
-            ->json('GET', '/api/transaction/'.$transactionOne->id);
+            ->json('GET', '/api/transaction/'.$transactionData['id']);
+
+        $response->assertStatus(404);
+
+
+
+
+
+    }
+
+    /**
+     * Tests Cash Flow App Update Transaction API call
+     *
+     * Tests
+     */
+    public function testBasicUpdateTransaction() {
+
+        $user = factory(User::class)->create();
+        $transaction = factory(Transaction::class)->create([
+            'user_id' => $user->id,
+            'repeating_interval' => 1, // do not repeat,
+        ]);
+
+        $transaction->update_all = false;
+        $transaction->amount = $transaction->amount + 200;
+
+
+        $response = $this
+            ->actingAs($user, 'api')
+            ->json('PUT', '/api/transaction/'.$transaction->id, ['transaction' => $transaction])
+        ;
 
         $response->assertStatus(200);
-        $response->assertJsonFragment(['data' => []]);
+        $response->assertJsonFragment(['id' => $transaction->id]);
+        $response->assertJsonFragment(['amount' => $transaction->amount]);
 
+    }
+
+    public function testUserCanOnlyUpdateHisOwnTransaction() {
+
+        $userOne = factory(User::class)->create();
+
+        $transaction = factory(Transaction::class)->create([
+            'user_id' => $userOne->id,
+            'repeating_interval' => 0, // do not repeat,
+        ]);
+
+
+
+        $transaction->update_all = false;
+        $transaction->amount = $transaction->amount + 200;
+
+        $userTwo = factory(User::class)->create();
+
+        $response = $this
+            ->actingAs($userTwo, 'api')
+            ->json('PUT', '/api/transaction/'.$transaction->id, ['transaction' => $transaction])
+            ;
+
+        $response->assertStatus(404);
+
+    }
+
+    public function testEditRepeatingTransactionUpdateAllFuture() {
+
+        $user = factory(User::class)->create();
+
+        $transaction = factory(Transaction::class)->make([
+            'user_id' => $user->id,
+            'repeating_interval' => 1, // repeat monthly
+        ]);
+
+        $response =$this
+            ->actingAs($user, 'api')
+            ->json('POST', '/api/transaction', ['transaction' => $transaction]);
+
+        $response->assertStatus(201);
+
+        $transactionData = $response->json('data');
+
+        $newAmount = sprintf("%0.2f", $transactionData['amount'] + 200);
+
+        $transactionData['amount'] = $newAmount;
+        $transactionData['update_all'] = true;
+
+        $response = $this
+            ->actingAs($user, 'api')
+            ->json('PUT', '/api/transaction/'.$transactionData['id'], ['transaction' => $transactionData]);
+
+        $response->assertStatus(200);
+        $response->assertJsonFragment(['id' => $transactionData['id']]);
+        $response->assertJsonFragment(['amount' => $newAmount]);
+
+        //FIXME: Following is exploiting the fact, that transaction.id is an autoincrement column
+        // get next transaction,
+
+        $response = $this->actingAs($user, 'api')->json('GET', '/api/transaction/'.($transactionData['id']+1));
+        $response->assertStatus(200);
+
+        $response->assertJsonFragment(['id' => ($transactionData['id'] + 1)]);
+        $response->assertJsonFragment(['amount' => $newAmount]);
+
+        //FIXME: Following is exploiting the fact, that transaction.id is an autoincrement column
+        // get next transaction,
+
+        $response = $this->actingAs($user, 'api')->json('GET', '/api/transaction/'.($transactionData['id']+2));
+        $response->assertStatus(200);
+
+        $response->assertJsonFragment(['id' => ($transactionData['id'] + 2)]);
+        $response->assertJsonFragment(['amount' => $newAmount]);
 
 
 
