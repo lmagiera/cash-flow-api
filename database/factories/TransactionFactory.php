@@ -6,7 +6,7 @@ $factory->define(App\Transaction::class, function (Faker $faker) {
     return [
         'description' => $faker->text(150),
 
-        'amount' => $faker->randomFloat(2, -2300, 2300),
+        'amount' => sprintf("%0.2f", $faker->randomFloat(2, -2300, 2300)),
         'varying' => $faker->boolean(),
 
         'planned_on' => $faker->dateTimeBetween('now', '+1 month')->format('Y-m-d'),

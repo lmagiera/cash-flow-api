@@ -1,11 +1,15 @@
 sudo: required
 language: php
+dist: trusty
 
 php:
-  - 7.1
+  - 7.2
 
 addons:
    chrome: stable
+
+services:
+  - mysql
 
 before_script:
   - export DISPLAY=:99.0
@@ -13,12 +17,8 @@ before_script:
   - ./vendor/laravel/dusk/bin/chromedriver-linux &
   - cp .env.travis .env
   - composer install --no-interaction
-  - npm install npm@latest -g
-  - npm install -g jshint
-  - npm install
-  - npm run production
   - mysql -e 'create database homestead_test;'
-  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://127.0.0.1 &
+  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
   - php artisan key:generate
   - php artisan migrate
   - php artisan serve &
