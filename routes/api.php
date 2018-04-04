@@ -63,22 +63,43 @@ Route::middleware(['auth:api'])->get('/transaction/{id}', function(Request $requ
 Route::middleware(['auth:api'])->put('/transaction/{id}', function(PutTransactionRequest $request, $id) {
 
 
-    dd($id);
-
     $transaction = Transaction::where(['id' => $id])->firstOrFail();
 
-    $transactionData =
-        $request->json()->get('transaction');
+    $oldRepitingInterval = $transaction->repeating_interval;
 
-    $transaction->fill($transactionData);
+    $transactionData = collect($request->json()->get('transaction'));
+    $fillables = $transactionData->except(['update_all', 'user_id', 'id', 'repeating_id'])->toArray();
+
+    $transaction->fill($fillables);
     $transaction->save();
 
     if ( $transactionData['update_all'] == true) {
 
         $repeatingId = $transaction->repeating_id;
-        collect($transactionData)->except(['repeating_id', 'repeating_interval']);
 
-        Transaction::repeating($repeatingId)->udpate($transactionData);
+        if ($transactionData['repeating_interval'] != $oldRepitingInterval) {
+
+            Transaction::repeating($repeatingId)->withoutKey($transaction->id)->delete();
+
+            $firstDate = (new Carbon($transaction->planned_on))->addMonth($transaction->repeating_interval)->format('Y-m-d');
+
+            for ($c = 1; $c < 50; $c++) {
+
+                $rTransaction = new Transaction($fillables);
+                $rTransaction->planned_on = $firstDate;
+                $rTransaction->user_id = $transaction->user_id;
+                $rTransaction->repeating_id = $transaction->repeating_id;
+
+                $rTransaction->save();
+            }
+
+
+
+        } else {
+            Transaction::repeating($repeatingId)->update($fillables);
+        }
+
+
 
     }
 
@@ -114,7 +135,7 @@ Route::middleware(['auth:api'])->post('/transaction', function(PostTransactionRe
         }
     }
 
-    return new TransactionResource($transaction);;
+    return new TransactionResource($transaction);
 
 
 });

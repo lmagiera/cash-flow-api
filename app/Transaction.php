@@ -10,11 +10,18 @@ class Transaction extends Model
     //
 
 
+
     protected $fillable = [
         'description',
         'amount',
         'planned_on',
+        'repeating_id',
+        'repeating_interval'
     ];
+
+
+
+
 
     public function user() {
         return $this->belongsTo(User::class);
@@ -54,17 +61,29 @@ class Transaction extends Model
      * @param \Illuminate\Database\Eloquent\Builder $query
      *
      */
-    public function scopedId($query, $id) {
+    public function scopeId($query, $id) {
 
         $query->where('id', '=', $id);
 
     }
 
     /**
-    * @param \Illuminate\Database\Eloquent\Builder $query
-    *
-    */
-    public function scopedRepeating($query, $repeating_id) {
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     *
+     */
+    public function scopeWithoutKey($query, $id) {
+
+        $query->whereKeyNot($id);
+
+    }
+
+
+
+    /**
+     * @param \Illuminate\Database\Eloquent\Builder $query
+     * @param $repeating_id
+     */
+    public function scopeRepeating($query, $repeating_id) {
 
         $query->where('repeating_id', '=', $repeating_id);
 
