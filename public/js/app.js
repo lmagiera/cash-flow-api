@@ -66140,7 +66140,7 @@ exports = module.exports = __webpack_require__(3)(true);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"ToolBar.vue","sourceRoot":""}]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"ToolBar.vue","sourceRoot":""}]);
 
 // exports
 
@@ -66294,6 +66294,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -66313,6 +66316,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 repeating_interval: 0
             },
 
+            editingTransaction: {
+                amount: 0,
+                description: '',
+                planned_on: '',
+                actual_on: '',
+                repeating_interval: 0
+            },
+
             pristineTransaction: {
                 amount: 0,
                 description: '',
@@ -66322,6 +66333,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             },
 
             hasErrors: false,
+            editing: false,
 
             errors: {
                 'transaction.description': false,
@@ -66381,11 +66393,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         $('#modal-add-transaction').on('show.bs.modal', function () {
 
-            // clear transaction
-            toolbar.transaction = jQuery.extend({}, toolbar.pristineTransaction);
+            console.log('Modal about to be shown: ' + toolbar.editing);
 
-            // set date to today
-            $('#transaction-planned-on').datepicker('update', new Date());
+            if (!toolbar.editing) {
+                // clear transaction
+                toolbar.transaction = jQuery.extend({}, toolbar.pristineTransaction);
+            }
+        });
+
+        $('#modal-add-transaction').on('hidden.bs.modal', function (e) {
+
+            toolbar.transaction = jQuery.extend({}, toolbar.editingTransaction);
+            toolbar.editingTransaction = jQuery.extend({}, toolbar.pristineTransaction);
+
+            console.log('Modal hidden: ' + toolbar.editing);
+        });
+    },
+    created: function created() {
+        var _this = this;
+
+        this.$bus.$on('transaction-edit', function (event) {
+
+            _this.edit(event.transaction);
         });
     },
 
@@ -66398,6 +66427,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             console.log("Clear transaction Object here");
         },
 
+        edit: function edit(transaction) {
+
+            this.transaction = transaction;
+            this.editingTransaction = jQuery.extend({}, this.transaction);
+            this.editing = true;
+
+            $('#modal-add-transaction').modal('show');
+        },
+
+
         selectRepeating: function selectRepeating(data) {
             console.log('Receive repeating info: ' + data.repeating_interval);
             this.transaction.repeating_interval = data.repeating_interval;
@@ -66407,25 +66446,87 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
          * Sends transation event up
          */
         sendTransaction: function sendTransaction() {
-            var _this = this;
+            var _this2 = this;
 
             console.log('Sending transaction on amount');
             console.log(this.transaction);
 
-            this.http.post('transaction', { transaction: this.transaction }).then(function (response) {
+            this.transaction['update_all'] = false;
+
+            var isChanginInterval = this.editingTransaction.repeating_interval != this.transaction.repeating_interval;
+            var isChangingDate = this.editingTransaction.planned_on != this.transaction.planned_on;
+            var isChangingDateAndInteval = isChanginInterval && isChangingDate;
+
+            if (this.editingTransaction.repeating_interval == 0) {
+
+                // we are changing interval from 0 to non zero,
+                // new transaction will be created any ways
+                this.transaction['update_all'] = true;
+            } else {
+
+                // we are dealing with interval already
+
+                if (!isChanginInterval && !isChangingDate) {
+                    // this is a simple case of update
+                    if (confirm('Update all occurences?\n\nClick "OK" to update all or\nClick "Cancel" to update only this instance')) {
+                        this.transaction['update_all'] = true;
+                    }
+                }
+
+                if (isChangingDateAndInteval || isChanginInterval) {
+
+                    // we are dealing with date or date and interval changes,
+                    // all future instances wiil be recalculated.
+
+                    if (confirm('This operation will affect all of the occurences of the transaction\nClick "OK" to continue')) {
+                        this.transaction['update_all'] = true;
+                    } else {
+                        return;
+                    }
+                }
+
+                if (isChangingDate && !isChangingDateAndInteval) {
+
+                    // just changing date, leaving same interval
+
+                    if (confirm('Update all occurences?\n\nClick "OK" to update all or\nClick "Cancel" to update only this instance')) {
+                        this.transaction['update_all'] = true;
+                    }
+                }
+            }
+
+            /**/
+
+            var method = 'POST';
+            var url = 'transaction';
+
+            if (this.editing) {
+
+                method = 'PUT';
+                url = url + "/" + this.transaction.id;
+            }
+
+            this.http({
+                method: method,
+                url: url,
+                data: { transaction: this.transaction }
+            }).then(function (response) {
 
                 console.log(response.status);
 
-                _this.$bus.$emit('new-transaction', { transaction: _this.transaction });
+                _this2.$bus.$emit('new-transaction', { transaction: _this2.transaction });
 
-                _this.$emit('transaction', { transaction: _this.transaction });
+                _this2.$emit('transaction', { transaction: _this2.transaction });
 
+                toolbar.editing = false;
+                toolbar.transaction = jQuery.extend({}, toolbar.pristineTransaction);
+                toolbar.editingTransaction = jQuery.extend({}, toolbar.pristineTransaction);
                 $('#modal-add-transaction').modal('hide');
             }).catch(function (e) {
 
-                _this.hasErrors = true;
+                _this2.hasErrors = true;
 
-                _this.errors = e.response.data.errors;
+                _this2.errors = e.response.data.errors;
 
                 console.log(e.response.data);
             });
@@ -66591,8 +66692,8 @@ var render = function() {
           {
             name: "model",
             rawName: "v-model",
-            value: _vm.repeating_interval,
-            expression: "repeating_interval"
+            value: _vm.transaction.repeating_interval,
+            expression: "transaction.repeating_interval"
           }
         ],
         staticClass: "custom-select",
@@ -66608,9 +66709,11 @@ var render = function() {
                 var val = "_value" in o ? o._value : o.value
                 return val
               })
-            _vm.repeating_interval = $event.target.multiple
-              ? $$selectedVal
-              : $$selectedVal[0]
+            _vm.$set(
+              _vm.transaction,
+              "repeating_interval",
+              $event.target.multiple ? $$selectedVal : $$selectedVal[0]
+            )
           }
         }
       },
@@ -66623,7 +66726,9 @@ var render = function() {
         _vm._v(" "),
         _c("option", { attrs: { value: "3" } }, [_vm._v("Every 3 Months")]),
         _vm._v(" "),
-        _c("option", { attrs: { value: "4" } }, [_vm._v("TEST")])
+        _c("option", { attrs: { value: "4" } }, [
+          _vm._v(_vm._s(_vm.repeating_interval))
+        ])
       ]
     ),
     _vm._v(" "),
@@ -66685,7 +66790,29 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(1),
+              _c("div", { staticClass: "modal-header" }, [
+                _c(
+                  "h5",
+                  {
+                    staticClass: "modal-title",
+                    class: _vm.editing ? "d-none" : "",
+                    attrs: { id: "exampleModalLabel" }
+                  },
+                  [_vm._v("\n            Add New Transaction\n        ")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "h5",
+                  {
+                    staticClass: "modal-title",
+                    class: _vm.editing ? "" : "d-none",
+                    attrs: { id: "exampleModalLabel" }
+                  },
+                  [_c("strong", [_vm._v(_vm._s(_vm.transaction.description))])]
+                ),
+                _vm._v(" "),
+                _vm._m(1)
+              ]),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
                 _vm.hasErrors
@@ -66969,26 +67096,18 @@ var staticRenderFns = [
     var _vm = this
     var _h = _vm.$createElement
     var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "modal-header" }, [
-      _c(
-        "h5",
-        { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
-        [_vm._v("Add New Transaction")]
-      ),
-      _vm._v(" "),
-      _c(
-        "button",
-        {
-          staticClass: "close",
-          attrs: {
-            type: "button",
-            "data-dismiss": "modal",
-            "aria-label": "Close"
-          }
-        },
-        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
-      )
-    ])
+    return _c(
+      "button",
+      {
+        staticClass: "close",
+        attrs: {
+          type: "button",
+          "data-dismiss": "modal",
+          "aria-label": "Close"
+        }
+      },
+      [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+    )
   },
   function() {
     var _vm = this
@@ -67124,7 +67243,7 @@ exports = module.exports = __webpack_require__(3)(true);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"TransactionList.vue","sourceRoot":""}]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"TransactionList.vue","sourceRoot":""}]);
 
 // exports
 
@@ -67135,6 +67254,21 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -67223,30 +67357,52 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).catch(function (e) {
                 console.error(e);
             });
+        },
+
+        edit: function edit(item) {
+
+            var transaction = jQuery.extend({}, item); // pass the copy.
+            this.$bus.$emit('transaction-edit', { transaction: transaction });
+        },
+
+        remove: function remove(item) {
+            var _this2 = this;
+
+            if (!confirm('Are you sure you want to remove transaction?')) {
+                return;
+            }
+
+            this.http.delete('transaction/' + item.id).then(function (response) {
+
+                _this2.refresh();
+            }).catch(function (e) {
+                console.error(e);
+            });
         }
 
     },
 
     created: function created() {
-        var _this2 = this;
+        var _this3 = this;
 
         //this.refresh();
+
 
         console.log('Subscribing to transactions!');
 
         this.$bus.$on('new-transaction', function (event) {
 
-            _this2.refresh();
+            _this3.refresh();
         });
 
         console.log('Subscribing to date-range-applied!');
 
         this.$bus.$on('date-range-applied', function (event) {
 
-            _this2.from = event.from;
-            _this2.to = event.to;
+            _this3.from = event.from;
+            _this3.to = event.to;
 
-            _this2.refresh();
+            _this3.refresh();
 
             console.log('Refreshed on date range applied');
         });
@@ -67295,13 +67451,73 @@ var render = function() {
                   "tbody",
                   _vm._l(_vm.transactions.data, function(item, index) {
                     return _c("tr", { attrs: { scope: "row" } }, [
-                      _c("td", [_vm._v(_vm._s(index + 1))]),
+                      _c("td", { staticClass: "d-none d-md-inline" }, [
+                        _vm._v(_vm._s(index + 1))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "d-none" }, [
+                        _vm._v(_vm._s(item.id))
+                      ]),
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(item.description))]),
                       _vm._v(" "),
                       _c("td", [_vm._v(_vm._s(item.planned_on))]),
                       _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(item.amount))])
+                      _c("td", [
+                        item.repeating_interval > 0
+                          ? _c("i", {
+                              staticClass: "fa fa-lg fa-repeat",
+                              attrs: { "aria-hidden": "true" }
+                            })
+                          : _vm._e()
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "text-right" }, [
+                        _vm._v(_vm._s(item.amount))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "text-right" }, [
+                        _c("div", { staticClass: "d-inline-flex ml-2" }, [
+                          _c(
+                            "button",
+                            {
+                              staticClass:
+                                "btn btn-sm btn-outline-success mr-1",
+                              attrs: { dusk: "btn-remove-transaction-control" },
+                              on: {
+                                click: function($event) {
+                                  _vm.edit(item)
+                                }
+                              }
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "fa  fa-pencil",
+                                attrs: { "aria-hidden": "true" }
+                              })
+                            ]
+                          ),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-sm btn-outline-danger",
+                              attrs: { dusk: "btn-remove-transaction-control" },
+                              on: {
+                                click: function($event) {
+                                  _vm.remove(item)
+                                }
+                              }
+                            },
+                            [
+                              _c("i", {
+                                staticClass: "fa  fa-trash",
+                                attrs: { "aria-hidden": "true" }
+                              })
+                            ]
+                          )
+                        ])
+                      ])
                     ])
                   })
                 )
@@ -67369,15 +67585,27 @@ var staticRenderFns = [
     var _c = _vm._self._c || _h
     return _c("thead", { staticClass: "thead-dark font-weight-bold" }, [
       _c("tr", [
-        _c("td", { attrs: { scope: "col" } }, [_vm._v("#")]),
+        _c(
+          "td",
+          { staticClass: "d-none d-md-inline", attrs: { scope: "col" } },
+          [_vm._v("#")]
+        ),
         _vm._v(" "),
-        _c("td", { staticStyle: { width: "75%" }, attrs: { scope: "col" } }, [
-          _vm._v("Description")
+        _c("td", { staticClass: "d-none", attrs: { scope: "col" } }, [
+          _vm._v("Id")
         ]),
+        _vm._v(" "),
+        _c("td", { attrs: { scope: "col" } }, [_vm._v("Description")]),
         _vm._v(" "),
         _c("td", { attrs: { scope: "col" } }, [_vm._v("Planned On")]),
         _vm._v(" "),
-        _c("td", { attrs: { scope: "col" } }, [_vm._v("Amount")])
+        _c("td", { attrs: { scope: "col" } }, [_vm._v(" ")]),
+        _vm._v(" "),
+        _c("td", { staticClass: "text-right", attrs: { scope: "col" } }, [
+          _vm._v("Amount")
+        ]),
+        _vm._v(" "),
+        _c("td", { attrs: { scope: "col" } }, [_vm._v(" ")])
       ])
     ])
   }

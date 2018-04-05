@@ -232,9 +232,11 @@ class ExampleTest extends DuskTestCase
      */
     public function testUserCanEnterRepeatingTransaction() {
 
+        //$this->markTestSkipped();
 
 
-        $this->browse(function (Browser $browser){
+
+        $this->browse(function (Browser $browser) {
 
             $user = $this->getUser();
 
@@ -256,7 +258,8 @@ class ExampleTest extends DuskTestCase
             $nextTransaction->planned_on = (new Carbon($datePlanned))->addMonth(1)->format('Y-m-d');
 
 
-            $browser
+            /** @var $homePage HomePage */
+            $homePage = $browser
                 ->loginAs($user)
                 ->visit(new HomePage())
                 ->openNewTransactionModal()
@@ -264,7 +267,7 @@ class ExampleTest extends DuskTestCase
                 ->saveNewTransaction()
                 ->validateTransactionOnList($transaction)
                 ->selectValidDateRange(['from' => $from, 'to' => $to])
-                ->pause(1000)
+                ->pause(500)
                 ->validateTransactionOnList($nextTransaction)
                 ;
 

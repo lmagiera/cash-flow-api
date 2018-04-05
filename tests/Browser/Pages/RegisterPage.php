@@ -4,7 +4,6 @@ namespace Tests\Browser\Pages;
 
 use App\User;
 use Laravel\Dusk\Browser;
-use Laravel\Dusk\Page as BasePage;
 
 class RegisterPage extends Page
 {
@@ -15,7 +14,7 @@ class RegisterPage extends Page
      */
     public function url()
     {
-        return parent::url().'/register';
+        return parent::url().'register';
     }
 
     /**

@@ -4,12 +4,12 @@
         <label for="transaction-repeat" class="col-form-label">Repeat:</label>
         <select class="custom-select" id="transaction-repeat"
                 v-bind:class="validation.transaction.repeating_interval"
-                v-model="repeating_interval" dusk="input-repeating-control">
+                v-model="transaction.repeating_interval" dusk="input-repeating-control">
             <option selected value="0">None</option>
             <option value="1">Monthly</option>
             <option value="2">Every 2 Months</option>
             <option value="3">Every 3 Months</option>
-            <option value="4">TEST</option>
+            <option value="4">{{repeating_interval}}</option>
         </select>
         <div class="invalid-feedback" dusk="feedback-invalid-repeating-interval">{{ errors["transaction.repeating_interval"] ? errors["transaction.repeating_interval"].toString() : '' }}</div>
     </div>

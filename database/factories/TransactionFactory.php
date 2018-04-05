@@ -4,9 +4,9 @@ use Faker\Generator as Faker;
 
 $factory->define(App\Transaction::class, function (Faker $faker) {
     return [
-        'description' => $faker->text(150),
+        'description' => $faker->text(20),
 
-        'amount' => $faker->randomFloat(2, -2300, 2300),
+        'amount' => sprintf("%0.2f", $faker->randomFloat(2, -2300, 2300)),
         'varying' => $faker->boolean(),
 
         'planned_on' => $faker->dateTimeBetween('now', '+1 month')->format('Y-m-d'),
@@ -16,7 +16,7 @@ $factory->define(App\Transaction::class, function (Faker $faker) {
             return factory(\App\User::class)->create()->id;
         },
 
-        'repeating_id' => $faker->randomNumber(5),
-        'repeating_interval' => $faker->randomFloat(0, 0, 3)
+        'repeating_id' => \Ramsey\Uuid\Uuid::uuid4(),
+        'repeating_interval' => 0
     ];
 });
