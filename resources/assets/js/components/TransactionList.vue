@@ -23,18 +23,33 @@
                 <table class="table table-sm table-striped" dusk="table-transaction-list">
                     <thead class="thead-dark font-weight-bold">
                         <tr>
-                            <td scope="col">#</td>
-                            <td scope="col" style="width: 75%">Description</td>
+                            <td scope="col" class="d-none d-md-inline">#</td>
+                            <td scope="col" class="d-none">Id</td>
+                            <td scope="col">Description</td>
                             <td scope="col">Planned On</td>
-                            <td scope="col">Amount</td>
+                            <td scope="col">&nbsp;</td>
+                            <td scope="col" class="text-right">Amount</td>
+                            <td scope="col">&nbsp;</td>
                         </tr>
                     </thead>
                     <tbody>
                     <tr scope="row" v-for="(item, index) in transactions.data">
-                        <td >{{index+1}}</td>
+                        <td class="d-none d-md-inline">{{index + 1}}</td>
+                        <td class="d-none">{{item.id}}</td>
                         <td>{{item.description}}</td>
                         <td>{{item.planned_on}}</td>
-                        <td>{{item.amount}}</td>
+                        <td><i v-if="item.repeating_interval > 0" class="fa fa-lg fa-repeat" aria-hidden="true"></i></td>
+                        <td class="text-right">{{item.amount}}</td>
+                        <td class="text-right">
+                            <div class="d-inline-flex ml-2">
+                                <button class="btn btn-sm btn-outline-success mr-1" v-on:click="edit(item)" dusk="btn-remove-transaction-control">
+                                    <i class="fa  fa-pencil" aria-hidden="true"></i>
+                                </button>
+                                <button class="btn btn-sm btn-outline-danger" v-on:click="remove(item)" dusk="btn-remove-transaction-control">
+                                    <i class="fa  fa-trash" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -87,6 +102,31 @@
                     console.error(e);
                 })
 
+            },
+
+            edit: function(item) {
+
+                const transaction = jQuery.extend({}, item); // pass the copy.
+                this.$bus.$emit('transaction-edit', {transaction: transaction});
+
+            },
+
+            remove: function(item) {
+
+                if ( !confirm('Are you sure you want to remove transaction?') ) {
+                    return;
+                }
+
+                this.http.delete('transaction/' + item.id).then(response => {
+
+
+                    this.refresh();
+
+
+                }).catch(e => {
+                    console.error(e);
+                })
+
             }
 
         },
@@ -94,6 +134,9 @@
         created() {
 
             //this.refresh();
+
+
+
 
             console.log('Subscribing to transactions!');
 

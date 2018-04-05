@@ -6,8 +6,6 @@
     <i class="fa fa-plus-square-o" aria-hidden="true"></i>
 </a>
 
-
-
 <div class="modal fade" id="modal-add-transaction"
      tabindex="-1" role="dialog"
      aria-labelledby="exampleModalLabel"
@@ -17,7 +15,12 @@
 <div class="modal-content">
 
     <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Add New Transaction</h5>
+        <h5 class="modal-title" id="exampleModalLabel" v-bind:class="editing ? 'd-none': ''">
+            Add New Transaction
+        </h5>
+        <h5 class="modal-title" id="exampleModalLabel" v-bind:class="editing ? '': 'd-none'">
+            <strong>{{transaction.description}}</strong>
+        </h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -129,6 +132,14 @@
                     repeating_interval: 0
                 },
 
+                editingTransaction: {
+                    amount: 0,
+                    description: '',
+                    planned_on: '',
+                    actual_on: '',
+                    repeating_interval: 0
+                },
+
                 pristineTransaction: {
                     amount: 0,
                     description: '',
@@ -138,6 +149,7 @@
                 },
 
                 hasErrors: false,
+                editing: false,
 
                 errors: {
                     'transaction.description': false,
@@ -198,17 +210,38 @@
 
             $('#modal-add-transaction').on('show.bs.modal', function () {
 
-                // clear transaction
-                toolbar.transaction = jQuery.extend({}, toolbar.pristineTransaction);
+                console.log('Modal about to be shown: ' + toolbar.editing);
 
-                // set date to today
-                $('#transaction-planned-on').datepicker('update', new Date());
+                if ( !toolbar.editing) {
+                    // clear transaction
+                    toolbar.transaction = jQuery.extend({}, toolbar.pristineTransaction);
+                }
 
+            });
+
+            $('#modal-add-transaction').on('hidden.bs.modal', function (e) {
+
+
+                toolbar.transaction = jQuery.extend({}, toolbar.editingTransaction);
+                toolbar.editingTransaction = jQuery.extend({}, toolbar.pristineTransaction);
+
+                console.log('Modal hidden: ' + toolbar.editing);
             });
 
 
 
         },
+
+        created() {
+
+            this.$bus.$on('transaction-edit', (event) => {
+
+                this.edit(event.transaction)
+
+            });
+        },
+
+
 
         methods: {
 
@@ -216,6 +249,18 @@
 
                 // should clear transaction object here
                 console.log("Clear transaction Object here");
+
+            },
+
+            edit(transaction) {
+
+                this.transaction = transaction;
+                this.editingTransaction = jQuery.extend({}, this.transaction);
+                this.editing = true;
+
+
+
+                $('#modal-add-transaction').modal('show');
 
             },
 
@@ -235,9 +280,71 @@
                 console.log('Sending transaction on amount');
                 console.log(this.transaction);
 
-                this.http.post('transaction', {transaction: this.transaction})
+                this.transaction['update_all'] = false;
 
-                    .then(response => {
+                const isChanginInterval = this.editingTransaction.repeating_interval != this.transaction.repeating_interval;
+                const isChangingDate = this.editingTransaction.planned_on != this.transaction.planned_on;
+                const isChangingDateAndInteval = isChanginInterval && isChangingDate;
+
+                if (this.editingTransaction.repeating_interval == 0) {
+
+                    // we are changing interval from 0 to non zero,
+                    // new transaction will be created any ways
+                    this.transaction['update_all'] = true;
+
+                } else {
+
+                    // we are dealing with interval already
+
+                    if ( !isChanginInterval && !isChangingDate ) {
+                        // this is a simple case of update
+                        if ( confirm('Update all occurences?\n\nClick "OK" to update all or\nClick "Cancel" to update only this instance') ) {
+                            this.transaction['update_all'] = true;
+                        }
+                    }
+
+                    if ( isChangingDateAndInteval || isChanginInterval ) {
+
+                        // we are dealing with date or date and interval changes,
+                        // all future instances wiil be recalculated.
+
+                        if ( confirm('This operation will affect all of the occurences of the transaction\nClick "OK" to continue') ) {
+                            this.transaction['update_all'] = true;
+                        } else {
+                            return;
+                        }
+                   }
+
+                    if (isChangingDate && !isChangingDateAndInteval) {
+
+                        // just changing date, leaving same interval
+
+                        if ( confirm('Update all occurences?\n\nClick "OK" to update all or\nClick "Cancel" to update only this instance') ) {
+                            this.transaction['update_all'] = true;
+                        }
+                    }
+
+                }
+
+
+                /**/
+
+                let method = 'POST';
+                let url = 'transaction';
+
+                if (this.editing) {
+
+                    method = 'PUT';
+                    url = url + "/" + this.transaction.id
+
+                }
+
+
+                this.http({
+                    method: method,
+                    url: url,
+                    data: {transaction: this.transaction}
+                }).then(response => {
 
                         console.log(response.status);
 
@@ -245,7 +352,11 @@
 
                         this.$emit('transaction', {transaction: this.transaction});
 
+                        toolbar.editing = false;
+                        toolbar.transaction = jQuery.extend({}, toolbar.pristineTransaction);
+                        toolbar.editingTransaction = jQuery.extend({}, toolbar.pristineTransaction);
                         $('#modal-add-transaction').modal('hide');
+
 
                     })
                     .catch(e => {
