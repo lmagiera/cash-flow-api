@@ -192,5 +192,3 @@ Route::middleware(['auth:api'])->delete('/transaction/{id}', function(Request $r
     return new TransactionResource($transaction);
 
 });
-
-
