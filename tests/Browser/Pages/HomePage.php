@@ -262,8 +262,14 @@ class HomePage extends Page
             ->assertVisible('@input-date-to-control')
             //->assertVisible('@btn-apply-control')
 
+            //->clear('@input-date-from-control')
+            //->clear('@input-date-to-control')
+
             ->type('@input-date-from-control', $dates['from'])
+            ->keys('@input-date-to-control', '{ENTER}', '{TAB}')
             ->type('@input-date-to-control', $dates['to'])
+            ->keys('@input-date-to-control', '{ENTER}', '{TAB}')
+
 
             //->screenshot(date('YmdHis'))
 
@@ -308,6 +314,22 @@ class HomePage extends Page
         $this->inputTransaction($browser, $transaction);
         $this->saveNewTransaction($browser);
         $this->validateTransactionOnList($browser, $transaction);
+
+
+    }
+
+    public function deleteTransaction(Browser $browser, Transaction $transaction) {
+
+        $this->validateTransactionOnList($browser, $transaction);
+
+        $browser
+            ->click('@btn-remove-transaction-control')
+            ->waitForDialog(1)
+            ->acceptDialog()
+            ->pause(500)
+            ->validateTransactionNotOnList($transaction)
+        ;
+
 
 
     }
