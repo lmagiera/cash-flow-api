@@ -388,7 +388,66 @@ class TransactionApiTest extends TestCase
         $transactionData['amount'] = $newAmount;
         $transactionData['update_all'] = true;
 
+        $response = $this
+            ->actingAs($user, 'api')
+            ->json('PUT', '/api/transaction/'.$transactionData['id'], ['transaction' => $transactionData]);
+
+        $response->assertStatus(200);
+        $response->assertJsonFragment(['id' => $transactionData['id']]);
+        $response->assertJsonFragment(['amount' => $newAmount]);
+        $response->assertJsonFragment(['planned_on' => $transactionData['planned_on']]);
+
+
+        // FIXME: Following is exploiting the fact, that transaction.id is an autoincrement column, and we are entering 50 transactions
+        // get next transaction,
+
+        $response = $this->actingAs($user, 'api')->json('GET', '/api/transaction/'.($transactionData['id'] + 50));
+        $response->assertStatus(200);
+
         $newDate = (new Carbon($transactionData['planned_on']))->addMonth(2)->format('Y-m-d');
+
+        $response->assertJsonFragment(['id' => ($transactionData['id'] + 50)]);
+        $response->assertJsonFragment(['amount' => $newAmount]);
+        $response->assertJsonFragment(['planned_on' => $newDate]);
+
+
+        // FIXME: Following is exploiting the fact, that transaction.id is an autoincrement column, and we are entering 50 transactions
+        // get next transaction,
+
+        $response = $this->actingAs($user, 'api')->json('GET', '/api/transaction/'.($transactionData['id'] + 51));
+        $response->assertStatus(200);
+
+        $newDate = (new Carbon($transactionData['planned_on']))->addMonth(4)->format('Y-m-d');
+
+        $response->assertJsonFragment(['id' => ($transactionData['id'] + 51)]);
+        $response->assertJsonFragment(['amount' => $newAmount]);
+        $response->assertJsonFragment(['planned_on' => $newDate]);
+
+
+    }
+
+    public function testSettingRepeatingIntervalToZeroClearsOccurrences() {
+
+        $user = factory(User::class)->create();
+
+        $transaction = factory(Transaction::class)->make([
+            'user_id' => $user->id,
+            'repeating_interval' => 1, // repeat monthly
+        ]);
+
+        $response = $this
+            ->actingAs($user, 'api')
+            ->json('POST', '/api/transaction', ['transaction' => $transaction]);
+
+        $response->assertStatus(201);
+
+        $transactionData = $response->json('data');
+
+        $newAmount = sprintf("%0.2f", $transactionData['amount'] + 200);
+
+        $transactionData['repeating_interval'] = 0;
+        $transactionData['amount'] = $newAmount;
+        $transactionData['update_all'] = true;
 
         $response = $this
             ->actingAs($user, 'api')
@@ -397,19 +456,75 @@ class TransactionApiTest extends TestCase
         $response->assertStatus(200);
         $response->assertJsonFragment(['id' => $transactionData['id']]);
         $response->assertJsonFragment(['amount' => $newAmount]);
+        $response->assertJsonFragment(['planned_on' => $transactionData['planned_on']]);
 
-        //FIXME: Following is exploiting the fact, that transaction.id is an autoincrement column, and we are entering 50 transactions
-        // get next transaction,
+        $response = $this->actingAs($user, 'api')->json('GET', '/api/transaction/'.($transactionData['id'] + 50));
+        $response->assertNotFound();
 
-        $response = $this->actingAs($user, 'api')->json('GET', '/api/transaction/'.($transactionData['id'] + 51));
+
+    }
+
+    public function testDeleteSingleTransaction() {
+
+        $user = factory(User::class)->create();
+
+        $transaction = factory(Transaction::class)->create([
+            'user_id' => $user->id,
+            'repeating_interval' => 0, // do not repeat,
+        ]);
+
+        $response = $this
+            ->actingAs($user, 'api')
+            ->json('DELETE', '/api/transaction/'.$transaction->id);
+
         $response->assertStatus(200);
 
-        $response->assertJsonFragment(['id' => ($transactionData['id'] + 51)]);
-        $response->assertJsonFragment(['amount' => $newAmount]);
-        $response->assertJsonFragment(['planned_on' => $newDate]);
+        $transactionData = $response->json('data');
+
+        $response = $this
+            ->actingAs($user, 'api')
+            ->json('GET', '/api/transaction/'.$transactionData['id']);
+
+        $response->assertNotFound();
 
 
 
+    }
+
+    public function testDeletingRepeatingTransactionDeletesAll() {
+
+        $user = factory(User::class)->create();
+
+        $transaction = factory(Transaction::class)->make([
+            'user_id' => $user->id,
+            'repeating_interval' => 1, // do not repeat,
+        ]);
+
+        $response = $this
+            ->actingAs($user, 'api')
+            ->json('POST', '/api/transaction', ['transaction' => $transaction]);
+
+        $response->assertStatus(201);
+
+        $transactionData = $response->json('data');
+
+        $response = $this
+            ->actingAs($user, 'api')
+            ->json('DELETE', '/api/transaction/'.$transactionData['id']);
+
+        $response->assertStatus(200);
+
+        $response = $this
+            ->actingAs($user, 'api')
+            ->json('GET', '/api/transaction/'.$transactionData['id']);
+
+        $response->assertNotFound();
+
+        $response = $this
+            ->actingAs($user, 'api')
+            ->json('DELETE', '/api/transaction/'.($transactionData['id'] + 1));
+
+        $response->assertNotFound();
 
     }
 }

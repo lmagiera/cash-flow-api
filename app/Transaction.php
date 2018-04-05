@@ -83,9 +83,11 @@ class Transaction extends Model
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param $repeating_id
      */
-    public function scopeRepeating($query, $repeating_id) {
+    public function scopeRepeating($query, $repeating_id, $planned_on) {
 
         $query->where('repeating_id', '=', $repeating_id);
+        $query->where('planned_on', '>=', $planned_on);
+
 
     }
 

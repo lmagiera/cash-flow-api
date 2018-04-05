@@ -65,6 +65,8 @@ Route::middleware(['auth:api'])->put('/transaction/{id}', function(PutTransactio
 
     $transaction = Transaction::where(['id' => $id])->firstOrFail();
 
+    $oldPlannedOn = $transaction->planned_on;
+
     $oldRepitingInterval = $transaction->repeating_interval;
 
     $transactionData = collect($request->json()->get('transaction'));
@@ -76,10 +78,11 @@ Route::middleware(['auth:api'])->put('/transaction/{id}', function(PutTransactio
     if ( $transactionData['update_all'] == true) {
 
         $repeatingId = $transaction->repeating_id;
+        $repeatingInterval = $transactionData['repeating_interval'];
 
-        if ($transactionData['repeating_interval'] != $oldRepitingInterval) {
+        if ($repeatingInterval != $oldRepitingInterval && $repeatingInterval != 0) {
 
-            Transaction::repeating($repeatingId)->withoutKey($transaction->id)->delete();
+            Transaction::repeating($repeatingId, $oldPlannedOn)->withoutKey($transaction->id)->delete();
 
             $firstDate = (new Carbon($transaction->planned_on))->addMonth($transaction->repeating_interval)->format('Y-m-d');
 
@@ -91,15 +94,52 @@ Route::middleware(['auth:api'])->put('/transaction/{id}', function(PutTransactio
                 $rTransaction->repeating_id = $transaction->repeating_id;
 
                 $rTransaction->save();
+
+                $firstDate = (new Carbon($rTransaction->planned_on))->addMonth($transaction->repeating_interval)->format('Y-m-d');
+            }
+
+        } else if ($repeatingInterval == 0)  {
+
+            Transaction::repeating($repeatingId, $oldPlannedOn)->withoutKey($transaction->id)->delete();
+
+        } else {
+
+            // means we have repeating interval
+            // if dates are different we should re-set all the stuff, if not, just update.
+            if ($oldPlannedOn == $transactionData['planned_on']) {
+
+                $execptDate = collect($fillables)->except('planned_on')->toArray();
+                Transaction::repeating($repeatingId, $oldPlannedOn)->update($execptDate);
+
+
+            } else {
+
+
+
+                Transaction::repeating($repeatingId, $oldPlannedOn)->withoutKey($transaction->id)->delete();
+
+                $firstDate = (new Carbon($transaction->planned_on))->addMonth($transaction->repeating_interval)->format('Y-m-d');
+
+                for ($c = 1; $c < 50; $c++) {
+
+                    $rTransaction = new Transaction($fillables);
+                    $rTransaction->planned_on = $firstDate;
+                    $rTransaction->user_id = $transaction->user_id;
+                    $rTransaction->repeating_id = $transaction->repeating_id;
+
+                    $rTransaction->save();
+
+                    $firstDate = (new Carbon($rTransaction->planned_on))->addMonth($transaction->repeating_interval)->format('Y-m-d');
+                }
+
+
             }
 
 
 
-        } else {
-            Transaction::repeating($repeatingId)->update($fillables);
+
+
         }
-
-
 
     }
 
@@ -115,7 +155,7 @@ Route::middleware(['auth:api'])->post('/transaction', function(PostTransactionRe
 
     $transaction = new Transaction($transactionData);
     $transaction->user_id = Auth::id();
-    $transaction->repeating_id = $transactionData['repeating_interval'] != 0 ? Uuid::uuid4()->toString() : null;
+    $transaction->repeating_id = Uuid::uuid4()->toString();
 
 
     $transaction->save();
@@ -132,11 +172,24 @@ Route::middleware(['auth:api'])->post('/transaction', function(PostTransactionRe
             $rTransaction->repeating_id = $transaction->repeating_id;
 
             $rTransaction->save();
+
+            $firstDate = (new Carbon($rTransaction->planned_on))->addMonth($transactionData['repeating_interval'])->format('Y-m-d');
         }
     }
 
     return new TransactionResource($transaction);
 
+
+});
+
+
+Route::middleware(['auth:api'])->delete('/transaction/{id}', function(Request $request, $id) {
+
+    $transaction = Transaction::where(['id' => $id])->firstOrFail();
+
+    $transaction->repeating($transaction->repeating_id)->delete();
+
+    return new TransactionResource($transaction);
 
 });
 
