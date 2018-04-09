@@ -224,6 +224,7 @@
 
                 toolbar.transaction = jQuery.extend({}, toolbar.editingTransaction);
                 toolbar.editingTransaction = jQuery.extend({}, toolbar.pristineTransaction);
+                toolbar.editing = false;
 
                 console.log('Modal hidden: ' + toolbar.editing);
             });
