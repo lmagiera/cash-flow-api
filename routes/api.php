@@ -187,7 +187,7 @@ Route::middleware(['auth:api'])->delete('/transaction/{id}', function(Request $r
 
     $transaction = Transaction::where(['id' => $id])->firstOrFail();
 
-    $transaction->repeating($transaction->repeating_id)->delete();
+    $transaction->repeating($transaction->repeating_id, $transaction->planned_on)->delete();
 
     return new TransactionResource($transaction);
 
