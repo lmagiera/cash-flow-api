@@ -18,7 +18,7 @@
         <div class="tab-content mt-1" id="transaction-list-tab-content">
             <div class="tab-pane show fade active" id="tab-transaction-list" role="tabpanel">
 
-                <h5 class="display-5 p-2">Transaction List</h5>
+                <h5 class="d-none d-md-block display-5 p-2">Transaction List</h5>
 
                 <table class="table table-sm table-striped" dusk="table-transaction-list">
                     <thead class="thead-dark font-weight-bold">
@@ -38,7 +38,7 @@
                         <td class="d-none">{{item.id}}</td>
                         <td>{{item.description}}</td>
                         <td>{{item.planned_on}}</td>
-                        <td><i v-if="item.repeating_interval > 0" class="fa fa-lg fa-repeat" aria-hidden="true"></i></td>
+                        <td><i v-if="item.repeating_interval > 0" class="fa text-muted fa-lg fa-repeat" aria-hidden="true"></i></td>
                         <td class="text-right">{{item.amount}}</td>
                         <td class="text-right">
                             <div class="d-inline-flex ml-2">

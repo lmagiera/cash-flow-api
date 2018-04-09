@@ -67434,7 +67434,7 @@ var render = function() {
             attrs: { id: "tab-transaction-list", role: "tabpanel" }
           },
           [
-            _c("h5", { staticClass: "display-5 p-2" }, [
+            _c("h5", { staticClass: "d-none d-md-block display-5 p-2" }, [
               _vm._v("Transaction List")
             ]),
             _vm._v(" "),
@@ -67466,7 +67466,7 @@ var render = function() {
                       _c("td", [
                         item.repeating_interval > 0
                           ? _c("i", {
-                              staticClass: "fa fa-lg fa-repeat",
+                              staticClass: "fa text-muted fa-lg fa-repeat",
                               attrs: { "aria-hidden": "true" }
                             })
                           : _vm._e()
