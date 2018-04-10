@@ -313,6 +313,7 @@ class HomePage extends Page
         $this->openNewTransactionModal($browser);
         $this->inputTransaction($browser, $transaction);
         $this->saveNewTransaction($browser);
+        $browser->pause(1500);
         $this->validateTransactionOnList($browser, $transaction);
 
 
@@ -324,7 +325,7 @@ class HomePage extends Page
 
         $browser
             ->click('@btn-remove-transaction-control')
-            ->waitForDialog(1)
+            ->waitForDialog(2)
             ->acceptDialog()
             ->pause(500)
             ->validateTransactionNotOnList($transaction)

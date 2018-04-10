@@ -259,8 +259,6 @@
                 this.editingTransaction = jQuery.extend({}, this.transaction);
                 this.editing = true;
 
-
-
                 $('#modal-add-transaction').modal('show');
 
             },
@@ -357,17 +355,24 @@
                         toolbar.transaction = jQuery.extend({}, toolbar.pristineTransaction);
                         toolbar.editingTransaction = jQuery.extend({}, toolbar.pristineTransaction);
                         $('#modal-add-transaction').modal('hide');
+                        this.$notifier.success("Transaction saved!");
 
 
                     })
                     .catch(e => {
 
-                        this.hasErrors = true;
+                        console.log(e.response.status);
 
-                        this.errors = e.response.data.errors;
+                        switch (e.response.status.toString()) {
+                            case '422':
+                                this.hasErrors = true;
+                                this.errors = e.response.data.errors;
+                                break;
+                            default:
+                                this.$notifier.danger("There was an error processing your request.<br>" + e.response.status + ": " + e.response.statusText);
 
-                        console.log(e.response.data);
 
+                        }
 
 
                     });
