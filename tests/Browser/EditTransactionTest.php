@@ -29,7 +29,8 @@ class EditTransactionTest extends DuskTestCase
             $user = factory(User::class)->create();
 
             $transaction = factory(Transaction::class)->make([
-                'repeating_interval' => 0
+                'repeating_interval' => 0,
+                'user_id' => $user->id
             ]);
 
             $browser

@@ -21,7 +21,7 @@ if (!mix.inProduction()) {
 
 mix
     .js('resources/assets/js/app.js', 'public/js')
-    /*.copy('node_modules/font-awesome/fonts/', 'public/fonts')*/
+    .extract(['vue'])
     .sass('resources/assets/sass/app.scss', 'public/css')
 ;
 

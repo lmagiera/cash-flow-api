@@ -18,13 +18,12 @@
         <div class="tab-content mt-1" id="transaction-list-tab-content">
             <div class="tab-pane show fade active" id="tab-transaction-list" role="tabpanel">
 
-                <h5 class="display-5 p-2">Transaction List</h5>
+                <h5 class="d-none d-md-block display-5 p-2">Transaction List</h5>
 
                 <table class="table table-sm table-striped" dusk="table-transaction-list">
                     <thead class="thead-dark font-weight-bold">
                         <tr>
                             <td scope="col" class="d-none d-md-inline">#</td>
-                            <td scope="col" class="d-none">Id</td>
                             <td scope="col">Description</td>
                             <td scope="col">Planned On</td>
                             <td scope="col">&nbsp;</td>
@@ -35,14 +34,13 @@
                     <tbody>
                     <tr scope="row" v-for="(item, index) in transactions.data">
                         <td class="d-none d-md-inline">{{index + 1}}</td>
-                        <td class="d-none">{{item.id}}</td>
                         <td>{{item.description}}</td>
                         <td>{{item.planned_on}}</td>
-                        <td><i v-if="item.repeating_interval > 0" class="fa fa-lg fa-repeat" aria-hidden="true"></i></td>
+                        <td><i v-if="item.repeating_interval > 0" class="fa text-muted fa-lg fa-repeat" aria-hidden="true"></i></td>
                         <td class="text-right">{{item.amount}}</td>
                         <td class="text-right">
                             <div class="d-inline-flex ml-2">
-                                <button class="btn btn-sm btn-outline-success mr-1" v-on:click="edit(item)" dusk="btn-remove-transaction-control">
+                                <button class="btn btn-sm btn-outline-success mr-1" v-on:click="edit(item)" dusk="btn-edit-transaction-control">
                                     <i class="fa  fa-pencil" aria-hidden="true"></i>
                                 </button>
                                 <button class="btn btn-sm btn-outline-danger" v-on:click="remove(item)" dusk="btn-remove-transaction-control">
@@ -99,7 +97,7 @@
                     console.log(response.data);
 
                 }).catch(e => {
-                    console.error(e);
+                    this.$notifier.danger("There was an error processing your request.<br>" + e.response.status + ": " + e.response.statusText);
                 })
 
             },
@@ -124,7 +122,7 @@
 
 
                 }).catch(e => {
-                    console.error(e);
+                    this.$notifier.danger("There was an error processing your request.<br>" + e.response.status + ": " + e.response.statusText);
                 })
 
             }
