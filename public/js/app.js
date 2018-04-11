@@ -30268,7 +30268,11 @@ Vue.prototype.HTTP = axios.create({
 
     //baseURL: 'https://cfa-beta.avrosix.net:6080/api/',
     baseURL: 'http://cash-flow-api.a6.net/api/',
-    headers: {}
+    headers: {
+
+        // any custom headers here
+
+    }
 });
 
 var app = new Vue({
