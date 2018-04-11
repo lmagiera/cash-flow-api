@@ -539,7 +539,7 @@ class TransactionApiTest extends TestCase
 
         $user = factory(User::class)->create();
 
-        // creates repeating transaction starting prev month
+        // creates transaction starting prev month
         $transactionPrev = factory(Transaction::class)->create([
             'user_id' => $user->id,
             'repeating_interval' => 0, // do repeat,
@@ -550,6 +550,7 @@ class TransactionApiTest extends TestCase
         $transactionNow = factory(Transaction::class)->create([
             'user_id' => $user->id,
             'repeating_interval' => 1, // do repeat,
+            'planned_on' => Carbon::now()->startOfMonth()->addDays(rand(0,28))->format('Y-m-d')
         ]);
 
         $response = $this
@@ -559,18 +560,22 @@ class TransactionApiTest extends TestCase
         $response->assertStatus(200);
 
         $response->assertJsonFragment(['data']);
+
         $response->assertJsonFragment(['cash_flow_start' => [
             'date' => Carbon::now()->startOfMonth()->subDay()->format('Y-m-d'),
-            'amount' => $transactionPrev->amount
+            'amount' => currency($transactionPrev->amount)
         ]]);
+
         $response->assertJsonFragment(['cash_flow_data' => [[
             'date' => (new Carbon($transactionNow->planned_on))->format('Y-m-d'),
-            'amount' => $transactionNow->amount
+            'amount' => $transactionNow->amount,
+            'saldo' => currency($transactionPrev->amount + $transactionNow->amount)
             ]
         ]]);
+
         $response->assertJsonFragment(['cash_flow_end' => [
             'date' => Carbon::now()->endOfMonth()->format('Y-m-d'),
-            'amount' => $transactionNow->amount
+            'amount' => currency($transactionPrev->amount + $transactionNow->amount)
         ]]);
 
 
