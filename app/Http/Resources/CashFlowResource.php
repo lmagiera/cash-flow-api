@@ -70,7 +70,7 @@ class CashFlowResource extends JsonResource
 
 
         return [
-            'cashflowstart' => [
+            'cash_flow_start' => [
                 'date' => $from,
                 'amount' => $beforeSum
             ],
