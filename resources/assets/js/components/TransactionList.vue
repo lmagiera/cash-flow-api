@@ -128,8 +128,8 @@
                     let labels = [];
                     let data = [];
 
-                    labels.push(mydata.cashflowstart.date);
-                    data.push(mydata.cashflowstart.amount);
+                    labels.push(mydata.cash_flow_start.date);
+                    data.push(mydata.cash_flow_start.amount);
 
                     $(mydata.cash_flow_data).each(function(key, item){
 
@@ -172,6 +172,7 @@
 
 
                 }).catch(e => {
+                    console.log(e);
                     this.$notifier.danger("There was an error processing your request.<br>" + e.response.status + ": " + e.response.statusText);
                 })
 
