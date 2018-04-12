@@ -12,6 +12,8 @@ require('./bootstrap');
 window.Vue = require('vue');
 
 
+
+
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
@@ -29,13 +31,32 @@ Object.defineProperty(Vue.prototype, '$bus', {
     }
 });
 
+let notifier = new Vue({
+    methods: {
+        danger: function(message) {
+            $.notify({message: message}, {type: "danger"});
+        },
+        success: function(message) {
+            $.notify({message: message}, {type: "success"});
+        }
+    }
+});
+
+Object.defineProperty(Vue.prototype, '$notifier', {
+    get() {
+        return this.$root.notifier;
+    }
+});
+
 
 Vue.prototype.HTTP = axios.create({
 
 
-    baseURL: 'https://cfa-beta.avrosix.net:6080/api/',
-    //baseURL: 'http://cash-flow-api.a6.net/api/',
+    //baseURL: 'https://cfa-beta.avrosix.net:6080/api/',
+    baseURL: 'http://cash-flow-api.a6.net/api/',
     headers: {
+
+        // any custom headers here
 
     }
 });
@@ -47,6 +68,7 @@ const app = new Vue({
     data() {
         return {
             bus: bus,
+            notifier: notifier,
             HTTP: this.HTTP
         }
 
