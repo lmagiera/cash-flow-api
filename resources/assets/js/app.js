@@ -48,12 +48,9 @@ Object.defineProperty(Vue.prototype, '$notifier', {
     }
 });
 
-
 Vue.prototype.HTTP = axios.create({
 
-
-    //baseURL: 'https://cfa-beta.avrosix.net:6080/api/',
-    baseURL: 'http://cash-flow-api.a6.net/api/',
+    baseURL: process.env.MIX_API_ENDPOINT,
     headers: {
 
         // any custom headers here

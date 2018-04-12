@@ -32581,8 +32581,7 @@ Object.defineProperty(Vue.prototype, '$notifier', {
 
 Vue.prototype.HTTP = axios.create({
 
-    //baseURL: 'https://cfa-beta.avrosix.net:6080/api/',
-    baseURL: 'http://cash-flow-api.a6.net/api/',
+    baseURL: "http://cash-flow-api.a6.net/api/",
     headers: {
 
         // any custom headers here
@@ -70789,7 +70788,7 @@ exports = module.exports = __webpack_require__(11)(true);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"TransactionList.vue","sourceRoot":""}]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"TransactionList.vue","sourceRoot":""}]);
 
 // exports
 
@@ -70930,8 +70929,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 var labels = [];
                 var data = [];
 
-                labels.push(mydata.cashflowstart.date);
-                data.push(mydata.cashflowstart.amount);
+                labels.push(mydata.cash_flow_start.date);
+                data.push(mydata.cash_flow_start.amount);
 
                 $(mydata.cash_flow_data).each(function (key, item) {
 
@@ -70967,6 +70966,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                         } }
                 });
             }).catch(function (e) {
+                console.log(e);
                 _this2.$notifier.danger("There was an error processing your request.<br>" + e.response.status + ": " + e.response.statusText);
             });
         },
