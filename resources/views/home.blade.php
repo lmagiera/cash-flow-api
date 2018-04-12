@@ -21,11 +21,7 @@
 
         </div>
     </div>
-    <div class="row">
-        <div class="col-12">
-            Some nice text here
-        </div>
-    </div>
+
 
 </div>
 

@@ -3,6 +3,7 @@
 use App\Http\Requests\GetTransactionsRequest;
 use App\Http\Requests\PostTransactionRequest;
 use App\Http\Requests\PutTransactionRequest;
+use App\Http\Resources\CashFlowResource;
 use App\Http\Resources\TransactionCollection;
 use App\Http\Resources\TransactionResource;
 use App\Transaction;
@@ -190,5 +191,12 @@ Route::middleware(['auth:api'])->delete('/transaction/{id}', function(Request $r
     $transaction->repeating($transaction->repeating_id, $transaction->planned_on)->delete();
 
     return new TransactionResource($transaction);
+
+});
+
+
+Route::middleware(['auth:api'])->get('/cashflow', function (Request $request){
+
+    return new CashFlowResource([]);
 
 });
