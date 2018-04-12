@@ -39,9 +39,14 @@ if (token) {
 }
 
 window.moment = require('moment');
+
 window.datetimepicker = require('bootstrap-datepicker');
+
 window.notify = require('bootstrap-notify');
 $.notifyDefaults({z_index: 10031, placement: {align: 'center'}});
+
+window.chart = require('chart.js');
+//window.chart.defaults.global.defaultColor = "rgba(255, 99, 132, 0.2)";
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening

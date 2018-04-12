@@ -29,8 +29,15 @@ class CashFlowResource extends JsonResource
             $to = Carbon::now()->endOfMonth()->format('Y-m-d');
 
         }
+        else {
 
-        $startFrom = Carbon::now()->startOfMonth()->format('Y-m-d');
+            $from = (new Carbon($from))->subDay()->format('Y-m-d');
+            //$to =
+
+        }
+
+
+        $startFrom = (new Carbon($from))->addDay()->format('Y-m-d');
 
         $beforeSum = DB::table('transactions')
             ->where('user_id', Auth::id())
@@ -40,8 +47,6 @@ class CashFlowResource extends JsonResource
         $runningTotal = $beforeSum;
         $cashFlowData = [];
 
-
-        DB::enableQueryLog();
 
         /** @var $cashFlowItems Collection */
         $cashFlowItems = Transaction::between($startFrom, $to)
@@ -65,7 +70,7 @@ class CashFlowResource extends JsonResource
 
 
         return [
-            'cash_flow_start' => [
+            'cashflowstart' => [
                 'date' => $from,
                 'amount' => $beforeSum
             ],

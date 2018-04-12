@@ -10,7 +10,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" id="tab-graphs-tab" data-toggle="tab" href="#tab-graphs">Graphs</a>
+                <a class="nav-link" id="tab-graphs-tab" data-toggle="tab" href="#tab-graphs" dusk="tabtcashflow-control" >Cash Flow</a>
             </li>
 
         </ul>
@@ -23,7 +23,7 @@
                 <table class="table table-sm table-striped" dusk="table-transaction-list">
                     <thead class="thead-dark font-weight-bold">
                         <tr>
-                            <td scope="col" class="d-none d-md-inline">#</td>
+                            <td scope="col" class="d-none d-md-block">#</td>
                             <td scope="col">Description</td>
                             <td scope="col">Planned On</td>
                             <td scope="col">&nbsp;</td>
@@ -33,7 +33,7 @@
                     </thead>
                     <tbody>
                     <tr scope="row" v-for="(item, index) in transactions.data">
-                        <td class="d-none d-md-inline">{{index + 1}}</td>
+                        <td class="d-none d-md-block">{{index + 1}}</td>
                         <td>{{item.description}}</td>
                         <td>{{item.planned_on}}</td>
                         <td><i v-if="item.repeating_interval > 0" class="fa text-muted fa-lg fa-repeat" aria-hidden="true"></i></td>
@@ -53,8 +53,15 @@
                 </table>
 
             </div>
-            <div class="tab-pane fade" id="tab-graphs">
-                Graphs will be here
+            <div class="tab-pane fade" id="tab-graphs" role="tabpanel">
+
+
+
+                <div id="chart-canvas-contrainer" style="position: relative; width: 99%">
+                    <canvas id="chart-canvas">Canvas Text</canvas>
+                </div>
+
+
             </div>
 
         </div>
@@ -102,6 +109,81 @@
 
             },
 
+            cashflow: function () {
+
+                let url = "cashflow";
+
+                if (this.from != '' && this.to != '') {
+                    url += '?from=' + this.from + '&to=' + this.to;
+                }
+
+                console.log('Refersh URL CASH FLOW' + url);
+
+                this.http.get(url).then(response => {
+
+                    const mydata = response.data.data;
+
+                    console.log(mydata);
+
+                    let labels = [];
+                    let data = [];
+
+                    labels.push(mydata.cashflowstart.date);
+                    data.push(mydata.cashflowstart.amount);
+
+                    $(mydata.cash_flow_data).each(function(key, item){
+
+                        labels.push(item.date);
+                        data.push(item.saldo);
+
+                    });
+
+
+                    labels.push(mydata.cash_flow_end.date);
+                    data.push(mydata.cash_flow_end.amount);
+
+                    console.log(labels);
+                    console.log(data);
+
+
+
+                    let ctx = $("#chart-canvas");
+
+                    const myChart = new chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: labels,
+                            datasets: [{
+                                label: 'Cash Flow',
+                                data: data,
+                                backgroundColor: ['rgba(144, 248, 53, 0.42)']
+                            }]
+
+                        },
+                        options: {scales: {
+                                yAxes: [{
+                                    ticks: {
+                                        beginAtZero:true
+                                    }
+                                }]
+                            }}
+                    });
+
+
+
+                }).catch(e => {
+                    this.$notifier.danger("There was an error processing your request.<br>" + e.response.status + ": " + e.response.statusText);
+                })
+
+
+
+
+
+
+
+
+            },
+
             edit: function(item) {
 
                 const transaction = jQuery.extend({}, item); // pass the copy.
@@ -119,6 +201,7 @@
 
 
                     this.refresh();
+                    this.cashflow();
 
 
                 }).catch(e => {
@@ -129,11 +212,28 @@
 
         },
 
+        mounted() {
+
+            const $list = this;
+
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+
+                e.target // newly activated tab
+                e.relatedTarget // previous active tab
+
+                console.log();
+
+                if ( $(e.target).text().toLowerCase() != "cash flow") {
+                    return;
+                }
+
+                $list.cashflow()
+
+            });
+
+        },
+
         created() {
-
-            //this.refresh();
-
-
 
 
             console.log('Subscribing to transactions!');
@@ -141,6 +241,7 @@
             this.$bus.$on('new-transaction', event => {
 
                 this.refresh();
+                this.cashflow();
 
             });
 
@@ -152,10 +253,19 @@
                 this.to = event.to;
 
                 this.refresh();
+                this.cashflow();
 
                 console.log('Refreshed on date range applied');
 
             });
+
+
+            console.log("canvas",  document.getElementById("#chart-canvas"));
+            return;
+
+
+
+
 
 
         }
