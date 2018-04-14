@@ -5,18 +5,26 @@ dist: trusty
 php:
   - 7.1
 
+addons:
+    chrome: stable
+
 services:
   - mysql
 
 before_script:
+
   - cp .env.travis .env
   - composer install --no-interaction
   - mysql -e 'create database homestead_test;'
   - php artisan key:generate
   - php artisan migrate --no-interaction -vvv
   - php artisan passport:install
+  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+  - php artisan serve &
+
 
 
 script:
 
+  - php artisan dusk
   - vendor/bin/phpunit
