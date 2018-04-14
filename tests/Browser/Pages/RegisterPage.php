@@ -4,6 +4,7 @@ namespace Tests\Browser\Pages;
 
 use App\User;
 use Laravel\Dusk\Browser;
+use Tests\Browser\Components\RegisterPage\RegisterForm;
 
 class RegisterPage extends Page
 {
@@ -36,46 +37,26 @@ class RegisterPage extends Page
     public function elements()
     {
         return [
-
             '@element' => '#selector',
-            '@input-user-name-control' => '#name',
-            '@input-user-email-control' => '#email',
-            '@input-user-password-control' => '#password',
-            '@input-user-password-confirm-control' => '#password-confirm',
-            '@btn-register-control' => '#btn-register-submit'
-
         ];
     }
 
-    public function registerValidUser(Browser $browser, User $user) {
+    /**
+     * @param Browser $browser
+     * @param User $user
+     * @return void
+     */
+    public function registerUser(Browser $browser, User $user) {
 
-        $browser
-            ->type('@input-user-name-control', $user->name)
-            ->type('@input-user-email-control', $user->email)
-            ->type('@input-user-password-control', 'secret')
-            ->type('@input-user-password-confirm-control', 'secret')
+        $browser->within(new RegisterForm(), function(Browser $browser) use ($user) {
 
+            $browser
+                ->setUser($user)
+                ->submit()
+                ;
 
-
-            ->click('@btn-register-control')
-            ->waitForText($user->name)
-
-
-        ;
-
-
-    }
-
-    public function registerInvalidUser(Browser $browser) {
-
-        $browser
-            ->click('@btn-register-control')
-            ->screenshot('register-'.date('YmdHis'))
-            ->waitForText('The name field is required.')
-            ->waitForText('The email field is required.')
-            ->waitForText('The password field is required.')
-
-            ;
+        });
 
     }
+
 }

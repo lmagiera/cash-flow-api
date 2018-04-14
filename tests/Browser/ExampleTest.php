@@ -258,8 +258,7 @@ class ExampleTest extends DuskTestCase
             $nextTransaction->planned_on = (new Carbon($datePlanned))->addMonth(1)->format('Y-m-d');
 
 
-            /** @var $homePage HomePage */
-            $homePage = $browser
+             $browser
                 ->loginAs($user)
                 ->visit(new HomePage())
                 ->openNewTransactionModal()

@@ -2,22 +2,18 @@
 
 namespace Tests\Browser;
 
-use App\Transaction;
-use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\HomePage;
-use Tests\DuskTestCase;
+use Tests\CashFlowAppTestCase;
 
-class EditTransactionTest extends DuskTestCase
+class EditTransactionTest extends CashFlowAppTestCase
 {
 
     use RefreshDatabase, DatabaseMigrations;
 
     /**
-     * A Dusk test example.
-     *
      * @return void
      * @throws \Exception
      * @throws \Throwable
@@ -26,12 +22,9 @@ class EditTransactionTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
 
-            $user = factory(User::class)->create();
+            $user = $this->createUser();
 
-            $transaction = factory(Transaction::class)->make([
-                'repeating_interval' => 0,
-                'user_id' => $user->id
-            ]);
+            $transaction = $this->makeTransaction(['repeating_interval' => 0]);
 
             $browser
                 ->loginAs($user)

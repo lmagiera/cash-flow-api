@@ -2,14 +2,13 @@
 
 namespace Tests\Browser;
 
-use App\User;
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\Browser\Pages\RegisterPage;
-use Tests\DuskTestCase;
-use Laravel\Dusk\Browser;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Dusk\Browser;
+use Tests\Browser\Pages\RegisterPage;
+use Tests\CashFlowAppTestCase;
 
-class RegisterUserTest extends DuskTestCase
+class RegisterUserTest extends CashFlowAppTestCase
 {
     use DatabaseMigrations;
     use RefreshDatabase;
@@ -25,11 +24,12 @@ class RegisterUserTest extends DuskTestCase
     {
         $this->browse(function (Browser $browser) {
 
-            $user = factory(User::class)->make();
+            $user = $this->makeUser();
 
             $browser
                 ->visit(new RegisterPage())
-                ->registerValidUser($user)
+                ->registerUser($user)
+                ->waitForText($user->name)
             ;
 
 
@@ -44,9 +44,19 @@ class RegisterUserTest extends DuskTestCase
 
         $this->browse(function (Browser $browser) {
 
+            $user = $this->makeUser([
+                'email' => '',
+                'name' => '',
+                'password' => ''
+
+            ]);
+
             $browser
                 ->visit(new RegisterPage())
-                ->registerInvalidUser()
+                ->registerUser($user)
+                ->waitForText('The name field is required.')
+                ->waitForText('The email field is required.')
+                ->waitForText('The password field is required.')
             ;
 
 
