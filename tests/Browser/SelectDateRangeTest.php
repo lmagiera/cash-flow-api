@@ -50,8 +50,6 @@ class SelectDateRangeTest extends DuskTestCase
                 'user_id' => $user->id
             ]);
 
-            echo $transaction->planned_on;
-
 
             $browser
                 ->loginAs($user)
