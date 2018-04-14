@@ -146,7 +146,7 @@ class TransactionApiTest extends TestCase
 
         $response = $this
             ->actingAs($user, 'api')
-            ->json('GET', '/api/transaction/' . $id);
+            ->json('GET', 'api/transaction/' . $id);
 
 
         $response->assertStatus(200);
