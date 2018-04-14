@@ -34,8 +34,6 @@ abstract class CashFlowAppUserLoggedInTestCase extends CashFlowAppTestCase
                 $this->currentUser = $this->createUser();
                 $browser->loginAs($this->currentUser);
 
-                echo "Created User: ".$this->currentUser->name.PHP_EOL;
-
             });
 
         } catch (\Exception $e) {
