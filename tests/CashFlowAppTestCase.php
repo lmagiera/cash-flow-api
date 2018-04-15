@@ -9,6 +9,8 @@
 namespace Tests;
 use App\Transaction;
 use App\User;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 /**
  * Class CashFlowAppTestCase
@@ -19,6 +21,8 @@ use App\User;
  */
 abstract class CashFlowAppTestCase extends DuskTestCase
 {
+
+    use RefreshDatabase, DatabaseMigrations;
 
     /**
      * Creates new user for application,
