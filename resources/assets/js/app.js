@@ -9,9 +9,8 @@
 
 require("./bootstrap");
 
-/* global Vue */
+/* global Vue, axios */
 window.Vue = require("vue");
-
 
 
 
