@@ -1,3 +1,6 @@
+MAINTAINER lmagiera@gmail.com
+LABEL maintainer="lmagiera@gmail.com"
+
 FROM php:7.1-apache
 
 ENV APACHE_DOCUMENT_ROOT /var/www/html
@@ -6,8 +9,9 @@ COPY . /var/www/html/
 COPY ./config/site.conf /etc/apache2/sites-available/000-default.conf
 
 RUN apt-get update
-
-RUN apt-get install -y npm wget zlib1g-dev mysql-client \
+    && apt-get install -y --no-install-recommends npm wget zlib1g-dev mysql-client \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
     && docker-php-ext-install mysqli \
     && docker-php-ext-install pdo_mysql \
     && docker-php-ext-install zip \
