@@ -7,10 +7,10 @@
 
 
 
-require('./bootstrap');
+require("./bootstrap");
 
 /* global Vue */
-window.Vue = require('vue');
+window.Vue = require("vue");
 
 
 
@@ -26,7 +26,7 @@ window.onbeforeunload=function(e){};
 
 let bus = new Vue({});
 
-Object.defineProperty(Vue.prototype, '$bus', {
+Object.defineProperty(Vue.prototype, "$bus", {
     get() {
         return this.$root.bus;
     }
@@ -43,16 +43,15 @@ let notifier = new Vue({
     }
 });
 
-Object.defineProperty(Vue.prototype, '$notifier', {
+Object.defineProperty(Vue.prototype, "$notifier", {
     get() {
         return this.$root.notifier;
     }
 });
 
-Vue.prototype.HTTP = axios.create({
+window.Vue.prototype.HTTP = axios.create({
 
     baseURL: process.env.MIX_API_ENDPOINT,
-    //baseURL: 'http://127.0.0.1:8000/api',
     headers: {
 
         // any custom headers here
@@ -62,7 +61,7 @@ Vue.prototype.HTTP = axios.create({
 
 const app = new Vue({
 
-    el: '#app',
+    el: "#app",
 
     data() {
         return {
@@ -75,17 +74,16 @@ const app = new Vue({
 
     methods: {
 
-        addTransaction: function(data) {
+        addTransaction(data) {
 
-            console.log("Adding Transaction with data: " + data.transaction);
-
+            //console.log("Adding Transaction with data: " + data.transaction);
 
         }
     },
     components: {
-        'tool-bar': require('./components/ToolBar.vue'),
-        'transaction-list': require('./components/TransactionList.vue'),
-        'date-range-selector': require('./components/DateRangeSelector.vue')
+        "tool-bar": require("./components/ToolBar.vue"),
+        "transaction-list": require("./components/TransactionList.vue"),
+        "date-range-selector": require("./components/DateRangeSelector.vue")
     },
 
     mounted() {
