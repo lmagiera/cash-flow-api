@@ -37,7 +37,7 @@ let token = document.head.querySelector("meta[name='csrf-token']");
 if (token) {
     window.axios.defaults.headers.common["X-CSRF-TOKEN"] = token.content;
 } else {
-    throw "CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token"
+    throw "CSRF token not found: https://laravel.com/docs/csrf#csrf-x-csrf-token";
 }
 
 /* global moment, datetimepicker, notify, chart */
@@ -46,7 +46,7 @@ window.datetimepicker = require("bootstrap-datepicker");
 window.notify = require("bootstrap-notify");
 window.chart = require("chart.js");
 
-$.notifyDefaults({z_index: 10031, placement: {align: "center"}});
+$.notifyDefaults({"z_index": 10031, "placement": {align: "center"}});
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
