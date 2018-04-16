@@ -33,4 +33,4 @@ before_script:
 script:
 
   - php artisan dusk
-  - vendor/bin/phpunit
+  - vendor/bin/phpunit --coverage-clover=coverage-report.xml
