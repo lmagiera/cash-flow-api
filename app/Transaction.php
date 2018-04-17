@@ -38,13 +38,13 @@ class Transaction extends Model
      * Scope a query to only include users of a given type.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \DateTime $from
-     * @param \DateTime $to
+     * @param \DateTime $dateFrom
+     * @param \DateTime $dateTo
      * @return void
      */
-    public function scopeBetween($query, $from, $to) {
+    public function scopeBetween($query, $dateFrom, $dateTo) {
 
-        $query->whereBetween('planned_on', [$from, $to]);
+        $query->whereBetween('planned_on', [$dateFrom, $dateTo]);
 
     }
 
@@ -61,19 +61,19 @@ class Transaction extends Model
      * @param \Illuminate\Database\Eloquent\Builder $query
      *
      */
-    public function scopeId($query, $id) {
+    public function scopeId($query, $keyId) {
 
-        $query->where('id', '=', $id);
+        $query->where('id', '=', $keyId);
 
     }
 
     /**
      * @param \Illuminate\Database\Eloquent\Builder $query
-     *
+     * @param $keyId
      */
-    public function scopeWithoutKey($query, $id) {
+    public function scopeWithoutKey($query, $keyId) {
 
-        $query->whereKeyNot($id);
+        $query->whereKeyNot($keyId);
 
     }
 

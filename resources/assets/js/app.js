@@ -33,11 +33,11 @@ Object.defineProperty(Vue.prototype, "$bus", {
 
 let notifier = new Vue({
     methods: {
-        danger: function(message) {
-            $.notify({message: message}, {type: "danger"});
+        danger(message) {
+            $.notify({"message": message}, {"type": "danger"});
         },
-        success: function(message) {
-            $.notify({message: message}, {type: "success"});
+        success(message) {
+            $.notify({"message": message}, {"type": "success"});
         }
     }
 });
@@ -64,10 +64,10 @@ const app = new Vue({
 
     data() {
         return {
-            bus: bus,
-            notifier: notifier,
-            HTTP: this.HTTP
-        }
+            bus,
+            "notifier": notifier,
+            "HTTP": this.HTTP
+        };
 
     },
 
@@ -86,11 +86,6 @@ const app = new Vue({
     },
 
     mounted() {
-
-
-
-
-
     }
 
 });
