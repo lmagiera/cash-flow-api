@@ -14,21 +14,25 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Ramsey\Uuid\Uuid;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class TransactionController extends Controller
 {
 
+    /**
+     * TransactionController constructor.
+     */
     public function __construct()
     {
 
         $this->middleware('auth:api');
-
     }
 
     /**
      * Display a listing of the resource.
      *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return TransactionCollection
      */
     public function index(Request $request)
     {
@@ -54,8 +58,8 @@ class TransactionController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param PostTransactionRequest $request
+     * @return TransactionResource
      */
     public function store(PostTransactionRequest $request)
     {
@@ -92,8 +96,8 @@ class TransactionController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Transaction  $transaction
-     * @return \Illuminate\Http\Response
+     * @param  \App\Transaction $transaction
+     * @return TransactionResource
      */
     public function show(Transaction $transaction)
     {
@@ -104,9 +108,9 @@ class TransactionController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Transaction  $transaction
-     * @return \Illuminate\Http\Response
+     * @param PutTransactionRequest $request
+     * @param  \App\Transaction $transaction
+     * @return TransactionResource
      */
     public function update(PutTransactionRequest $request, Transaction $transaction)
     {
@@ -176,16 +180,8 @@ class TransactionController extends Controller
 
                         $firstDate = (new Carbon($rTransaction->planned_on))->addMonth($transaction->repeating_interval)->format('Y-m-d');
                     }
-
-
                 }
-
-
-
-
-
             }
-
         }
 
         return new TransactionResource($transaction);
@@ -194,13 +190,27 @@ class TransactionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Transaction  $transaction
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @param  \App\Transaction $transaction
+     * @return TransactionResource
+     * @throws \Exception
      */
-    public function destroy(Transaction $transaction)
+    public function destroy(Request $request, Transaction $transaction)
     {
-        $transaction->repeating($transaction->repeating_id, $transaction->planned_on)->delete();
+
+
+        if ( $request->has('all') ) {
+            $transaction->repeating($transaction->repeating_id, $transaction->planned_on)->delete();
+            return new TransactionResource($transaction);
+        }
+
+        if ( !$transaction->exists ) {
+            throw new NotFoundHttpException("Transaction not found");
+        }
+
+        $transaction->delete();
 
         return new TransactionResource($transaction);
+
     }
 }

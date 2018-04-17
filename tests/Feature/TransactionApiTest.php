@@ -510,7 +510,7 @@ class TransactionApiTest extends TestCase
 
         $response = $this
             ->actingAs($user, 'api')
-            ->json('DELETE', '/api/transaction/'.$transactionData['id']);
+            ->json('DELETE', '/api/transaction/'.$transactionData['id'].'?all');
 
         $response->assertStatus(200);
 
@@ -528,9 +528,48 @@ class TransactionApiTest extends TestCase
 
     }
 
-    public function testDeleteOnlySingleTransactionFromRepetingSeries() {
+    public function testDeleteOnlySingleTransactionFromRepeatingSeries() {
 
-        $this->markTestSkipped();
+        $user = factory(User::class)->create();
+
+        $transaction = factory(Transaction::class)->make([
+            'user_id' => $user->id,
+            'repeating_interval' => 1, // do repeat monthly,
+            'planned_on' => Carbon::now()->startOfMonth()->addDays(rand(0,27))->format('Y-m-d')
+        ]);
+
+        $response = $this
+            ->actingAs($user, 'api')
+            ->json('POST', '/api/transaction', ['transaction' => $transaction]);
+
+        $response->assertStatus(201);
+
+        $transactionData = $response->json('data');
+
+        $response = $this
+            ->actingAs($user, 'api')
+            ->json('DELETE', '/api/transaction/'.$transactionData['id']);
+
+        $response->assertStatus(200);
+
+
+        $response = $this
+            ->actingAs($user, 'api')
+            ->json('GET', '/api/transaction/'.$transactionData['id']);
+
+        $response->assertNotFound();
+
+        $response = $this
+            ->actingAs($user, 'api')
+            ->json('DELETE', '/api/transaction/'.($transactionData['id'] + 1));
+
+        $response->assertStatus(200);
+
+
+
+
+
+
 
     }
 
@@ -577,11 +616,6 @@ class TransactionApiTest extends TestCase
             'date' => Carbon::now()->endOfMonth()->format('Y-m-d'),
             'amount' => currency($transactionPrev->amount + $transactionNow->amount)
         ]]);
-
-
-
-
-
 
 
     }

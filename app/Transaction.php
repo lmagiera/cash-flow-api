@@ -61,9 +61,9 @@ class Transaction extends Model
      * @param \Illuminate\Database\Eloquent\Builder $query
      *
      */
-    public function scopeId($query, $keyId) {
+    public function scopeById($query, $keyId) {
 
-        $query->where('id', '=', $keyId);
+        $query->whereKey($keyId);
 
     }
 
