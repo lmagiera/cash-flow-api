@@ -25,7 +25,6 @@ class CurrentUserScope implements Scope
      */
     public function apply(Builder $builder, Model $model)
     {
-        $myModel = $model;
         $builder->where('user_id', '=', auth()->id());
     }
 }
