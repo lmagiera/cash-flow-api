@@ -20,28 +20,23 @@ class CashFlowResource extends JsonResource
      */
     public function toArray($request)
     {
-        $from = $request->get('from');
-        $to = $request->get('to');
+        $reqDateFrom = $request->get('from');
+        $reqDateTo = $request->get('to');
 
-        if ( !$from || !$to) {
+        if ( !$reqDateFrom || !$reqDateTo) {
 
-            $from = Carbon::now()->startOfMonth()->subDay()->format('Y-m-d');
-            $to = Carbon::now()->endOfMonth()->format('Y-m-d');
-
-        }
-        else {
-
-            $from = (new Carbon($from))->subDay()->format('Y-m-d');
-            //$to =
+            $reqDateFrom = Carbon::now()->startOfMonth()->subDay()->format('Y-m-d');
+            $reqDateTo = Carbon::now()->endOfMonth()->format('Y-m-d');
 
         }
 
+        $startFrom = (new Carbon($reqDateFrom))->addDay()->format('Y-m-d');
+        $reqDateFrom = (new Carbon($reqDateFrom))->format('Y-m-d');
 
-        $startFrom = (new Carbon($from))->addDay()->format('Y-m-d');
 
         $beforeSum = DB::table('transactions')
             ->where('user_id', Auth::id())
-            ->where('planned_on', '<=', $from)
+            ->where('planned_on', '<=', $reqDateFrom)
             ->sum('amount');
 
         $runningTotal = $beforeSum;
@@ -49,7 +44,7 @@ class CashFlowResource extends JsonResource
 
 
         /** @var $cashFlowItems Collection */
-        $cashFlowItems = Transaction::between($startFrom, $to)
+        $cashFlowItems = Transaction::between($startFrom, $reqDateTo)
             ->select('planned_on')
             ->selectRaw('sum(amount) as sum_amount')
             ->groupBy('planned_on')
@@ -71,11 +66,11 @@ class CashFlowResource extends JsonResource
 
         return [
             'cash_flow_start' => [
-                'date' => $from,
+                'date' => $reqDateFrom,
                 'amount' => $beforeSum
             ],
             'cash_flow_end' => [
-                'date' => $to,
+                'date' => $reqDateTo,
                 'amount' => currency($runningTotal)
             ],
             'cash_flow_data' => $cashFlowData
