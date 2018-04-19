@@ -14,6 +14,7 @@ window.Vue = require("vue");
 
 
 import MessageBox from "./components/MessageBox.plugin.js";
+
 Vue.use(MessageBox);
 
 
@@ -86,9 +87,9 @@ const app = new Vue({
                 message: "This is a beautiful world!",
                 type: "Ok",
                 buttons: { Yes: {text: "Yes"}, No: {text: "No"}, Cancel: {text: "Cancel"}},
-                onclose: function (dialogResult) {
+                onclose(dialogResult) {
 
-                    console.log(dialogResult)
+                    alert(dialogResult);
 
                 }
             });
