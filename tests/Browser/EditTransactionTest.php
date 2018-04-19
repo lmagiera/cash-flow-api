@@ -18,7 +18,7 @@ class EditTransactionTest extends CashFlowAppTestCase
      * @throws \Exception
      * @throws \Throwable
      */
-    public function testUserCanSeeEditAndDeleteButtons()
+    public function testUserCanDeleteSingleTransaction()
     {
         $this->browse(function (Browser $browser) {
 
@@ -30,7 +30,8 @@ class EditTransactionTest extends CashFlowAppTestCase
                 ->loginAs($user)
                 ->visit(new HomePage())
                 ->saveTransaction($transaction)
-                ->deleteTransaction($transaction)
+                ->deleteSingleTransaction($transaction)
+
             ;
         });
     }
