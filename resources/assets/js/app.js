@@ -13,6 +13,10 @@ require("./bootstrap");
 window.Vue = require("vue");
 
 
+import MessageBox from "./components/MessageBox.plugin.js";
+Vue.use(MessageBox);
+
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -48,15 +52,13 @@ Object.defineProperty(Vue.prototype, "$notifier", {
     }
 });
 
-window.Vue.prototype.HTTP = axios.create({
+Vue.prototype.HTTP = axios.create({
 
     baseURL: process.env.MIX_API_ENDPOINT,
-    headers: {
-
-        // any custom headers here
-
-    }
+    headers: {}
 });
+
+
 
 const app = new Vue({
 
@@ -74,18 +76,45 @@ const app = new Vue({
     methods: {
 
         addTransaction(data) {
-
             //console.log("Adding Transaction with data: " + data.transaction);
+        },
+
+        dialog() {
+
+            Vue.$dialog.show({
+                title: "Hello World",
+                message: "This is a beautiful world!",
+                type: "Ok",
+                buttons: { Yes: {text: "Yes"}, No: {text: "No"}, Cancel: {text: "Cancel"}},
+                onclose: function (dialogResult) {
+
+                    console.log(dialogResult)
+
+                }
+            });
+
+
 
         }
+
     },
     components: {
         "tool-bar": require("./components/ToolBar.vue"),
         "transaction-list": require("./components/TransactionList.vue"),
-        "date-range-selector": require("./components/DateRangeSelector.vue")
+        "date-range-selector": require("./components/DateRangeSelector.vue"),
+
     },
 
     mounted() {
+
+        Vue.$dialog.app = this;
+
     }
 
 });
+
+
+
+
+
+

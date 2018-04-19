@@ -4,6 +4,8 @@ namespace Tests\Browser\Pages;
 
 use App\Transaction;
 use Carbon\Carbon;
+use Facebook\WebDriver\WebDriverBy;
+use Facebook\WebDriver\WebDriverExpectedCondition;
 use Illuminate\Support\Collection;
 use Laravel\Dusk\Browser;
 
@@ -43,7 +45,9 @@ class HomePage extends Page
             '@input-description-control' => 'input[id="transaction-description"]',
             '@input-planned-on-control' => 'input[id="transaction-planned-on"]',
             '@input-actual-on-control' => 'input[id="transaction-actual-on"]',
-            '@modal-add-transaction-title' => '.modal-title'
+            '@modal-add-transaction-title' => '.modal-title',
+            '@dialog-remove-transaction' => '.message-box',
+            //'@dialog-btn-yes-control' => '#btn-yes-control'
         ];
     }
 
@@ -319,19 +323,27 @@ class HomePage extends Page
 
     }
 
-    public function deleteTransaction(Browser $browser, Transaction $transaction) {
+    public function deleteSingleTransaction(Browser $browser, Transaction $transaction) {
 
         $this->validateTransactionOnList($browser, $transaction);
 
         $browser
             ->click('@btn-remove-transaction-control')
-            ->waitForDialog(2)
-            ->acceptDialog()
-            ->pause(500)
+            ->waitFor('@dialog-remove-transaction')
+            ->within("@dialog-remove-transaction", function (Browser $browser){
+
+                $element = WebDriverBy::cssSelector('#btn-yes-control');
+                $browser->driver->wait()->until(WebDriverExpectedCondition::presenceOfElementLocated($element));
+                $browser->pause(1000);
+                $browser->driver->findElement($element)->click();
+                $browser
+                    ->waitUntilMissing('@dialog-remove-transaction')
+                ;
+            })
+            ->pause(1000)
             ->validateTransactionNotOnList($transaction)
         ;
 
-
-
     }
+
 }

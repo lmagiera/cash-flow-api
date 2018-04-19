@@ -20,6 +20,12 @@
 
                 <h5 class="d-none d-md-block display-5 p-2">Transaction List</h5>
 
+
+
+
+
+
+
                 <table class="table table-sm table-striped" dusk="table-transaction-list">
                     <thead class="thead-dark font-weight-bold">
                         <tr>
@@ -56,11 +62,9 @@
             <div class="tab-pane fade" id="tab-graphs" role="tabpanel">
 
 
-
                 <div id="chart-canvas-contrainer" style="position: relative; width: 99%">
                     <canvas id="chart-canvas">Canvas Text</canvas>
                 </div>
-
 
             </div>
 
@@ -83,6 +87,12 @@
                 from: '',
                 to: ''
             }
+
+        },
+
+        components: {
+
+            //"message-box-dialog": require("./dialogs/MessageBoxDialog.vue")
 
         },
 
@@ -194,23 +204,57 @@
 
             remove: function(item) {
 
-                if ( !confirm('Are you sure you want to remove transaction?') ) {
-                    return;
+
+                let message = "Are you sure you want to remove this transaction? This cannot be undone!";
+                let type = "YesNo";
+
+                let buttons = {Yes: {text: "Yes, remove transaction"}, No: {text: "No"}, Cancel: {text: "Cancel"}};
+
+                if (item.repeating_interval > 0) {
+                    message = "Would you like to remove all transactions?";
+                    type = "YesNoCancel";
+                    buttons.Yes.text = "Yes, remove all";
+                    buttons.No.text = "No, remove single one";
+
                 }
 
-                this.http.delete('transaction/' + item.id).then(response => {
+                const title = "Remove transaction: " + item.description;
+
+                const $this = this;
+
+                Vue.$dialog.show({title, message, type, buttons,
+
+                    onclose: function (result) {
+
+                        console.error('Modal is hiding: result: ' + result);
+
+                        if ( result === "Cancel") {
+                            return;
+                        }
+
+                        if ( result === "No" && item.repeating_interval === 0) {
+                            return;
+                        }
+
+                        let url = "transaction/" + item.id;
+
+                        if ( result === "Yes" && item.repeating_interval > 0) {
+                            url += "?all";
+                        }
+
+                        $this.http.delete(url).then(response => {
 
 
-                    this.refresh();
-                    this.cashflow();
+                            $this.refresh();
+                            $this.cashflow();
 
 
-                }).catch(e => {
-                    this.$notifier.danger("There was an error processing your request.<br>" + e.response.status + ": " + e.response.statusText);
-                })
+                        }).catch(e => {
+                            $this.$notifier.danger("There was an error processing your request.<br>" + e.response.status + ": " + e.response.statusText);
+                        })
 
+                }})
             }
-
         },
 
         mounted() {

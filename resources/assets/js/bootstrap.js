@@ -2,6 +2,8 @@
 window._ = require("lodash");
 window.Popper = require("popper.js").default;
 
+
+
 /**
  * We'll load jQuery and the Bootstrap jQuery plugin which provides support
  * for JavaScript based Bootstrap features such as modals and tabs. This
@@ -45,8 +47,9 @@ window.moment = require("moment");
 window.datetimepicker = require("bootstrap-datepicker");
 window.notify = require("bootstrap-notify");
 window.chart = require("chart.js");
-
 $.notifyDefaults({"z_index": 10031, "placement": {align: "center"}});
+
+
 
 /**
  * Echo exposes an expressive API for subscribing to channels and listening
