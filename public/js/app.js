@@ -32618,7 +32618,7 @@ var app = new Vue({
                 buttons: { Yes: { text: "Yes" }, No: { text: "No" }, Cancel: { text: "Cancel" } },
                 onclose: function onclose(dialogResult) {
 
-                    console.log(dialogResult);
+                    alert(dialogResult);
                 }
             });
         }
@@ -69672,9 +69672,7 @@ var MessageBox = {
 
                 var modalId = "#modal-" + MessageBoxState.id;
 
-                $(modalId).on('hide.bs.modal', function (e) {
-
-                    console.error('Modal is hiding, will be returning');
+                $(modalId).on("hide.bs.modal", function (e) {
 
                     var dialogResult = instance.dialogResult == null ? "Cancel" : instance.dialogResult;
                     Vue.$dialog.app.$refs.container.removeChild(instance.$el);
@@ -69682,7 +69680,7 @@ var MessageBox = {
                     opt.onclose.call(this, dialogResult);
                 });
 
-                $(modalId).modal('show');
+                $(modalId).modal("show");
             }
         };
     }

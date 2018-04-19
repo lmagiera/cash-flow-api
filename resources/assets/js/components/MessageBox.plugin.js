@@ -1,11 +1,9 @@
-
-
 import MessageBoxDialog from "./dialogs/MessageBoxDialog";
 import MessageBoxWrapper from "./dialogs/MessageBoxWrapper";
 
 const MessageBoxState = {
     id: 0
-}
+};
 
 const MessageBox = {
 
@@ -53,9 +51,7 @@ const MessageBox = {
 
                 const modalId = "#modal-" + MessageBoxState.id;
 
-                $(modalId).on('hide.bs.modal', function (e) {
-
-                    console.error('Modal is hiding, will be returning');
+                $(modalId).on("hide.bs.modal", function (e) {
 
                     const dialogResult = instance.dialogResult == null ? "Cancel" : instance.dialogResult;
                     Vue.$dialog.app.$refs.container.removeChild(instance.$el);
@@ -64,7 +60,7 @@ const MessageBox = {
 
                 });
 
-                $(modalId).modal('show');
+                $(modalId).modal("show");
 
             }
         }
