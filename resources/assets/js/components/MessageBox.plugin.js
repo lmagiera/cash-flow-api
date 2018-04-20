@@ -63,7 +63,7 @@ const MessageBox = {
                 $(modalId).modal("show");
 
             }
-        }
+        };
 
 
 

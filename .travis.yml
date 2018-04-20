@@ -2,6 +2,13 @@ sudo: required
 language: php
 dist: trusty
 
+
+env:
+  global:
+    - CC_TEST_REPORTER_ID=2af4fa4a7b3b4bcea610e6c08c31f33a6b5b8b4a6db680c01f3db0dc5d737bad
+    - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
+
+
 php:
   - 7.1
 
@@ -11,12 +18,16 @@ addons:
 cache:
   directories:
     - "node_modules"
+    - "vendor"
 
 services:
   - mysql
 
 before_script:
 
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
   - cp .env.travis .env
   - composer install --no-interaction
   - npm install
@@ -33,9 +44,10 @@ before_script:
 script:
 
   - php artisan dusk
-  - vendor/bin/phpunit --coverage-clover=coverage.xml
+  - vendor/bin/phpunit --coverage-clover=build/logs/clover.xml
 
 
 after_success:
     - bash <(curl -s https://codecov.io/bash)
-    - vendor/bin/codacycoverage clover coverage.xml
+    - vendor/bin/codacycoverage clover build/logs/clover.xml
+    - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi

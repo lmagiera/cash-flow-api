@@ -32550,6 +32550,7 @@ __webpack_require__(152);
 window.Vue = __webpack_require__(149);
 
 
+
 Vue.use(__WEBPACK_IMPORTED_MODULE_0__components_MessageBox_plugin_js__["a" /* default */]);
 
 /**
@@ -69620,8 +69621,6 @@ module.exports = {
 
 
 
-
-
 var MessageBoxState = {
     id: 0
 };
@@ -69949,6 +69948,7 @@ var render = function() {
                               "btn btn-block-xs-only btn-outline-primary m-1",
                             attrs: {
                               id: "btn-no-control",
+                              dusk: "dialog-btn-no-control",
                               type: "button",
                               "data-dismiss": "modal"
                             },
@@ -69992,6 +69992,7 @@ var render = function() {
                               "btn btn-block-xs-only btn-outline-primary m-1",
                             attrs: {
                               id: "btn-no-control",
+                              dusk: "dialog-btn-no-control",
                               type: "button",
                               "data-dismiss": "modal"
                             },
@@ -71988,7 +71989,7 @@ exports = module.exports = __webpack_require__(6)(true);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"DateRangeSelector.vue","sourceRoot":""}]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"DateRangeSelector.vue","sourceRoot":""}]);
 
 // exports
 
@@ -72077,10 +72078,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         $('.input-daterange').datepicker({ format: "yyyy-mm-dd", autoclose: true }).on('changeDate', function (e) {
 
-            console.log('Date from changed!');
-            console.log(e);
+            console.log("Date Changed!");
+            console.log(e.target);
+
             $this.from = $('#input-date-from-control').val();
             $this.to = $('#input-date-to-control').val();
+
+            if (moment($this.from).diff($this.to) > 0) {
+                $this.to = $this.from;
+            }
+
             $this.applyDateRange();
         });
 

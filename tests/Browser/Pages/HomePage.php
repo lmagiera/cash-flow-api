@@ -264,22 +264,27 @@ class HomePage extends Page
 
             ->assertVisible('@input-date-from-control')
             ->assertVisible('@input-date-to-control')
+
             //->assertVisible('@btn-apply-control')
 
-            //->clear('@input-date-from-control')
-            //->clear('@input-date-to-control')
-
+            ->clear('@input-date-from-control')
+            ->screenshot('001-clear-from')
             ->type('@input-date-from-control', $dates['from'])
+            ->screenshot('002-type-from')
             ->keys('@input-date-to-control', '{ENTER}', '{TAB}')
+            ->screenshot('003-keys-from')
+
+
+            ->screenshot('test-1')
+
+            ->clear('@input-date-to-control')
             ->type('@input-date-to-control', $dates['to'])
             ->keys('@input-date-to-control', '{ENTER}', '{TAB}')
 
+            ->screenshot('test-2')
 
-            //->screenshot(date('YmdHis'))
 
             ->assertMissing('@feedback-invalid-dates')
-
-            //->click('@btn-apply-control')
 
 
             ->assertVue('from', $dates['from'], '@date-range-selector-component')
@@ -303,8 +308,6 @@ class HomePage extends Page
 
             ->assertValue( '@input-date-from-control', $from)
             ->assertValue('@input-date-to-control', $to)
-
-
 
             ;
 
@@ -343,6 +346,59 @@ class HomePage extends Page
             ->pause(1000)
             ->validateTransactionNotOnList($transaction)
         ;
+
+    }
+
+    public function deleteRepeatingTransaction(Browser $browser, Transaction $transaction) {
+
+        $this->validateTransactionOnList($browser, $transaction);
+
+        $browser
+            ->click('@btn-remove-transaction-control')
+            ->waitFor('@dialog-remove-transaction')
+            ->within("@dialog-remove-transaction", function (Browser $browser){
+
+                $browser->screenshot('100-dialog');
+
+                $element = WebDriverBy::cssSelector('#btn-yes-control');
+                $browser->driver->wait()->until(WebDriverExpectedCondition::presenceOfElementLocated($element));
+                $browser->pause(1000);
+                $browser->driver->findElement($element)->click();
+                $browser->screenshot('101-dialog');
+                $browser
+                    ->waitUntilMissing('@dialog-remove-transaction')
+                ;
+            })
+            ->pause(1000)
+            ->validateTransactionNotOnList($transaction);
+
+
+    }
+
+    public function deleteSingleRepeatingTransaction(Browser $browser, Transaction $transaction) {
+
+
+        $this->validateTransactionOnList($browser, $transaction);
+
+        $browser
+            ->click('@btn-remove-transaction-control')
+            ->waitFor('@dialog-remove-transaction')
+            ->within("@dialog-remove-transaction", function (Browser $browser){
+
+                $browser->screenshot('100-dialog');
+
+                $element = WebDriverBy::cssSelector('#btn-no-control');
+                $browser->driver->wait()->until(WebDriverExpectedCondition::presenceOfElementLocated($element));
+                $browser->pause(1000);
+                $browser->driver->findElement($element)->click();
+                $browser->screenshot('101-dialog');
+                $browser
+                    ->waitUntilMissing('@dialog-remove-transaction')
+                ;
+            })
+            ->pause(1000)
+            ->validateTransactionNotOnList($transaction);
+
 
     }
 
