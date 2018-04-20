@@ -9,7 +9,6 @@ use App\Http\Requests\PutTransactionRequest;
 use App\Http\Resources\TransactionCollection;
 use App\Http\Resources\TransactionResource;
 use App\Transaction;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -70,25 +69,14 @@ class TransactionController extends Controller
         $transaction->user_id = Auth::id();
         $transaction->repeating_id = Uuid::uuid4()->toString();
 
-
         $transaction->save();
 
-        if ( $transactionData['repeating_interval'] != 0 ) {
+        if ($transactionData['repeating_interval'] > 0){
 
-            $firstDate = (new Carbon($transaction->planned_on))->addMonth($transactionData['repeating_interval'])->format('Y-m-d');
-
-            for ($c = 1; $c < 50; $c++) {
-
-                $rTransaction = new Transaction($transactionData);
-                $rTransaction->planned_on = $firstDate;
-                $rTransaction->user_id = $transaction->user_id;
-                $rTransaction->repeating_id = $transaction->repeating_id;
-
-                $rTransaction->save();
-
-                $firstDate = (new Carbon($rTransaction->planned_on))->addMonth($transactionData['repeating_interval'])->format('Y-m-d');
-            }
+            $transaction->saveRepeating($transactionData);
         }
+
+
 
         return new TransactionResource($transaction);
     }
@@ -133,6 +121,9 @@ class TransactionController extends Controller
 
                 Transaction::repeating($repeatingId, $oldPlannedOn)->withoutKey($transaction->id)->delete();
 
+                $transaction->saveRepeating($transactionData);
+
+                /*
                 $firstDate = (new Carbon($transaction->planned_on))->addMonth($transaction->repeating_interval)->format('Y-m-d');
 
                 for ($c = 1; $c < 50; $c++) {
@@ -146,6 +137,7 @@ class TransactionController extends Controller
 
                     $firstDate = (new Carbon($rTransaction->planned_on))->addMonth($transaction->repeating_interval)->format('Y-m-d');
                 }
+                */
 
             } else if ($repeatingInterval == 0)  {
 
@@ -166,7 +158,9 @@ class TransactionController extends Controller
 
 
                     Transaction::repeating($repeatingId, $oldPlannedOn)->withoutKey($transaction->id)->delete();
+                    $transaction->saveRepeating($transactionData);
 
+                    /*
                     $firstDate = (new Carbon($transaction->planned_on))->addMonth($transaction->repeating_interval)->format('Y-m-d');
 
                     for ($c = 1; $c < 50; $c++) {
@@ -180,6 +174,7 @@ class TransactionController extends Controller
 
                         $firstDate = (new Carbon($rTransaction->planned_on))->addMonth($transaction->repeating_interval)->format('Y-m-d');
                     }
+                    */
                 }
             }
         }
