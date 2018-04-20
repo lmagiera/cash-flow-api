@@ -268,20 +268,20 @@ class HomePage extends Page
             //->assertVisible('@btn-apply-control')
 
             ->clear('@input-date-from-control')
-            ->screenshot('001-clear-from')
+            //->screenshot('001-clear-from')
             ->type('@input-date-from-control', $dates['from'])
-            ->screenshot('002-type-from')
+            //->screenshot('002-type-from')
             ->keys('@input-date-to-control', '{ENTER}', '{TAB}')
-            ->screenshot('003-keys-from')
+            //->screenshot('003-keys-from')
 
 
-            ->screenshot('test-1')
+            //->screenshot('test-1')
 
             ->clear('@input-date-to-control')
             ->type('@input-date-to-control', $dates['to'])
             ->keys('@input-date-to-control', '{ENTER}', '{TAB}')
 
-            ->screenshot('test-2')
+            //->screenshot('test-2')
 
 
             ->assertMissing('@feedback-invalid-dates')
@@ -358,13 +358,13 @@ class HomePage extends Page
             ->waitFor('@dialog-remove-transaction')
             ->within("@dialog-remove-transaction", function (Browser $browser){
 
-                $browser->screenshot('100-dialog');
+                //$browser->screenshot('100-dialog');
 
                 $element = WebDriverBy::cssSelector('#btn-yes-control');
                 $browser->driver->wait()->until(WebDriverExpectedCondition::presenceOfElementLocated($element));
                 $browser->pause(1000);
                 $browser->driver->findElement($element)->click();
-                $browser->screenshot('101-dialog');
+                //$browser->screenshot('101-dialog');
                 $browser
                     ->waitUntilMissing('@dialog-remove-transaction')
                 ;
@@ -385,13 +385,13 @@ class HomePage extends Page
             ->waitFor('@dialog-remove-transaction')
             ->within("@dialog-remove-transaction", function (Browser $browser){
 
-                $browser->screenshot('100-dialog');
+                //$browser->screenshot('100-dialog');
 
                 $element = WebDriverBy::cssSelector('#btn-no-control');
                 $browser->driver->wait()->until(WebDriverExpectedCondition::presenceOfElementLocated($element));
                 $browser->pause(1000);
                 $browser->driver->findElement($element)->click();
-                $browser->screenshot('101-dialog');
+                //$browser->screenshot('101-dialog');
                 $browser
                     ->waitUntilMissing('@dialog-remove-transaction')
                 ;
