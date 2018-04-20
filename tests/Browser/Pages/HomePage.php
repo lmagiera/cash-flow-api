@@ -275,13 +275,13 @@ class HomePage extends Page
             //->screenshot('003-keys-from')
 
 
-            //->screenshot('test-1')
+            ->pause(500)
 
             ->clear('@input-date-to-control')
             ->type('@input-date-to-control', $dates['to'])
             ->keys('@input-date-to-control', '{ENTER}', '{TAB}')
 
-            //->screenshot('test-2')
+            ->pause(500)
 
 
             ->assertMissing('@feedback-invalid-dates')
