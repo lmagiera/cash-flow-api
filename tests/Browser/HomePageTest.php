@@ -27,7 +27,6 @@ class HomePageTest extends CashFlowAppUserLoggedInTestCase
         $this->browse(function (Browser $browser) {
             $browser
                 ->visit(new HomePage());
-            echo "Visited Home Page".PHP_EOL;
         });
 
     }

@@ -80,10 +80,17 @@
                 .datepicker({format: "yyyy-mm-dd", autoclose: true})
                 .on('changeDate', function(e) {
 
-                    console.log('Date from changed!');
-                    console.log(e);
+
+                    console.log("Date Changed!");
+                    console.log(e.target);
+
                     $this.from = $('#input-date-from-control').val();
                     $this.to = $('#input-date-to-control').val();
+
+                    if (moment($this.from).diff($this.to) > 0) {
+                        $this.to = $this.from;
+                    }
+
                     $this.applyDateRange();
 
             });
@@ -107,6 +114,8 @@
 
                 $('.input-daterange input[name="from"]').datepicker('update', this.from);
                 $('.input-daterange input[name="to"]').datepicker('update', this.to);
+
+
 
 
                 this.$bus.$emit('date-range-applied', {from: this.from, to: this.to});

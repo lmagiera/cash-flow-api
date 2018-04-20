@@ -18,12 +18,12 @@
 
                         <template v-if="type === 'YesNoCancel'">
                             <button id="btn-cancel-control" v-on:click="result('Cancel')" type="button" class="btn btn-block-xs-only btn-secondary mr-md-auto m-0" data-dismiss="modal">{{buttons.Cancel.text}}</button>
-                            <button id="btn-no-control" type="button" v-on:click="result('No')" class="btn btn-block-xs-only btn-outline-primary m-1" data-dismiss="modal">{{buttons.No.text}}</button>
+                            <button id="btn-no-control" dusk="dialog-btn-no-control" type="button" v-on:click="result('No')" class="btn btn-block-xs-only btn-outline-primary m-1" data-dismiss="modal">{{buttons.No.text}}</button>
                             <button id="btn-yes-control" dusk="dialog-btn-yes-control" type="button" v-on:click="result('Yes')" class="btn btn-block-xs-only btn-primary m-0" data-dismiss="modal">{{buttons.Yes.text}}</button>
                         </template>
 
                         <template v-if="type === 'YesNo'">
-                            <button id="btn-no-control"  type="button" v-on:click="result('No')" class="btn btn-block-xs-only btn-outline-primary m-1" data-dismiss="modal">{{buttons.No.text}}</button>
+                            <button id="btn-no-control" dusk="dialog-btn-no-control"  type="button" v-on:click="result('No')" class="btn btn-block-xs-only btn-outline-primary m-1" data-dismiss="modal">{{buttons.No.text}}</button>
                             <button id="btn-yes-control" dusk="dialog-btn-yes-control" type="button" v-on:click="result('Yes')" class="btn btn-block-xs-only btn-primary m-0" data-dismiss="modal">{{buttons.Yes.text}}</button>
                         </template>
 
