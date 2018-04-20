@@ -44,10 +44,10 @@ before_script:
 script:
 
   - php artisan dusk
-  - vendor/bin/phpunit --coverage-clover=build/logs/clover.xml
+  - vendor/bin/phpunit --coverage-clover clover.xml
 
 
 after_success:
     - bash <(curl -s https://codecov.io/bash)
-    - vendor/bin/codacycoverage clover build/logs/clover.xml
+    - vendor/bin/codacycoverage clover clover.xml
     - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
