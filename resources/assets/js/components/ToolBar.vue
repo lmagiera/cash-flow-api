@@ -157,6 +157,14 @@
                     'transaction.planned_on': false,
                     //'transaction.actual_on': false,
                     'transaction.repeating_interval': false
+                },
+
+                pristineErrors: {
+                    'transaction.description': false,
+                    'transaction.amount': false,
+                    'transaction.planned_on': false,
+                    //'transaction.actual_on': false,
+                    'transaction.repeating_interval': false
                 }
 
             }
@@ -225,6 +233,9 @@
                 toolbar.transaction = jQuery.extend({}, toolbar.editingTransaction);
                 toolbar.editingTransaction = jQuery.extend({}, toolbar.pristineTransaction);
                 toolbar.editing = false;
+                toolbar.hasErrors = false;
+                toolbar.errors = jQuery.extend({}, this.pristineErrors);
+
 
                 console.log('Modal hidden: ' + toolbar.editing);
             });
