@@ -32605,25 +32605,6 @@ var app = new Vue({
         };
     },
 
-
-    methods: {
-        addTransaction: function addTransaction(data) {
-            //console.log("Adding Transaction with data: " + data.transaction);
-        },
-        dialog: function dialog() {
-
-            Vue.$dialog.show({
-                title: "Hello World",
-                message: "This is a beautiful world!",
-                type: "Ok",
-                buttons: { Yes: { text: "Yes" }, No: { text: "No" }, Cancel: { text: "Cancel" } },
-                onclose: function onclose(dialogResult) {
-
-                    alert(dialogResult);
-                }
-            });
-        }
-    },
     components: {
         "tool-bar": __webpack_require__(237),
         "transaction-list": __webpack_require__(247),
@@ -69629,13 +69610,13 @@ var MessageBox = {
 
     id: 1,
 
-    createInsance: function createInsance(opt) {
+    createInstance: function createInstance(opt) {
 
         MessageBoxState.id += 1;
 
-        var MessageBoxDialogClass = Vue.extend(__WEBPACK_IMPORTED_MODULE_0__dialogs_MessageBoxDialog___default.a);
+        var MessageBoxDialogClass = window.Vue.extend(__WEBPACK_IMPORTED_MODULE_0__dialogs_MessageBoxDialog___default.a);
 
-        var instance = new MessageBoxDialogClass({
+        return new MessageBoxDialogClass({
             propsData: {
 
                 title: opt.title,
@@ -69646,8 +69627,10 @@ var MessageBox = {
 
             }
         });
+    },
+    getSelector: function getSelector() {
 
-        return instance;
+        return "#modal-" + MessageBoxState.id;
     },
     install: function install(Vue, options) {
 
@@ -69669,20 +69652,20 @@ var MessageBox = {
 
             show: function show(opt) {
 
-                var instance = MessageBox.createInsance(opt);
+                var instance = MessageBox.createInstance(opt);
 
                 instance.$mount();
 
                 Vue.$dialog.app.$refs.container.appendChild(instance.$el);
 
-                $("#modal-" + MessageBoxState.id).on("hide.bs.modal", function (e) {
+                $(MessageBox.getSelector()).on("hide.bs.modal", function (e) {
 
                     var dialogResult = instance.dialogResult == null ? "Cancel" : instance.dialogResult;
                     Vue.$dialog.app.$refs.container.removeChild(instance.$el);
                     opt.onclose.call(this, dialogResult);
                 });
 
-                $("#modal-" + MessageBoxState.id).modal("show");
+                $(MessageBox.getSelector()).modal("show");
             }
         };
     }
@@ -70308,7 +70291,7 @@ exports = module.exports = __webpack_require__(6)(true);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"ToolBar.vue","sourceRoot":""}]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"ToolBar.vue","sourceRoot":""}]);
 
 // exports
 
@@ -70556,13 +70539,6 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
     methods: {
-
-        showModal: function showModal() {
-
-            // should clear transaction object here
-            console.log("Clear transaction Object here");
-        },
-
         edit: function edit(transaction) {
 
             this.transaction = transaction;
@@ -70578,58 +70554,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.transaction.repeating_interval = data.repeating_interval;
         },
 
-        /**
-         * Sends transation event up
-         */
-        sendTransaction: function sendTransaction() {
+        uploadTransaction: function uploadTransaction() {
             var _this2 = this;
-
-            console.log('Sending transaction on amount');
-            console.log(this.transaction);
-
-            this.transaction['update_all'] = false;
-
-            var isChanginInterval = this.editingTransaction.repeating_interval != this.transaction.repeating_interval;
-            var isChangingDate = this.editingTransaction.planned_on != this.transaction.planned_on;
-            var isChangingDateAndInteval = isChanginInterval && isChangingDate;
-
-            if (this.editingTransaction.repeating_interval == 0) {
-
-                // we are changing interval from 0 to non zero,
-                // new transaction will be created any ways
-                this.transaction['update_all'] = true;
-            } else {
-
-                // we are dealing with interval already
-
-                if (!isChanginInterval && !isChangingDate) {
-                    // this is a simple case of update
-                    if (confirm('Update all occurences?\n\nClick "OK" to update all or\nClick "Cancel" to update only this instance')) {
-                        this.transaction['update_all'] = true;
-                    }
-                }
-
-                if (isChangingDateAndInteval || isChanginInterval) {
-
-                    // we are dealing with date or date and interval changes,
-                    // all future instances wiil be recalculated.
-
-                    if (confirm('This operation will affect all of the occurences of the transaction\nClick "OK" to continue')) {
-                        this.transaction['update_all'] = true;
-                    } else {
-                        return;
-                    }
-                }
-
-                if (isChangingDate && !isChangingDateAndInteval) {
-
-                    // just changing date, leaving same interval
-
-                    if (confirm('Update all occurences?\n\nClick "OK" to update all or\nClick "Cancel" to update only this instance')) {
-                        this.transaction['update_all'] = true;
-                    }
-                }
-            }
 
             /**/
 
@@ -70643,16 +70569,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }
 
             this.http({
+
                 method: method,
                 url: url,
                 data: { transaction: this.transaction }
+
             }).then(function (response) {
 
                 console.log(response.status);
 
                 _this2.$bus.$emit('new-transaction', { transaction: _this2.transaction });
 
-                _this2.$emit('transaction', { transaction: _this2.transaction });
+                //this.$emit('transaction', {transaction: this.transaction});
 
                 toolbar.editing = false;
                 toolbar.transaction = jQuery.extend({}, toolbar.pristineTransaction);
@@ -70673,6 +70601,81 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
                 }
             });
+        },
+
+
+        /**
+         * Sends transation event up
+         */
+        sendTransaction: function sendTransaction() {
+
+            this.transaction['update_all'] = false;
+
+            if (!this.editing) {
+                this.uploadTransaction();
+                return;
+            }
+
+            //  This is a case, when we changed repeating interval no 'None',
+            //  we should update all transactions, removing any repeating one
+            if (this.transaction.repeating_interval == 0) {
+                this.transaction['update_all'] = true;
+                this.uploadTransaction();
+                return;
+            }
+
+            var isChanginInterval = this.editingTransaction.repeating_interval != this.transaction.repeating_interval;
+            var isChangingDate = this.editingTransaction.planned_on != this.transaction.planned_on;
+            var isChangingDateAndInteval = isChanginInterval && isChangingDate;
+
+            var title = "Edit Transaction" + this.editingTransaction.description;
+
+            var message = "Update all occurrences? Click Yes to update all or No to update only this occurrence";
+            var buttons = { Yes: { text: "Yes, update all" }, No: { text: "No, update single one" }, Cancel: { text: "Cancel" } };
+            var type = "YesNoCancel";
+
+            var $this = this;
+
+            // this is the case, when no interval or date is changed,
+            // give option to update all or one
+            if (!isChangingDate && !isChanginInterval || isChangingDate && !isChangingDateAndInteval) {
+
+                window.Vue.$dialog.show({ title: title, message: message, type: type, buttons: buttons, onclose: function onclose(result) {
+
+                        if (result === "Cancel") {
+                            return;
+                        }
+
+                        if (result === "Yes") {
+                            $this.transaction['update_all'] = true;
+                        }
+
+                        $this.uploadTransaction();
+                    } });
+
+                return;
+            }
+
+            if (isChangingDateAndInteval || isChanginInterval) {
+
+                // we are dealing with date or date and interval changes,
+                // all future instances wiil be recalculated.
+
+                type = "YesNo";
+                buttons = { Yes: { text: "Yes, update all" }, No: { text: "No, Cancel" }, Cancel: { text: "Cancel" } };
+                message = "This operation will affect all of the occurrences of the transaction";
+
+                window.Vue.$dialog.show({ title: title, message: message, type: type, buttons: buttons, onclose: function onclose(result) {
+
+                        if (result === "Cancel") {
+                            return;
+                        }
+                        if (result === "Yes") {
+                            $this.transaction['update_all'] = true;
+                        }
+                        $this.uploadTransaction();
+                    } });
+            }
         }
     },
 

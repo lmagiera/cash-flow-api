@@ -73,32 +73,6 @@ const app = new Vue({
         };
 
     },
-
-    methods: {
-
-        addTransaction(data) {
-            //console.log("Adding Transaction with data: " + data.transaction);
-        },
-
-        dialog() {
-
-            Vue.$dialog.show({
-                title: "Hello World",
-                message: "This is a beautiful world!",
-                type: "Ok",
-                buttons: { Yes: {text: "Yes"}, No: {text: "No"}, Cancel: {text: "Cancel"}},
-                onclose(dialogResult) {
-
-                    alert(dialogResult);
-
-                }
-            });
-
-
-
-        }
-
-    },
     components: {
         "tool-bar": require("./components/ToolBar.vue"),
         "transaction-list": require("./components/TransactionList.vue"),
