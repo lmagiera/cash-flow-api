@@ -69629,7 +69629,7 @@ var MessageBox = {
 
     id: 1,
 
-    createInsance: function createInsance() {
+    createInsance: function createInsance(opt) {
 
         MessageBoxState.id += 1;
 
@@ -69669,7 +69669,7 @@ var MessageBox = {
 
             show: function show(opt) {
 
-                var instance = createInsance();
+                var instance = MessageBox.createInsance(opt);
 
                 instance.$mount();
 
@@ -69682,7 +69682,7 @@ var MessageBox = {
                     opt.onclose.call(this, dialogResult);
                 });
 
-                $(modalId).modal("show");
+                $("#modal-" + MessageBoxState.id).modal("show");
             }
         };
     }

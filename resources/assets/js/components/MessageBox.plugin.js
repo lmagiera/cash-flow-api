@@ -9,7 +9,7 @@ const MessageBox = {
 
     id: 1,
 
-    createInsance() {
+    createInsance(opt) {
 
         MessageBoxState.id += 1;
 
@@ -53,7 +53,7 @@ const MessageBox = {
 
             show(opt) {
 
-                const instance = createInsance();
+                const instance = MessageBox.createInsance(opt);
 
                 instance.$mount();
 
@@ -67,7 +67,7 @@ const MessageBox = {
 
                 });
 
-                $(modalId).modal("show");
+                $("#modal-" + MessageBoxState.id).modal("show");
 
             }
         };
