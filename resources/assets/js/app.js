@@ -36,6 +36,7 @@ Object.defineProperty(Vue.prototype, "$bus", {
     }
 });
 
+// install notifier
 let notifier = new Vue({
     methods: {
         danger(message) {
