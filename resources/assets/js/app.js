@@ -73,6 +73,7 @@ const app = new Vue({
         };
 
     },
+
     components: {
         "tool-bar": require("./components/ToolBar.vue"),
         "transaction-list": require("./components/TransactionList.vue"),
