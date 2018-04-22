@@ -77,8 +77,6 @@
             @yield('content')
         </main>
 
-
-        <button class="btn btn-sm btn-dark" v-on:click="dialog()">Show Dialog</button>
         <div ref="container"></div>
 
 
