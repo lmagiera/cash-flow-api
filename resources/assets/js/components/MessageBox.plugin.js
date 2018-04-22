@@ -13,7 +13,7 @@ const MessageBox = {
 
         MessageBoxState.id += 1;
 
-        const MessageBoxDialogClass = Vue.extend(MessageBoxDialog);
+        const MessageBoxDialogClass = window.Vue.extend(MessageBoxDialog);
 
         const instance = new MessageBoxDialogClass({
             propsData: {
