@@ -9,13 +9,13 @@ const MessageBox = {
 
     id: 1,
 
-    createInsance(opt) {
+    createInstance(opt) {
 
         MessageBoxState.id += 1;
 
         const MessageBoxDialogClass = window.Vue.extend(MessageBoxDialog);
 
-        const instance = new MessageBoxDialogClass({
+        return new MessageBoxDialogClass({
             propsData: {
 
                 title: opt.title,
@@ -27,9 +27,11 @@ const MessageBox = {
             }
         });
 
-        return instance;
+    },
 
+    getSelector() {
 
+        return "#modal-" + MessageBoxState.id;
 
     },
 
@@ -53,13 +55,13 @@ const MessageBox = {
 
             show(opt) {
 
-                const instance = MessageBox.createInsance(opt);
+                const instance = MessageBox.createInstance(opt);
 
                 instance.$mount();
 
                 Vue.$dialog.app.$refs.container.appendChild(instance.$el);
 
-                $("#modal-" + MessageBoxState.id).on("hide.bs.modal", function (e) {
+                $(MessageBox.getSelector()).on("hide.bs.modal", function (e) {
 
                     const dialogResult = instance.dialogResult == null ? "Cancel" : instance.dialogResult;
                     Vue.$dialog.app.$refs.container.removeChild(instance.$el);
@@ -67,7 +69,7 @@ const MessageBox = {
 
                 });
 
-                $("#modal-" + MessageBoxState.id).modal("show");
+                $(MessageBox.getSelector()).modal("show");
 
             }
         };
