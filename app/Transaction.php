@@ -21,27 +21,6 @@ class Transaction extends Model
         'repeating_interval'
     ];
 
-    /**
-     * @var bool Indicates repeating transactions
-     */
-    private $is_repeating = false;
-
-
-
-    /**
-     * @return bool Whether transaction is a repeating one
-     */
-    public function isRepearting() {
-
-        return $this->is_repeating;
-
-    }
-
-
-    public function user() {
-        return $this->belongsTo(User::class);
-    }
-
     protected static function boot()
     {
         parent::boot();
@@ -69,16 +48,6 @@ class Transaction extends Model
     public function scopeOrdered($query) {
 
         $query->orderBy('planned_on', 'ASC');
-
-    }
-
-    /**
-     * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param $keyId
-     */
-    public function scopeById($query, $keyId) {
-
-        $query->whereKey($keyId);
 
     }
 

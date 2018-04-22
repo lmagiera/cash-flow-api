@@ -96,7 +96,6 @@ class TransactionController extends Controller
     public function update(PutTransactionRequest $request, Transaction $transaction)
     {
         $oldPlannedOn = $transaction->planned_on;
-
         $oldRepitingInterval = $transaction->repeating_interval;
 
         $transactionData = collect($request->json()->get('transaction'));
@@ -105,40 +104,35 @@ class TransactionController extends Controller
         $transaction->fill($fillables);
         $transaction->save();
 
-        if ( $transactionData['update_all'] == true) {
+        if ($transactionData['update_all'] == true) {
 
             $repeatingId = $transaction->repeating_id;
             $repeatingInterval = $transactionData['repeating_interval'];
 
+            if ( $repeatingInterval === 0) {
+
+                Transaction::repeating($repeatingId, $oldPlannedOn)->withoutKey($transaction->id)->delete();
+                return new TransactionResource($transaction);
+
+            }
+
             if ($repeatingInterval != $oldRepitingInterval && $repeatingInterval != 0) {
 
                 Transaction::repeating($repeatingId, $oldPlannedOn)->withoutKey($transaction->id)->delete();
-
                 $transaction->saveRepeating();
 
-            } else if ($repeatingInterval == 0)  {
+                return new TransactionResource($transaction);
 
-                Transaction::repeating($repeatingId, $oldPlannedOn)->withoutKey($transaction->id)->delete();
-
-            } else {
-
-                // means we have repeating interval
-                // if dates are different we should re-set all the stuff, if not, just update.
-                if ($oldPlannedOn == $transactionData['planned_on']) {
-
-                    $execptDate = collect($fillables)->except('planned_on')->toArray();
-                    Transaction::repeating($repeatingId, $oldPlannedOn)->update($execptDate);
-
-
-                } else {
-
-
-                    Transaction::repeating($repeatingId, $oldPlannedOn)->withoutKey($transaction->id)->delete();
-                    $transaction->saveRepeating();
-
-
-                }
             }
+
+            if ( $oldPlannedOn == $transactionData['planned_on']) {
+
+                $execptDate = collect($fillables)->except('planned_on')->toArray();
+                Transaction::repeating($repeatingId, $oldPlannedOn)->update($execptDate);
+                return new TransactionResource($transaction);
+
+            }
+
         }
 
         return new TransactionResource($transaction);
