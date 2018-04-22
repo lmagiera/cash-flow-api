@@ -9,6 +9,32 @@ const MessageBox = {
 
     id: 1,
 
+    createInstance(opt) {
+
+        MessageBoxState.id += 1;
+
+        const MessageBoxDialogClass = window.Vue.extend(MessageBoxDialog);
+
+        return new MessageBoxDialogClass({
+            propsData: {
+
+                title: opt.title,
+                message: opt.message,
+                type: opt.type,
+                buttons: opt.buttons,
+                modalId: MessageBoxState.id
+
+            }
+        });
+
+    },
+
+    getSelector() {
+
+        return "#modal-" + MessageBoxState.id;
+
+    },
+
     install(Vue, options) {
 
         Vue.component(MessageBoxWrapper.name, MessageBoxWrapper);
@@ -29,43 +55,24 @@ const MessageBox = {
 
             show(opt) {
 
-                MessageBoxState.id += 1;
-
-                var MessageBoxDialogClass = Vue.extend(MessageBoxDialog);
-
-                var instance = new MessageBoxDialogClass({
-                    propsData: {
-
-                        title: opt.title,
-                        message: opt.message,
-                        type: opt.type,
-                        buttons: opt.buttons,
-                        modalId: MessageBoxState.id
-
-                    }
-                });
+                const instance = MessageBox.createInstance(opt);
 
                 instance.$mount();
 
                 Vue.$dialog.app.$refs.container.appendChild(instance.$el);
 
-                const modalId = "#modal-" + MessageBoxState.id;
-
-                $(modalId).on("hide.bs.modal", function (e) {
+                $(MessageBox.getSelector()).on("hide.bs.modal", function (e) {
 
                     const dialogResult = instance.dialogResult == null ? "Cancel" : instance.dialogResult;
                     Vue.$dialog.app.$refs.container.removeChild(instance.$el);
-
                     opt.onclose.call(this, dialogResult);
 
                 });
 
-                $(modalId).modal("show");
+                $(MessageBox.getSelector()).modal("show");
 
             }
         };
-
-
 
     }
 
