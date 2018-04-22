@@ -4,9 +4,9 @@ namespace Tests\Browser\Pages;
 
 use App\User;
 use Laravel\Dusk\Browser;
-use Tests\Browser\Components\RegisterPage\RegisterForm;
+use Tests\Browser\Components\LoginFormComponent;
 
-class RegisterPage extends Page
+class LoginPage extends Page
 {
     /**
      * Get the URL for the page.
@@ -15,7 +15,7 @@ class RegisterPage extends Page
      */
     public function url()
     {
-        return parent::url().'register';
+        return parent::url()."login";
     }
 
     /**
@@ -41,22 +41,27 @@ class RegisterPage extends Page
         ];
     }
 
-    /**
-     * @param Browser $browser
-     * @param User $user
-     * @return void
-     */
-    public function registerUser(Browser $browser, User $user) {
+    public function enterUserCredentials(Browser $browser, User $user, $rememberMe = false) {
 
-        $browser->within(new RegisterForm(), function(Browser $browser) use ($user) {
+        $browser->within(new LoginFormComponent(), function (Browser $browser) use ($user, $rememberMe){
 
             $browser
-                ->setUser($user)
-                ->submit()
-                ;
+                ->enterCredentials($user, $rememberMe)
+            ;
 
         });
 
     }
 
+    public function submitLogin(Browser $browser) {
+
+        $browser->within(new LoginFormComponent(), function (Browser $browser) {
+
+            $browser
+                ->submit()
+            ;
+
+        });
+
+    }
 }

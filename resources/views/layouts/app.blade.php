@@ -24,6 +24,9 @@
 </head>
 <body>
     <div id="app">
+
+
+
         <nav class="navbar navbar-expand-md navbar-light navbar-laravel">
             <div class="container">
                 <a class="navbar-brand" href="{{ url('/') }}">
@@ -73,8 +76,13 @@
         <main class="py-4">
             @yield('content')
         </main>
+
+
+        <button class="btn btn-sm btn-dark" v-on:click="dialog()">Show Dialog</button>
+        <div ref="container"></div>
+
+
     </div>
-    <!--<img src="https://travis-ci.com/lmagiera/cash-flow-api.svg?token=FbFT1FKufWkQsAQpvNFq&branch=develop" />-->
     <script type="text/javascript" src="https://freeperspective.atlassian.net/s/d41d8cd98f00b204e9800998ecf8427e-T/d290wo/b/20/a44af77267a987a660377e5c46e0fb64/_/download/batch/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector/com.atlassian.jira.collector.plugin.jira-issue-collector-plugin:issuecollector.js?locale=en-US&collectorId=3fc6eba9"></script>
 </body>
 </html>

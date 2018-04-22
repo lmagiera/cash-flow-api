@@ -50,8 +50,6 @@ class SelectDateRangeTest extends DuskTestCase
                 'user_id' => $user->id
             ]);
 
-            echo $transaction->planned_on;
-
 
             $browser
                 ->loginAs($user)
@@ -59,7 +57,7 @@ class SelectDateRangeTest extends DuskTestCase
                 ->selectValidDateRange(['from' => $from, 'to' => $to])
                 ->pause(2000)
                 ->validateTransactionsOnList($transactions)
-                ->screenshot('testSelectDateRange_'.date('YmdHis'))
+                //->screenshot('testSelectDateRange_'.date('YmdHis'))
                 ->validateTransactionNotOnList($transaction)
 
                 ;

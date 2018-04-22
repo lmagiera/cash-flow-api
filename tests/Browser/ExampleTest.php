@@ -49,28 +49,6 @@ class ExampleTest extends DuskTestCase
     }
 
     /**
-     * A basic browser test example.
-     *
-     * @todo invalid phpdoc
-     * @return void
-     * @throws \Throwable
-     */
-    public function testBasicExample()
-    {
-        $user = $this->getUser();
-
-        $this->browse(function (Browser $browser) use (&$user) {
-
-            $browser
-                ->loginAs($user)
-                ->visit(new HomePage())
-                ->assertSee($user->name);
-
-        });
-
-    }
-
-    /**
      * @todo Add phpdoc
      * @throws \Exception
      * @throws \Throwable
@@ -258,8 +236,7 @@ class ExampleTest extends DuskTestCase
             $nextTransaction->planned_on = (new Carbon($datePlanned))->addMonth(1)->format('Y-m-d');
 
 
-            /** @var $homePage HomePage */
-            $homePage = $browser
+             $browser
                 ->loginAs($user)
                 ->visit(new HomePage())
                 ->openNewTransactionModal()

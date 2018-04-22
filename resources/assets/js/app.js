@@ -7,10 +7,15 @@
 
 
 
-require('./bootstrap');
+require("./bootstrap");
 
-window.Vue = require('vue');
+/* global Vue, axios */
+window.Vue = require("vue");
 
+
+import MessageBox from "./components/MessageBox.plugin.js";
+
+Vue.use(MessageBox);
 
 
 
@@ -25,7 +30,7 @@ window.onbeforeunload=function(e){};
 
 let bus = new Vue({});
 
-Object.defineProperty(Vue.prototype, '$bus', {
+Object.defineProperty(Vue.prototype, "$bus", {
     get() {
         return this.$root.bus;
     }
@@ -33,16 +38,16 @@ Object.defineProperty(Vue.prototype, '$bus', {
 
 let notifier = new Vue({
     methods: {
-        danger: function(message) {
-            $.notify({message: message}, {type: "danger"});
+        danger(message) {
+            $.notify({message}, {"type": "danger"});
         },
-        success: function(message) {
-            $.notify({message: message}, {type: "success"});
+        success(message) {
+            $.notify({message}, {"type": "success"});
         }
     }
 });
 
-Object.defineProperty(Vue.prototype, '$notifier', {
+Object.defineProperty(Vue.prototype, "$notifier", {
     get() {
         return this.$root.notifier;
     }
@@ -51,47 +56,41 @@ Object.defineProperty(Vue.prototype, '$notifier', {
 Vue.prototype.HTTP = axios.create({
 
     baseURL: process.env.MIX_API_ENDPOINT,
-    headers: {
-
-        // any custom headers here
-
-    }
+    headers: {}
 });
+
+
 
 const app = new Vue({
 
-    el: '#app',
+    el: "#app",
 
     data() {
         return {
-            bus: bus,
-            notifier: notifier,
-            HTTP: this.HTTP
-        }
+            bus,
+            notifier,
+            "HTTP": this.HTTP
+        };
 
     },
 
-    methods: {
-
-        addTransaction: function(data) {
-
-            console.log("Adding Transaction with data: " + data.transaction);
-
-
-        }
-    },
     components: {
-        'tool-bar': require('./components/ToolBar.vue'),
-        'transaction-list': require('./components/TransactionList.vue'),
-        'date-range-selector': require('./components/DateRangeSelector.vue')
+        "tool-bar": require("./components/ToolBar.vue"),
+        "transaction-list": require("./components/TransactionList.vue"),
+        "date-range-selector": require("./components/DateRangeSelector.vue"),
+
     },
 
     mounted() {
 
-
-
-
+        Vue.$dialog.app = this;
 
     }
 
 });
+
+
+
+
+
+

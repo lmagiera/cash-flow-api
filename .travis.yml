@@ -2,21 +2,52 @@ sudo: required
 language: php
 dist: trusty
 
+
+env:
+  global:
+    - CC_TEST_REPORTER_ID=2af4fa4a7b3b4bcea610e6c08c31f33a6b5b8b4a6db680c01f3db0dc5d737bad
+    - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
+
+
 php:
   - 7.1
+
+addons:
+    chrome: stable
+
+cache:
+  directories:
+    - "node_modules"
+    - "vendor"
 
 services:
   - mysql
 
 before_script:
+
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
   - cp .env.travis .env
   - composer install --no-interaction
+  - npm install
+  - npm run production
   - mysql -e 'create database homestead_test;'
   - php artisan key:generate
   - php artisan migrate --no-interaction -vvv
   - php artisan passport:install
+  - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
+  - php artisan serve > /dev/null 2>&1 &
+
 
 
 script:
 
-  - vendor/bin/phpunit
+  - php artisan dusk
+  - vendor/bin/phpunit --coverage-clover clover.xml
+
+
+after_success:
+    - bash <(curl -s https://codecov.io/bash)
+    - vendor/bin/codacycoverage clover clover.xml
+    - if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
