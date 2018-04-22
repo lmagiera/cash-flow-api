@@ -394,6 +394,8 @@
                             $this.uploadTransaction();
 
                         }});
+
+                    // return; // Not needed but nevertheless.
                 }
             }
         },
