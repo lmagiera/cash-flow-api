@@ -69629,6 +69629,26 @@ var MessageBox = {
 
     id: 1,
 
+    createInsance: function createInsance() {
+
+        MessageBoxState.id += 1;
+
+        var MessageBoxDialogClass = Vue.extend(__WEBPACK_IMPORTED_MODULE_0__dialogs_MessageBoxDialog___default.a);
+
+        var instance = new MessageBoxDialogClass({
+            propsData: {
+
+                title: opt.title,
+                message: opt.message,
+                type: opt.type,
+                buttons: opt.buttons,
+                modalId: MessageBoxState.id
+
+            }
+        });
+
+        return instance;
+    },
     install: function install(Vue, options) {
 
         Vue.component(__WEBPACK_IMPORTED_MODULE_1__dialogs_MessageBoxWrapper___default.a.name, __WEBPACK_IMPORTED_MODULE_1__dialogs_MessageBoxWrapper___default.a);
@@ -69649,33 +69669,16 @@ var MessageBox = {
 
             show: function show(opt) {
 
-                MessageBoxState.id += 1;
-
-                var MessageBoxDialogClass = Vue.extend(__WEBPACK_IMPORTED_MODULE_0__dialogs_MessageBoxDialog___default.a);
-
-                var instance = new MessageBoxDialogClass({
-                    propsData: {
-
-                        title: opt.title,
-                        message: opt.message,
-                        type: opt.type,
-                        buttons: opt.buttons,
-                        modalId: MessageBoxState.id
-
-                    }
-                });
+                var instance = createInsance();
 
                 instance.$mount();
 
                 Vue.$dialog.app.$refs.container.appendChild(instance.$el);
 
-                var modalId = "#modal-" + MessageBoxState.id;
-
-                $(modalId).on("hide.bs.modal", function (e) {
+                $("#modal-" + MessageBoxState.id).on("hide.bs.modal", function (e) {
 
                     var dialogResult = instance.dialogResult == null ? "Cancel" : instance.dialogResult;
                     Vue.$dialog.app.$refs.container.removeChild(instance.$el);
-
                     opt.onclose.call(this, dialogResult);
                 });
 

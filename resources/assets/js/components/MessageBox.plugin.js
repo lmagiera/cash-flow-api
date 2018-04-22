@@ -9,6 +9,30 @@ const MessageBox = {
 
     id: 1,
 
+    createInsance() {
+
+        MessageBoxState.id += 1;
+
+        const MessageBoxDialogClass = Vue.extend(MessageBoxDialog);
+
+        const instance = new MessageBoxDialogClass({
+            propsData: {
+
+                title: opt.title,
+                message: opt.message,
+                type: opt.type,
+                buttons: opt.buttons,
+                modalId: MessageBoxState.id
+
+            }
+        });
+
+        return instance;
+
+
+
+    },
+
     install(Vue, options) {
 
         Vue.component(MessageBoxWrapper.name, MessageBoxWrapper);
@@ -29,33 +53,16 @@ const MessageBox = {
 
             show(opt) {
 
-                MessageBoxState.id += 1;
-
-                var MessageBoxDialogClass = Vue.extend(MessageBoxDialog);
-
-                var instance = new MessageBoxDialogClass({
-                    propsData: {
-
-                        title: opt.title,
-                        message: opt.message,
-                        type: opt.type,
-                        buttons: opt.buttons,
-                        modalId: MessageBoxState.id
-
-                    }
-                });
+                const instance = createInsance();
 
                 instance.$mount();
 
                 Vue.$dialog.app.$refs.container.appendChild(instance.$el);
 
-                const modalId = "#modal-" + MessageBoxState.id;
-
-                $(modalId).on("hide.bs.modal", function (e) {
+                $("#modal-" + MessageBoxState.id).on("hide.bs.modal", function (e) {
 
                     const dialogResult = instance.dialogResult == null ? "Cancel" : instance.dialogResult;
                     Vue.$dialog.app.$refs.container.removeChild(instance.$el);
-
                     opt.onclose.call(this, dialogResult);
 
                 });
@@ -64,8 +71,6 @@ const MessageBox = {
 
             }
         };
-
-
 
     }
 
