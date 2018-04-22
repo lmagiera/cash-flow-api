@@ -246,13 +246,6 @@
 
         methods: {
 
-            showModal: function () {
-
-                // should clear transaction object here
-                console.log("Clear transaction Object here");
-
-            },
-
             edit(transaction) {
 
                 this.transaction = transaction;
@@ -263,68 +256,12 @@
 
             },
 
-
             selectRepeating: function (data) {
                 console.log('Receive repeating info: ' + data.repeating_interval);
                 this.transaction.repeating_interval = data.repeating_interval;
             },
 
-
-            /**
-             * Sends transation event up
-             */
-            sendTransaction: function () {
-
-
-                console.log('Sending transaction on amount');
-                console.log(this.transaction);
-
-                this.transaction['update_all'] = false;
-
-                const isChanginInterval = this.editingTransaction.repeating_interval != this.transaction.repeating_interval;
-                const isChangingDate = this.editingTransaction.planned_on != this.transaction.planned_on;
-                const isChangingDateAndInteval = isChanginInterval && isChangingDate;
-
-                if (this.editingTransaction.repeating_interval == 0) {
-
-                    // we are changing interval from 0 to non zero,
-                    // new transaction will be created any ways
-                    this.transaction['update_all'] = true;
-
-                } else {
-
-                    // we are dealing with interval already
-
-                    if ( !isChanginInterval && !isChangingDate ) {
-                        // this is a simple case of update
-                        if ( confirm('Update all occurences?\n\nClick "OK" to update all or\nClick "Cancel" to update only this instance') ) {
-                            this.transaction['update_all'] = true;
-                        }
-                    }
-
-                    if ( isChangingDateAndInteval || isChanginInterval ) {
-
-                        // we are dealing with date or date and interval changes,
-                        // all future instances wiil be recalculated.
-
-                        if ( confirm('This operation will affect all of the occurences of the transaction\nClick "OK" to continue') ) {
-                            this.transaction['update_all'] = true;
-                        } else {
-                            return;
-                        }
-                   }
-
-                    if (isChangingDate && !isChangingDateAndInteval) {
-
-                        // just changing date, leaving same interval
-
-                        if ( confirm('Update all occurences?\n\nClick "OK" to update all or\nClick "Cancel" to update only this instance') ) {
-                            this.transaction['update_all'] = true;
-                        }
-                    }
-
-                }
-
+            uploadTransaction() {
 
                 /**/
 
@@ -338,44 +275,128 @@
 
                 }
 
-
                 this.http({
+
                     method: method,
                     url: url,
                     data: {transaction: this.transaction}
+
                 }).then(response => {
 
-                        console.log(response.status);
+                    console.log(response.status);
 
-                        this.$bus.$emit('new-transaction', {transaction: this.transaction});
+                    this.$bus.$emit('new-transaction', {transaction: this.transaction});
 
-                        this.$emit('transaction', {transaction: this.transaction});
+                    //this.$emit('transaction', {transaction: this.transaction});
 
-                        toolbar.editing = false;
-                        toolbar.transaction = jQuery.extend({}, toolbar.pristineTransaction);
-                        toolbar.editingTransaction = jQuery.extend({}, toolbar.pristineTransaction);
-                        $('#modal-add-transaction').modal('hide');
-                        this.$notifier.success("Transaction saved!");
-
-
-                    })
-                    .catch(e => {
-
-                        console.log(e.response.status);
-
-                        switch (e.response.status.toString()) {
-                            case '422':
-                                this.hasErrors = true;
-                                this.errors = e.response.data.errors;
-                                break;
-                            default:
-                                this.$notifier.danger("There was an error processing your request.<br>" + e.response.status + ": " + e.response.statusText);
+                    toolbar.editing = false;
+                    toolbar.transaction = jQuery.extend({}, toolbar.pristineTransaction);
+                    toolbar.editingTransaction = jQuery.extend({}, toolbar.pristineTransaction);
+                    $('#modal-add-transaction').modal('hide');
+                    this.$notifier.success("Transaction saved!");
 
 
-                        }
+                }).catch(e => {
+
+                    console.log(e.response.status);
+
+                    switch (e.response.status.toString()) {
+                        case '422':
+                            this.hasErrors = true;
+                            this.errors = e.response.data.errors;
+                            break;
+                        default:
+                            this.$notifier.danger("There was an error processing your request.<br>" + e.response.status + ": " + e.response.statusText);
+
+                    }
 
 
-                    });
+                });
+
+
+
+            },
+
+
+            /**
+             * Sends transation event up
+             */
+            sendTransaction: function () {
+
+
+                this.transaction['update_all'] = false;
+
+                if (!this.editing) {
+                    this.uploadTransaction();
+                    return;
+                }
+
+                //  This is a case, when we changed repeating interval no 'None',
+                //  we should update all transactions, removing any repeating one
+                if (this.transaction.repeating_interval == 0) {
+                    this.transaction['update_all'] = true;
+                    this.uploadTransaction();
+                    return;
+
+                }
+
+                const isChanginInterval = this.editingTransaction.repeating_interval != this.transaction.repeating_interval;
+                const isChangingDate = this.editingTransaction.planned_on != this.transaction.planned_on;
+                const isChangingDateAndInteval = isChanginInterval && isChangingDate;
+
+                let title = "Edit Transaction" + this.editingTransaction.description;
+
+                let message = "Update all occurrences? Click Yes to update all or No to update only this occurrence";
+                let buttons = {Yes: {text: "Yes, update all"}, No: {text: "No, update single one"}, Cancel: {text: "Cancel"}};
+                let type = "YesNoCancel";
+
+                const $this = this;
+
+                // this is the case, when no interval or date is changed,
+                // give option to update all or one
+                if ((!isChangingDate && !isChanginInterval) || (isChangingDate && !isChangingDateAndInteval)) {
+
+                    window.Vue.$dialog.show({title, message, type, buttons, onclose: function(result){
+
+                            if ( result === "Cancel") {
+                                return;
+                            }
+
+                            if ( result === "Yes") {
+                                $this.transaction['update_all'] = true;
+                            }
+
+                            $this.uploadTransaction();
+
+                        }});
+
+                    return;
+
+                }
+
+                if ( isChangingDateAndInteval || isChanginInterval ) {
+
+                    // we are dealing with date or date and interval changes,
+                    // all future instances wiil be recalculated.
+
+                    type = "YesNo";
+                    buttons = {Yes: {text: "Yes, update all"}, No: {text: "No, Cancel"}, Cancel: {text: "Cancel"}};
+                    message = "This operation will affect all of the occurrences of the transaction"
+
+                    window.Vue.$dialog.show({title, message, type, buttons, onclose: function(result){
+
+                            if (result === "Cancel") {
+                                return;
+                            }
+                            if ( result === "Yes") {
+                                $this.transaction['update_all'] = true;
+                            }
+                            $this.uploadTransaction();
+
+                        }});
+
+                    // return; // Not needed but nevertheless.
+                }
             }
         },
 
