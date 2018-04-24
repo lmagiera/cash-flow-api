@@ -71403,7 +71403,7 @@ exports = module.exports = __webpack_require__(6)(true);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"TransactionList.vue","sourceRoot":""}]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"TransactionList.vue","sourceRoot":""}]);
 
 // exports
 
@@ -71414,6 +71414,29 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -71498,9 +71521,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             transactions: [],
             from: '',
             to: '',
-            cashflowData: {
-                data: []
-            },
+            cashFlowStart: { date: null, amount: 0 },
+            cashFlowEnd: { date: null, amount: 0 },
+            cashFlowData: [],
             chart: {
                 instance: null
             }
@@ -71553,14 +71576,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 labels.push(mydata.cash_flow_start.date);
                 data.push(mydata.cash_flow_start.amount);
 
+                _this2.cashFlowStart = mydata.cash_flow_start;
+
                 $(mydata.cash_flow_data).each(function (key, item) {
 
                     labels.push(item.date);
                     data.push(item.saldo);
                 });
 
+                _this2.cashFlowData = mydata.cash_flow_data;
+                console.log(_this2.cashFlowData);
+
                 labels.push(mydata.cash_flow_end.date);
                 data.push(mydata.cash_flow_end.amount);
+
+                _this2.cashFlowEnd = mydata.cash_flow_end;
 
                 _this2.chart.instance.data.labels = labels;
                 _this2.chart.instance.data.datasets[0].data = data;
@@ -71809,7 +71839,72 @@ var render = function() {
           ]
         ),
         _vm._v(" "),
-        _vm._m(2)
+        _c(
+          "div",
+          {
+            staticClass: "tab-pane fade",
+            attrs: { id: "tab-graphs", role: "tabpanel" }
+          },
+          [
+            _vm._m(2),
+            _vm._v(" "),
+            _c(
+              "table",
+              {
+                staticClass: "table table-sm table-striped",
+                attrs: { dusk: "table-cash-flow" }
+              },
+              [
+                _c("thead", { staticClass: "thead-dark font-weight-bold" }, [
+                  _vm._m(3),
+                  _vm._v(" "),
+                  _c("tr", [
+                    _c("td", { attrs: { scope: "col" } }, [
+                      _vm._v(_vm._s(_vm.cashFlowStart.date))
+                    ]),
+                    _vm._v(" "),
+                    _vm._m(4),
+                    _vm._v(" "),
+                    _c(
+                      "td",
+                      { staticClass: "text-right", attrs: { scope: "col" } },
+                      [_vm._v(_vm._s(_vm.cashFlowStart.amount))]
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c(
+                  "tbody",
+                  _vm._l(_vm.cashFlowData, function(item, index) {
+                    return _c("tr", [
+                      _c("td", [_vm._v(_vm._s(item.date))]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "text-right" }, [
+                        _vm._v(_vm._s(item.amount))
+                      ]),
+                      _vm._v(" "),
+                      _c("td", { staticClass: "text-right" }, [
+                        _vm._v(" " + _vm._s(item.saldo))
+                      ])
+                    ])
+                  })
+                ),
+                _vm._v(" "),
+                _c("tfoot", { staticClass: "thead-dark font-weight-bold" }, [
+                  _c("tr", [
+                    _c("td", [_vm._v(_vm._s(_vm.cashFlowEnd.date))]),
+                    _vm._v(" "),
+                    _vm._m(5),
+                    _vm._v(" "),
+                    _c("td", { staticClass: "text-right" }, [
+                      _vm._v(" " + _vm._s(_vm.cashFlowEnd.amount))
+                    ])
+                  ])
+                ])
+              ]
+            )
+          ]
+        )
       ]
     )
   ])
@@ -71892,20 +71987,49 @@ var staticRenderFns = [
     return _c(
       "div",
       {
-        staticClass: "tab-pane fade",
-        attrs: { id: "tab-graphs", role: "tabpanel" }
+        staticStyle: { position: "relative", width: "100%" },
+        attrs: { id: "chart-canvas-container", dusk: "graph-cash-flow" }
       },
-      [
-        _c(
-          "div",
-          {
-            staticStyle: { position: "relative", width: "99%" },
-            attrs: { id: "chart-canvas-container", dusk: "graph-cash-flow" }
-          },
-          [_c("canvas", { attrs: { id: "chart-canvas" } })]
-        )
-      ]
+      [_c("canvas", { attrs: { id: "chart-canvas" } })]
     )
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("tr", [
+      _c("td", { staticClass: "d-none d-md-block", attrs: { scope: "col" } }, [
+        _vm._v("Date")
+      ]),
+      _vm._v(" "),
+      _c("td", { staticClass: "text-right", attrs: { scope: "col" } }, [
+        _vm._v("Sum")
+      ]),
+      _vm._v(" "),
+      _c("td", { staticClass: "text-right", attrs: { scope: "col" } }, [
+        _vm._v("Balance")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", { attrs: { scope: "col" } }, [
+      _c("span", { staticClass: "d-none d-md-inline" }, [
+        _vm._v("Beginning of the period")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", [
+      _c("span", { staticClass: "d-none d-md-inline" }, [
+        _vm._v("End of the period")
+      ])
+    ])
   }
 ]
 render._withStripped = true

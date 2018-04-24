@@ -61,7 +61,13 @@ abstract class CashFlowAppTestCase extends DuskTestCase
 
         $attributes = array_merge($attributes, ['user_id' => $user->id]);
 
-        return factory(Transaction::class)->create($attributes);
+        $transaction = factory(Transaction::class)->create($attributes);
+
+        if ( $transaction->repeating_interval > 0) {
+            $transaction->saveRepeating();
+        }
+
+        return $transaction;
 
     }
 

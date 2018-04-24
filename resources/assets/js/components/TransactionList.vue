@@ -21,11 +21,6 @@
                 <h5 class="d-none d-md-block display-5 p-2">Transaction List</h5>
 
 
-
-
-
-
-
                 <table class="table table-sm table-striped" dusk="table-transaction-list">
                     <thead class="thead-dark font-weight-bold">
                         <tr>
@@ -61,9 +56,37 @@
             </div>
 
             <div class="tab-pane fade" id="tab-graphs" role="tabpanel">
-                <div id="chart-canvas-container" style="position: relative; width: 99%" dusk="graph-cash-flow">
+                <div id="chart-canvas-container" style="position: relative; width: 100%" dusk="graph-cash-flow">
                     <canvas id="chart-canvas"></canvas>
                 </div>
+                <table class="table table-sm table-striped" dusk="table-cash-flow">
+                    <thead class="thead-dark font-weight-bold">
+                    <tr>
+                        <td scope="col" class="d-none d-md-block">Date</td>
+                        <td scope="col" class="text-right">Sum</td>
+                        <td scope="col" class="text-right">Balance</td>
+                    </tr>
+                    <tr>
+                        <td scope="col">{{cashFlowStart.date}}</td>
+                        <td scope="col"><span class="d-none d-md-inline">Beginning of the period</span></td>
+                        <td scope="col" class="text-right">{{cashFlowStart.amount}}</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr  v-for="(item, index) in cashFlowData">
+                            <td>{{item.date}}</td>
+                            <td class="text-right">{{item.amount}}</td>
+                            <td class="text-right"> {{item.saldo}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot class="thead-dark font-weight-bold">
+                        <tr>
+                            <td>{{cashFlowEnd.date}}</td>
+                            <td><span class="d-none d-md-inline">End of the period</span></td>
+                            <td class="text-right"> {{cashFlowEnd.amount}}</td>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
 
         </div>
@@ -82,9 +105,9 @@
                 transactions: [],
                 from: '',
                 to: '',
-                cashflowData: {
-                    data: []
-                },
+                cashFlowStart: {date:null, amount:0},
+                cashFlowEnd: {date:null, amount:0},
+                cashFlowData: [],
                 chart: {
                     instance: null
                 }
@@ -141,6 +164,10 @@
                     labels.push(mydata.cash_flow_start.date);
                     data.push(mydata.cash_flow_start.amount);
 
+                    this.cashFlowStart = mydata.cash_flow_start;
+
+
+
                     $(mydata.cash_flow_data).each(function(key, item){
 
                         labels.push(item.date);
@@ -148,9 +175,13 @@
 
                     });
 
+                    this.cashFlowData = mydata.cash_flow_data;
+                    console.log(this.cashFlowData);
 
                     labels.push(mydata.cash_flow_end.date);
                     data.push(mydata.cash_flow_end.amount);
+
+                    this.cashFlowEnd = mydata.cash_flow_end;
 
                     this.chart.instance.data.labels = labels;
                     this.chart.instance.data.datasets[0].data = data;

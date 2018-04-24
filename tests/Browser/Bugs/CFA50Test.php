@@ -29,8 +29,7 @@ class CFA50Test extends CashFlowAppUserLoggedInTestCase
 
 
             $browser->visit(new HomePage())
-                ->assertVisible("@tab-cash-flow-control")
-                ->click('@tab-cash-flow-control')
+                ->openCashFLowTab()
                 ->waitFor('@graph-cash-flow')
                 //TODO: don't really know how to test displayed graph
 

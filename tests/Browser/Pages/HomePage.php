@@ -385,4 +385,21 @@ class HomePage extends Page
 
     }
 
+    public function openCashFLowTab(Browser $browser) {
+
+        $browser
+            ->assertVisible("@tab-cash-flow-control")
+            ->click('@tab-cash-flow-control')
+            ->pause(500)
+            ;
+
+    }
+
+    public function nextDateRange(Browser $browser) {
+
+        $browser->click('@btn-date-range-next-control');
+        $browser->pause(500);
+
+    }
+
 }
