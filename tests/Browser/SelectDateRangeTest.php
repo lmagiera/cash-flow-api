@@ -55,7 +55,6 @@ class SelectDateRangeTest extends CashFlowAppUserLoggedInTestCase
                 ->loginAs($user)
                 ->visit(new HomePage())
                 ->selectValidDateRange(['from' => $from, 'to' => $to])
-                ->pause(2000)
                 ->validateTransactionsOnList($transactions)
                 //->screenshot('testSelectDateRange_'.date('YmdHis'))
                 ->validateTransactionNotOnList($transaction)
