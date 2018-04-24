@@ -89,8 +89,6 @@ class EditTransactionTest extends CashFlowAppUserLoggedInTestCase
             $browser
                 ->visit(new HomePage())
                 ->saveTransaction($transaction)
-                ->pause(500)
-                //->screenshot('test-0')
                 ->deleteSingleRepeatingTransaction($transaction)
             ;
 

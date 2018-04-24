@@ -260,39 +260,22 @@ class HomePage extends Page
     public function selectValidDateRange(Browser $browser, array $dates) {
 
 
-        $browser
+        $browser->assertVisible('@input-date-from-control');
+        $browser->assertVisible('@input-date-to-control');
 
-            ->assertVisible('@input-date-from-control')
-            ->assertVisible('@input-date-to-control')
+        $browser->clear('@input-date-from-control');
+        $browser->type('@input-date-from-control', $dates['from']);
+        $browser->keys('@input-date-from-control', '{TAB}');
+        $browser->screenshot('001-value-from');
 
-            //->assertVisible('@btn-apply-control')
+        $browser->clear('@input-date-to-control');
+        $browser->type('@input-date-to-control', $dates['to']);
+        $browser->keys('@input-date-to-control', '{ENTER}');
+        $browser->keys('@input-date-to-control', '{TAB}');
+        $browser->screenshot('002-value-to');
 
-            ->clear('@input-date-from-control')
-            //->screenshot('001-clear-from')
-            ->type('@input-date-from-control', $dates['from'])
-            //->screenshot('002-type-from')
-            ->keys('@input-date-to-control', '{ENTER}', '{TAB}')
-            //->screenshot('003-keys-from')
-
-
-            ->pause(500)
-
-            ->clear('@input-date-to-control')
-            ->type('@input-date-to-control', $dates['to'])
-            ->keys('@input-date-to-control', '{ENTER}', '{TAB}')
-
-            ->pause(500)
-
-
-            ->assertMissing('@feedback-invalid-dates')
-
-
-            ->assertVue('from', $dates['from'], '@date-range-selector-component')
-            ->assertVue('to', $dates['to'], '@date-range-selector-component')
-
-        ;
-
-
+        $browser->assertVue('from', $dates['from'], '@date-range-selector-component');
+        $browser->assertVue('to', $dates['to'], '@date-range-selector-component');
 
     }
 
