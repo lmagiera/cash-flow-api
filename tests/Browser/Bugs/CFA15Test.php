@@ -10,21 +10,19 @@ use Tests\CashFlowAppTestCase;
 
 class CFA15Test extends CashFlowAppTestCase
 {
-
     use DatabaseMigrations, RefreshDatabase;
 
     /**
      * CFA-15 Adding new transaction with non-numeric value does not validate and show error.
      *
-     * @return void
      * @throws \Exception
      * @throws \Throwable
+     *
+     * @return void
      */
     public function testCFA15()
     {
         $this->browse(function (Browser $browser) {
-
-
             $user = $this->createUser();
             $t = $this->makeTransaction(['amount' => '!invalid']);
 
@@ -34,10 +32,7 @@ class CFA15Test extends CashFlowAppTestCase
                 ->openNewTransactionModal()
                 ->inputTransaction($t)
                 ->attemptSaveTransaction()
-                ->waitFor('@feedback-invalid-amount')
-
-
-            ;
+                ->waitFor('@feedback-invalid-amount');
         });
     }
 }

@@ -13,21 +13,19 @@ class UsersTableSeeder extends Seeder
     public function run()
     {
         $user = factory(User::class, 1)->create([
-           'id' => 1,
-           'name' => 'One And Only',
-           'email' => 'lmagiera@gmail.com'
+           'id'    => 1,
+           'name'  => 'One And Only',
+           'email' => 'lmagiera@gmail.com',
         ]);
-
 
         //dd($user);
 
-        $date = \Carbon\Carbon::now()->startOfMonth()->addDays(rand(0,20));
-
+        $date = \Carbon\Carbon::now()->startOfMonth()->addDays(rand(0, 20));
 
         factory(\App\Transaction::class)->create([
-            'user_id' => 1,
+            'user_id'            => 1,
             'repeating_interval' => 0,
-            'planned_on' => $date
+            'planned_on'         => $date,
         ]);
 
         /*
@@ -81,8 +79,5 @@ class UsersTableSeeder extends Seeder
         }
 
         */
-
-
-
     }
 }

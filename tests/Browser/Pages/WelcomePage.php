@@ -3,7 +3,6 @@
 namespace Tests\Browser\Pages;
 
 use Laravel\Dusk\Browser;
-use Laravel\Dusk\Page as BasePage;
 
 class WelcomePage extends Page
 {
@@ -20,7 +19,8 @@ class WelcomePage extends Page
     /**
      * Assert that the browser is on the page.
      *
-     * @param  Browser  $browser
+     * @param Browser $browser
+     *
      * @return void
      */
     public function assert(Browser $browser)

@@ -10,40 +10,30 @@ use Tests\CashFlowAppTestCase;
 
 class LoginAndRememberUserTest extends CashFlowAppTestCase
 {
-
     /**
-     * @return void
      * @throws \Exception
      * @throws \Throwable
+     *
+     * @return void
      */
-    public function testUserIsRemembered() {
-
-
+    public function testUserIsRemembered()
+    {
         $this->browse(function (Browser $browser) {
-
             $user = $this->createUser();
 
             $browser
                 ->visit(new LoginPage())
                 ->enterUserCredentials($user, true)
                 ->submitLogin()
-                ->on(new HomePage())
-            ;
+                ->on(new HomePage());
 
             session()->invalidate();
 
-            $this->browse(function (Browser $browser){
-
+            $this->browse(function (Browser $browser) {
                 $browser
                     ->visit(new WelcomePage())
-                    ->assertSeeLink("Home")
-                ;
-
+                    ->assertSeeLink('Home');
             });
-
         });
-
-
     }
-
 }
