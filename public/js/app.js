@@ -71403,7 +71403,7 @@ exports = module.exports = __webpack_require__(6)(true);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"TransactionList.vue","sourceRoot":""}]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", "", {"version":3,"sources":[],"names":[],"mappings":"","file":"TransactionList.vue","sourceRoot":""}]);
 
 // exports
 
@@ -71414,10 +71414,6 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
 //
 //
 //
@@ -71501,7 +71497,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return {
             transactions: [],
             from: '',
-            to: ''
+            to: '',
+            cashflowData: {
+                data: []
+            },
+            chart: {
+                instance: null
+            }
+
         };
     },
 
@@ -71519,16 +71522,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             var url = 'transaction';
 
-            if (this.from != '' && this.to != '') {
+            if (this.from !== '' && this.to !== '') {
                 url += '?from=' + this.from + '&to=' + this.to;
             }
-
-            console.log('Refersh ' + url);
 
             this.http.get(url).then(function (response) {
 
                 _this.transactions = response.data;
-                console.log(response.data);
             }).catch(function (e) {
                 _this.$notifier.danger("There was an error processing your request.<br>" + e.response.status + ": " + e.response.statusText);
             });
@@ -71539,17 +71539,13 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             var url = "cashflow";
 
-            if (this.from != '' && this.to != '') {
+            if (this.from !== '' && this.to !== '') {
                 url += '?from=' + this.from + '&to=' + this.to;
             }
-
-            console.log('Refersh URL CASH FLOW' + url);
 
             this.http.get(url).then(function (response) {
 
                 var mydata = response.data.data;
-
-                console.log(mydata);
 
                 var labels = [];
                 var data = [];
@@ -71566,30 +71562,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 labels.push(mydata.cash_flow_end.date);
                 data.push(mydata.cash_flow_end.amount);
 
-                console.log(labels);
-                console.log(data);
-
-                var ctx = $("#chart-canvas");
-
-                var myChart = new chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: labels,
-                        datasets: [{
-                            label: 'Cash Flow',
-                            data: data,
-                            backgroundColor: ['rgba(144, 248, 53, 0.42)']
-                        }]
-
-                    },
-                    options: { scales: {
-                            yAxes: [{
-                                ticks: {
-                                    beginAtZero: true
-                                }
-                            }]
-                        } }
-                });
+                _this2.chart.instance.data.labels = labels;
+                _this2.chart.instance.data.datasets[0].data = data;
+                _this2.chart.instance.update();
             }).catch(function (e) {
                 console.log(e);
                 _this2.$notifier.danger("There was an error processing your request.<br>" + e.response.status + ": " + e.response.statusText);
@@ -71655,12 +71630,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
         var $list = this;
 
+        var ctx = $("#chart-canvas");
+
+        this.chart.instance = new chart(ctx, {
+            type: 'line',
+            data: {
+                labels: this.chart.labels,
+                datasets: [{
+                    label: 'Cash Flow',
+                    data: this.chart.data,
+                    backgroundColor: ['rgba(144, 248, 53, 0.42)']
+                }]
+
+            },
+            options: { scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                } }
+        });
+
+        // hook tab changing and refresh cashflow view
+
         $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 
             e.target; // newly activated tab
             e.relatedTarget; // previous active tab
 
-            console.log();
 
             if ($(e.target).text().toLowerCase() != "cash flow") {
                 return;
@@ -71852,7 +71850,7 @@ var staticRenderFns = [
                 id: "tab-graphs-tab",
                 "data-toggle": "tab",
                 href: "#tab-graphs",
-                dusk: "tabtcashflow-control"
+                dusk: "tab-cash-flow-control"
               }
             },
             [_vm._v("Cash Flow")]
@@ -71902,13 +71900,9 @@ var staticRenderFns = [
           "div",
           {
             staticStyle: { position: "relative", width: "99%" },
-            attrs: { id: "chart-canvas-contrainer" }
+            attrs: { id: "chart-canvas-container", dusk: "graph-cash-flow" }
           },
-          [
-            _c("canvas", { attrs: { id: "chart-canvas" } }, [
-              _vm._v("Canvas Text")
-            ])
-          ]
+          [_c("canvas", { attrs: { id: "chart-canvas" } })]
         )
       ]
     )
