@@ -21,18 +21,17 @@ class RegisterForm extends BaseComponent
     /**
      * Assert that the browser page contains the component.
      *
-     * @param  Browser  $browser
+     * @param Browser $browser
+     *
      * @return void
      */
     public function assert(Browser $browser)
     {
         $browser->assertVisible($this->selector());
 
-        foreach ( $this->elements() as $element) {
+        foreach ($this->elements() as $element) {
             $browser->assertVisible($element);
         }
-
-
     }
 
     /**
@@ -43,28 +42,25 @@ class RegisterForm extends BaseComponent
     public function elements()
     {
         return [
-            '@input-user-name-control' => '#name',
-            '@input-user-email-control' => '#email',
-            '@input-user-password-control' => '#password',
+            '@input-user-name-control'             => '#name',
+            '@input-user-email-control'            => '#email',
+            '@input-user-password-control'         => '#password',
             '@input-user-password-confirm-control' => '#password-confirm',
-            '@btn-register-control' => '#btn-register-submit'
+            '@btn-register-control'                => '#btn-register-submit',
         ];
     }
 
-    public function setUser( Browser $browser, User $user) {
-
+    public function setUser(Browser $browser, User $user)
+    {
         $browser
             ->type('@input-user-name-control', $user->name)
             ->type('@input-user-email-control', $user->email)
             ->type('@input-user-password-control', $user->password)
-            ->type('@input-user-password-confirm-control', $user->password)
-            ;
-
+            ->type('@input-user-password-confirm-control', $user->password);
     }
 
-    public function submit(Browser $browser) {
-
+    public function submit(Browser $browser)
+    {
         $browser->click('@btn-register-control');
-
     }
 }

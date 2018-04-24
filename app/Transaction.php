@@ -11,14 +11,12 @@ class Transaction extends Model
 {
     //
 
-
-
     protected $fillable = [
         'description',
         'amount',
         'planned_on',
         'repeating_id',
-        'repeating_interval'
+        'repeating_interval',
     ];
 
     protected static function boot()
@@ -32,52 +30,46 @@ class Transaction extends Model
      * Scope a query to only include users of a given type.
      *
      * @param \Illuminate\Database\Eloquent\Builder $query
-     * @param \DateTime $dateFrom
-     * @param \DateTime $dateTo
+     * @param \DateTime                             $dateFrom
+     * @param \DateTime                             $dateTo
+     *
      * @return void
      */
-    public function scopeBetween($query, $dateFrom, $dateTo) {
-
+    public function scopeBetween($query, $dateFrom, $dateTo)
+    {
         $query->whereBetween('planned_on', [$dateFrom, $dateTo]);
-
     }
 
     /**
      * @param \Illuminate\Database\Eloquent\Builder $query
      */
-    public function scopeOrdered($query) {
-
+    public function scopeOrdered($query)
+    {
         $query->orderBy('planned_on', 'ASC');
-
     }
 
     /**
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param $keyId
      */
-    public function scopeWithoutKey($query, $keyId) {
-
+    public function scopeWithoutKey($query, $keyId)
+    {
         $query->whereKeyNot($keyId);
-
     }
-
 
     /**
      * @param \Illuminate\Database\Eloquent\Builder $query
      * @param $repeating_id
      * @param $planned_on
      */
-    public function scopeRepeating($query, $repeating_id, $planned_on) {
-
+    public function scopeRepeating($query, $repeating_id, $planned_on)
+    {
         $query->where('repeating_id', '=', $repeating_id);
         $query->where('planned_on', '>=', $planned_on);
-
-
     }
 
     public function save(array $options = [])
     {
-
         $this->user_id = $this->user_id ?? auth()->id();
         $this->repeating_id = $this->repeating_id ?? Uuid::uuid4()->toString();
 
@@ -86,10 +78,9 @@ class Transaction extends Model
         return $return;
     }
 
-    public function saveRepeating() {
-
+    public function saveRepeating()
+    {
         if (!$this->exists) {
-
             return; //TODO: exception maybe?
         }
 
@@ -98,8 +89,7 @@ class Transaction extends Model
         $firstDate = (new Carbon($this->planned_on))->addMonth($transactionData['repeating_interval'])->format('Y-m-d');
 
         for ($c = 1; $c < 50; $c++) {
-
-            $rTransaction = new Transaction($transactionData);
+            $rTransaction = new self($transactionData);
             $rTransaction->planned_on = $firstDate;
             $rTransaction->repeating_id = $this->repeating_id;
             $rTransaction->user_id = $this->user_id;
@@ -108,8 +98,5 @@ class Transaction extends Model
 
             $firstDate = (new Carbon($rTransaction->planned_on))->addMonth($transactionData['repeating_interval'])->format('Y-m-d');
         }
-
     }
-
-
 }

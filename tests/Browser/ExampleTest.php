@@ -13,20 +13,15 @@ use Tests\Browser\Pages\HomePage;
 use Tests\DuskTestCase;
 
 /**
- * Class ExampleTest
+ * Class ExampleTest.
  *
  * @todo Rename this class
  * @todo Add Comment
- *
- * @package Tests\Browser
  */
 class ExampleTest extends DuskTestCase
 {
-
-
     use RefreshDatabase;
     use DatabaseMigrations;
-
 
     public function setUp()
     {
@@ -35,172 +30,144 @@ class ExampleTest extends DuskTestCase
         $this->seed(TestDataSeeder::class);
     }
 
-
     /**
-     *
      * @todo Add phpdoc
+     *
      * @param array $attributes
+     *
      * @return mixed
      */
-    protected function getUser($attributes = array()) {
-
+    protected function getUser($attributes = [])
+    {
         return factory(User::class)->create($attributes);
-
     }
 
     /**
      * @todo Add phpdoc
+     *
      * @throws \Exception
      * @throws \Throwable
      */
-    public function testUserCanAddValidTransaction() {
-
-
+    public function testUserCanAddValidTransaction()
+    {
         $user = $this->getUser();
 
         $transaction = factory(Transaction::class)->make();
 
         $this->browse(function (Browser $b) use ($user, $transaction) {
-
             $b->loginAs($user)
                 ->visit(new HomePage())
                 ->openNewTransactionModal()
                 ->inputTransaction($transaction)
-                ->saveNewTransaction()
-            ;
+                ->saveNewTransaction();
         });
-
-
     }
 
     /**
      * @todo Add phpdoc
+     *
      * @throws \Exception
      * @throws \Throwable
      */
-    public function testUserSeesValidationErrors() {
-
+    public function testUserSeesValidationErrors()
+    {
         $user = $this->getUser();
 
         $this->browse(function (Browser $browser) use ($user) {
-
             $browser
                 ->loginAs($user)
                 ->visit(new HomePage())
                 ->openNewTransactionModal()
                 ->saveInvalidTransaction();
-
-
-
-
         });
-
     }
 
     /**
      * @todo Add phpdoc
+     *
      * @throws \Exception
      * @throws \Throwable
      */
-    public function testUserSeeHisTransactionList() {
-
-
+    public function testUserSeeHisTransactionList()
+    {
         $user = $this->getUser();
 
-        $this->browse(function(Browser $browser) use ($user) {
-
+        $this->browse(function (Browser $browser) use ($user) {
             $browser
                 ->loginAs($user)
                 ->visit(new HomePage())
-                ->browseTransactionList()
-
-                ;
-
+                ->browseTransactionList();
         });
-
     }
 
     /**
      * @todo Add phpdoc
+     *
      * @throws \Exception
      * @throws \Throwable
      */
-    public function testUserSeesTransactionAdded() {
-
+    public function testUserSeesTransactionAdded()
+    {
         $user = $this->getUser();
 
         $transaction = factory(Transaction::class)->make([
-            'planned_on' => Carbon::now()->startOfMonth()->addDays(rand(0,15))->format('Y-m-d')
+            'planned_on' => Carbon::now()->startOfMonth()->addDays(rand(0, 15))->format('Y-m-d'),
         ]);
 
         $this->browse(function (Browser $browser) use ($user, $transaction) {
-
             $browser->loginAs($user)
                 ->visit(new HomePage())
                 ->openNewTransactionModal()
                 ->inputTransaction($transaction)
                 ->saveNewTransaction()
-                ->validateTransactionOnList($transaction)
-
-                ;
-
+                ->validateTransactionOnList($transaction);
         });
-
     }
 
     /**
      * @todo Add phpdoc
+     *
      * @throws \Exception
      * @throws \Throwable
      */
-    public function testUserCanOnlyAddTransactionToHisAccount() {
-
-
+    public function testUserCanOnlyAddTransactionToHisAccount()
+    {
         $firstUser = $this->getUser();
         $firstTransaction = factory(Transaction::class)->make([
-            'planned_on' => Carbon::now()->startOfMonth()->addDays(rand(0,15))->format('Y-m-d')
+            'planned_on' => Carbon::now()->startOfMonth()->addDays(rand(0, 15))->format('Y-m-d'),
         ]);
 
         $this->browse(function (Browser $browser) use ($firstUser, $firstTransaction) {
-
-          $browser
+            $browser
               ->loginAs($firstUser)
               ->visit(new HomePage())
               ->openNewTransactionModal()
               ->inputTransaction($firstTransaction)
               ->saveNewTransaction()
-              ->validateTransactionOnList($firstTransaction)
-              ;
-
+              ->validateTransactionOnList($firstTransaction);
         });
 
         $secondUser = $this->getUser();
         $secondTransaction = factory(Transaction::class)->make([
-            'planned_on' => Carbon::now()->startOfMonth()->addDays(rand(0,15))->format('Y-m-d')
+            'planned_on' => Carbon::now()->startOfMonth()->addDays(rand(0, 15))->format('Y-m-d'),
         ]);
 
         $this->browse(function (Browser $browser) use ($secondUser, $secondTransaction, $firstTransaction) {
-
             $browser
                 ->loginAs($secondUser)
                 ->visit(new HomePage())
                 ->openNewTransactionModal()
                 ->inputTransaction($secondTransaction)
                 ->saveNewTransaction()
-                ->validateTransactionOnList($secondTransaction)
-                ;
+                ->validateTransactionOnList($secondTransaction);
             $browser->assertDontSee($firstTransaction->description);
-
         });
 
         $this->browse(function (Browser $browser) use ($firstUser, $secondTransaction) {
-
             $browser
                 ->loginAs($firstUser)
                 ->visit(new HomePage())
-                ->assertDontSee($secondTransaction->description)
-                ;
-
+                ->assertDontSee($secondTransaction->description);
         });
     }
 
@@ -208,35 +175,31 @@ class ExampleTest extends DuskTestCase
      * @throws \Exception
      * @throws \Throwable
      */
-    public function testUserCanEnterRepeatingTransaction() {
+    public function testUserCanEnterRepeatingTransaction()
+    {
 
         //$this->markTestSkipped();
 
-
-
         $this->browse(function (Browser $browser) {
-
             $user = $this->getUser();
 
             $datePlanned = Carbon::now()
                 ->startOfMonth()
-                ->addDays(rand(0,15))
-                ->format('Y-m-d')
-            ;
+                ->addDays(rand(0, 15))
+                ->format('Y-m-d');
 
             $transaction = factory(Transaction::class)->make([
-                'planned_on' => $datePlanned,
-                'repeating_interval' => 1 // monthly
+                'planned_on'         => $datePlanned,
+                'repeating_interval' => 1, // monthly
             ]);
 
             $from = Carbon::now()->startOfMonth()->addMonth(1)->format('Y-m-d');
             $to = (new Carbon($from))->endOfMonth()->format('Y-m-d');
 
-            $nextTransaction = clone($transaction);
+            $nextTransaction = clone $transaction;
             $nextTransaction->planned_on = (new Carbon($datePlanned))->addMonth(1)->format('Y-m-d');
 
-
-             $browser
+            $browser
                 ->loginAs($user)
                 ->visit(new HomePage())
                 ->openNewTransactionModal()
@@ -245,11 +208,7 @@ class ExampleTest extends DuskTestCase
                 ->validateTransactionOnList($transaction)
                 ->selectValidDateRange(['from' => $from, 'to' => $to])
                 ->pause(500)
-                ->validateTransactionOnList($nextTransaction)
-                ;
-
+                ->validateTransactionOnList($nextTransaction);
         });
-
     }
-
 }

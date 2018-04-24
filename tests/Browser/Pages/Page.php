@@ -6,7 +6,6 @@ use Laravel\Dusk\Page as BasePage;
 
 abstract class Page extends BasePage
 {
-
     public function url()
     {
         return env('APP_URL');
@@ -20,7 +19,7 @@ abstract class Page extends BasePage
     public static function siteElements()
     {
         return [
-            '@app' => '#app',
+            '@app'     => '#app',
             '@element' => '#selector',
         ];
     }

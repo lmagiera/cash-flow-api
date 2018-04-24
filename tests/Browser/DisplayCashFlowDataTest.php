@@ -2,36 +2,33 @@
 
 namespace Tests\Browser;
 
-use Carbon\Carbon;
+use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\HomePage;
 use Tests\CashFlowAppUserLoggedInTestCase;
-use Tests\DuskTestCase;
-use Laravel\Dusk\Browser;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class DisplayCashFlowDataTest extends CashFlowAppUserLoggedInTestCase
 {
-
     /**
-     * @return void
      * @throws \Exception
      * @throws \Throwable
+     *
+     * @return void
      */
-    public function testUserCanSeeCashFlowData() {
-
+    public function testUserCanSeeCashFlowData()
+    {
         $this->browse(function (Browser $browser) {
 
             // create repeating transaction
             $transaction = $this->createTransaction($this->currentUser, [
                'repeating_interval' => 1,
-                'amount' => 200
+                'amount'            => 200,
             ]);
 
             // create transaction in the past
 
             $pastTransaction = $this->createTransaction($this->currentUser, [
                 'planned_on' => now()->startOfMonth()->subDays(1)->format('Y-m-d'),
-                'amount' => 200
+                'amount'     => 200,
             ]);
 
             $cashFlowStart = now()->startOfMonth()->format('Y-m-d');
@@ -53,16 +50,7 @@ class DisplayCashFlowDataTest extends CashFlowAppUserLoggedInTestCase
                 ->assertSee($transaction->amount)
 
                 ->assertSee($cashFlowEnd)
-                ->assertSee($cashFlowEndAmount)
-
-
-
-
-            ;
-
+                ->assertSee($cashFlowEndAmount);
         });
-
-
     }
-
 }

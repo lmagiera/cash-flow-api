@@ -15,13 +15,14 @@ class LoginPage extends Page
      */
     public function url()
     {
-        return parent::url()."login";
+        return parent::url().'login';
     }
 
     /**
      * Assert that the browser is on the page.
      *
-     * @param  Browser  $browser
+     * @param Browser $browser
+     *
      * @return void
      */
     public function assert(Browser $browser)
@@ -41,27 +42,19 @@ class LoginPage extends Page
         ];
     }
 
-    public function enterUserCredentials(Browser $browser, User $user, $rememberMe = false) {
-
-        $browser->within(new LoginFormComponent(), function (Browser $browser) use ($user, $rememberMe){
-
+    public function enterUserCredentials(Browser $browser, User $user, $rememberMe = false)
+    {
+        $browser->within(new LoginFormComponent(), function (Browser $browser) use ($user, $rememberMe) {
             $browser
-                ->enterCredentials($user, $rememberMe)
-            ;
-
+                ->enterCredentials($user, $rememberMe);
         });
-
     }
 
-    public function submitLogin(Browser $browser) {
-
+    public function submitLogin(Browser $browser)
+    {
         $browser->within(new LoginFormComponent(), function (Browser $browser) {
-
             $browser
-                ->submit()
-            ;
-
+                ->submit();
         });
-
     }
 }

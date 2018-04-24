@@ -14,9 +14,7 @@ class ChangeTransactionRepeatingIdLength extends Migration
     public function up()
     {
         Schema::table('transactions', function (Blueprint $table) {
-
             $table->string('repeating_id', 36)->change();
-
         });
     }
 

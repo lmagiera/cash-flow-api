@@ -4,75 +4,67 @@ namespace Tests\Browser;
 
 use App\User;
 use Carbon\Carbon;
+use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Dusk\Browser;
 use Tests\Browser\Pages\HomePage;
 use Tests\DuskTestCase;
-use Laravel\Dusk\Browser;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
 
 class SelectDateRangeNavigationTest extends DuskTestCase
 {
-
     use RefreshDatabase, DatabaseMigrations;
 
     /**
      * A Dusk test example.
      *
-     * @return void
      * @throws \Exception
      * @throws \Throwable
+     *
+     * @return void
      */
     public function testUserSeeNextDateRangeButton()
     {
         $this->browse(function (Browser $browser) {
-
-
             $user = factory(User::class)->create();
 
             $browser
                 ->loginAs($user)
                 ->visit(new HomePage())
                 ->assertVisible('@btn-date-range-next-control');
-            ;
-
         });
     }
 
     /**
      * A Dusk test example.
      *
-     * @return void
      * @throws \Exception
      * @throws \Throwable
+     *
+     * @return void
      */
     public function testUserSeePrevDateRangeButton()
     {
         $this->browse(function (Browser $browser) {
-
-
             $user = factory(User::class)->create();
 
             $browser
                 ->loginAs($user)
                 ->visit(new HomePage())
                 ->assertVisible('@btn-date-range-prev-control');
-            ;
-
         });
     }
 
     /**
      * A Dusk test example.
      *
-     * @return void
      * @throws \Exception
      * @throws \Throwable
+     *
+     * @return void
      */
-    public function testCanMoveMonthAhead() {
-
+    public function testCanMoveMonthAhead()
+    {
         $this->browse(function (Browser $browser) {
-
-
             $user = factory(User::class)->create();
 
             $from = Carbon::now()->startOfMonth()->format('Y-m-d');
@@ -87,25 +79,21 @@ class SelectDateRangeNavigationTest extends DuskTestCase
                 ->selectValidDateRange(['from' => $from, 'to' => $to])
                 ->click('@btn-date-range-next-control')
                 ->assertVue('from', $newFrom, '@date-range-selector-component')
-                ->assertVue('to', $newTo, '@date-range-selector-component')
-            ;
-
+                ->assertVue('to', $newTo, '@date-range-selector-component');
         });
-
     }
 
     /**
      * A Dusk test example.
      *
-     * @return void
      * @throws \Exception
      * @throws \Throwable
+     *
+     * @return void
      */
-    public function testCanMoveMonthBehind() {
-
+    public function testCanMoveMonthBehind()
+    {
         $this->browse(function (Browser $browser) {
-
-
             $user = factory(User::class)->create();
 
             $from = Carbon::now()->startOfMonth()->format('Y-m-d');
@@ -120,11 +108,7 @@ class SelectDateRangeNavigationTest extends DuskTestCase
                 ->selectValidDateRange(['from' => $from, 'to' => $to])
                 ->click('@btn-date-range-prev-control')
                 ->assertVue('from', $newFrom, '@date-range-selector-component')
-                ->assertVue('to', $newTo, '@date-range-selector-component')
-            ;
-
+                ->assertVue('to', $newTo, '@date-range-selector-component');
         });
-
     }
-
 }

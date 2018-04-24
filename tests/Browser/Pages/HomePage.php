@@ -24,7 +24,8 @@ class HomePage extends Page
     /**
      * Assert that the browser is on the page.
      *
-     * @param  Browser  $browser
+     * @param Browser $browser
+     *
      * @return void
      */
     public function assert(Browser $browser)
@@ -40,41 +41,31 @@ class HomePage extends Page
     public function elements()
     {
         return [
-            '@element' => '#selector',
-            '@input-amount-control' => 'input[id="transaction-amount"]',
-            '@input-description-control' => 'input[id="transaction-description"]',
-            '@input-planned-on-control' => 'input[id="transaction-planned-on"]',
-            '@input-actual-on-control' => 'input[id="transaction-actual-on"]',
+            '@element'                     => '#selector',
+            '@input-amount-control'        => 'input[id="transaction-amount"]',
+            '@input-description-control'   => 'input[id="transaction-description"]',
+            '@input-planned-on-control'    => 'input[id="transaction-planned-on"]',
+            '@input-actual-on-control'     => 'input[id="transaction-actual-on"]',
             '@modal-add-transaction-title' => '.modal-title',
-            '@dialog-remove-transaction' => '.message-box',
+            '@dialog-remove-transaction'   => '.message-box',
             //'@dialog-btn-yes-control' => '#btn-yes-control'
         ];
     }
 
-
-    public function browseTransactionList(Browser $browser) {
-
-
+    public function browseTransactionList(Browser $browser)
+    {
         $browser
             ->assertVisible('@tab-nav-transaction-list')
-            ->assertVisible('@table-transaction-list')
-
-        ;
-
-
-
-
+            ->assertVisible('@table-transaction-list');
     }
 
     /**
      * @param Browser $browser
+     *
      * @return HomePage
      */
-    function openNewTransactionModal(Browser $browser) {
-
-
-
-
+    public function openNewTransactionModal(Browser $browser)
+    {
         $browser
             ->assertSeeIn('@btn-add-transaction', 'Add New Transaction')
 
@@ -83,7 +74,6 @@ class HomePage extends Page
 
             ->assertVisible('@modal-add-transaction')
             //->assertSeeIn('@modal-add-transaction-title', 'Add New Transaction')
-
 
             /* Check for all fields */
 
@@ -118,20 +108,13 @@ class HomePage extends Page
             ->assertSeeIn('@btn-save-transaction', 'Save')
 
             ->assertVisible('@btn-close-add-new-transaction')
-            ->assertSeeIn('@btn-close-add-new-transaction', 'Cancel')
+            ->assertSeeIn('@btn-close-add-new-transaction', 'Cancel');
 
-            ;
-
-
-
-            return $this;
-
-
-
+        return $this;
     }
 
-    public function inputTransaction(Browser $browser, Transaction $t) {
-
+    public function inputTransaction(Browser $browser, Transaction $t)
+    {
         $browser
 
             ->waitFor('@modal-add-transaction')
@@ -150,18 +133,11 @@ class HomePage extends Page
             //->assertVue('transaction.actual_on', $t->actual_on, '@tool-bar-component')
 
             ->select('@input-repeating-control', $t->repeating_interval)
-            ->assertVue('transaction.repeating_interval', $t->repeating_interval, '@tool-bar-component')
-
-
-        ;
-
-
-
-
+            ->assertVue('transaction.repeating_interval', $t->repeating_interval, '@tool-bar-component');
     }
 
-    public function saveInvalidTransaction(Browser $browser) {
-
+    public function saveInvalidTransaction(Browser $browser)
+    {
         $browser
 
             ->waitFor('@modal-add-transaction')
@@ -184,29 +160,20 @@ class HomePage extends Page
             ->assertVue('errors["transaction.planned_on"][0]',
                 'The transaction.planned on field is required.', '@tool-bar-component')
             ->assertVue('errors["transaction.repeating_interval"][0]',
-                'The selected transaction.repeating interval is invalid.', '@tool-bar-component')
-            ;
-
-
+                'The selected transaction.repeating interval is invalid.', '@tool-bar-component');
     }
 
-    public function attemptSaveTransaction(Browser $browser) {
-
+    public function attemptSaveTransaction(Browser $browser)
+    {
         $browser
             ->waitFor('@modal-add-transaction')
             ->assertVisible('@modal-add-transaction')
 
-            ->click('@btn-save-transaction')
-
-
-        ;
-
+            ->click('@btn-save-transaction');
     }
 
-
-
-    public function saveNewTransaction(Browser $browser) {
-
+    public function saveNewTransaction(Browser $browser)
+    {
         $browser
             ->waitFor('@modal-add-transaction')
             ->assertVisible('@modal-add-transaction')
@@ -214,52 +181,34 @@ class HomePage extends Page
             ->click('@btn-save-transaction')
             ->waitUntilMissing('@modal-add-transaction')
             ->pause(1000) // wait for server call
-
-        ;
-
-
-
+;
     }
 
-
-    public function validateTransactionOnList(Browser $browser, Transaction $transaction) {
-
-
+    public function validateTransactionOnList(Browser $browser, Transaction $transaction)
+    {
         $browser
             ->assertSeeIn('@table-transaction-list', $transaction->description)
             ->assertSeeIn('@table-transaction-list', $transaction->amount)
-            ->assertSeeIn('@table-transaction-list', $transaction->planned_on)
-            ;
-
-
-
-
+            ->assertSeeIn('@table-transaction-list', $transaction->planned_on);
     }
 
-    public function validateTransactionNotOnList(Browser $browser, Transaction $transaction) {
-
+    public function validateTransactionNotOnList(Browser $browser, Transaction $transaction)
+    {
         $browser
             //->assertDontSeeIn('@table-transaction-list', $transaction->description)
             //->assertDontSeeIn('@table-transaction-list', $transaction->amount)
-            ->assertDontSeeIn('@table-transaction-list', $transaction->planned_on)
-        ;
-
-
+            ->assertDontSeeIn('@table-transaction-list', $transaction->planned_on);
     }
 
-    public function validateTransactionsOnList(Browser $browser, Collection $transactions) {
-
+    public function validateTransactionsOnList(Browser $browser, Collection $transactions)
+    {
         $transactions->each(function ($transaction) use ($browser) {
-
             $this->validateTransactionOnList($browser, $transaction);
-
         });
-
     }
 
-    public function selectValidDateRange(Browser $browser, array $dates) {
-
-
+    public function selectValidDateRange(Browser $browser, array $dates)
+    {
         $browser->assertVisible('@input-date-from-control');
         $browser->assertVisible('@input-date-to-control');
 
@@ -276,11 +225,10 @@ class HomePage extends Page
 
         $browser->assertVue('from', $dates['from'], '@date-range-selector-component');
         $browser->assertVue('to', $dates['to'], '@date-range-selector-component');
-
     }
 
-    public function validateDateRangeIsOnCurrentMonth(Browser $browser) {
-
+    public function validateDateRangeIsOnCurrentMonth(Browser $browser)
+    {
         $from = Carbon::now()->startOfMonth()->format('Y-m-d');
         $to = Carbon::now()->endOfMonth()->format('Y-m-d');
 
@@ -289,57 +237,46 @@ class HomePage extends Page
             ->assertVue('from', $from, '@date-range-selector-component')
             ->assertVue('to', $to, '@date-range-selector-component')
 
-            ->assertValue( '@input-date-from-control', $from)
-            ->assertValue('@input-date-to-control', $to)
-
-            ;
-
-
+            ->assertValue('@input-date-from-control', $from)
+            ->assertValue('@input-date-to-control', $to);
     }
 
-
-    public function saveTransaction(Browser $browser, Transaction $transaction) {
-        
+    public function saveTransaction(Browser $browser, Transaction $transaction)
+    {
         $this->openNewTransactionModal($browser);
         $this->inputTransaction($browser, $transaction);
         $this->saveNewTransaction($browser);
         $browser->pause(1500);
         $this->validateTransactionOnList($browser, $transaction);
-
-
     }
 
-    public function deleteSingleTransaction(Browser $browser, Transaction $transaction) {
-
+    public function deleteSingleTransaction(Browser $browser, Transaction $transaction)
+    {
         $this->validateTransactionOnList($browser, $transaction);
 
         $browser
             ->click('@btn-remove-transaction-control')
             ->waitFor('@dialog-remove-transaction')
-            ->within("@dialog-remove-transaction", function (Browser $browser){
-
+            ->within('@dialog-remove-transaction', function (Browser $browser) {
                 $element = WebDriverBy::cssSelector('#btn-yes-control');
                 $browser->driver->wait()->until(WebDriverExpectedCondition::presenceOfElementLocated($element));
                 $browser->pause(1000);
                 $browser->driver->findElement($element)->click();
                 $browser
-                    ->waitUntilMissing('@dialog-remove-transaction')
-                ;
+                    ->waitUntilMissing('@dialog-remove-transaction');
             })
             ->pause(1000)
-            ->validateTransactionNotOnList($transaction)
-        ;
-
+            ->validateTransactionNotOnList($transaction);
     }
 
-    public function deleteRepeatingTransaction(Browser $browser, Transaction $transaction) {
-
+    public function deleteRepeatingTransaction(Browser $browser, Transaction $transaction)
+    {
         $this->validateTransactionOnList($browser, $transaction);
 
         $browser
             ->click('@btn-remove-transaction-control')
             ->waitFor('@dialog-remove-transaction')
-            ->within("@dialog-remove-transaction", function (Browser $browser){
+            ->within('@dialog-remove-transaction', function (Browser $browser) {
 
                 //$browser->screenshot('100-dialog');
 
@@ -349,24 +286,20 @@ class HomePage extends Page
                 $browser->driver->findElement($element)->click();
                 //$browser->screenshot('101-dialog');
                 $browser
-                    ->waitUntilMissing('@dialog-remove-transaction')
-                ;
+                    ->waitUntilMissing('@dialog-remove-transaction');
             })
             ->pause(1000)
             ->validateTransactionNotOnList($transaction);
-
-
     }
 
-    public function deleteSingleRepeatingTransaction(Browser $browser, Transaction $transaction) {
-
-
+    public function deleteSingleRepeatingTransaction(Browser $browser, Transaction $transaction)
+    {
         $this->validateTransactionOnList($browser, $transaction);
 
         $browser
             ->click('@btn-remove-transaction-control')
             ->waitFor('@dialog-remove-transaction')
-            ->within("@dialog-remove-transaction", function (Browser $browser){
+            ->within('@dialog-remove-transaction', function (Browser $browser) {
 
                 //$browser->screenshot('100-dialog');
 
@@ -376,30 +309,23 @@ class HomePage extends Page
                 $browser->driver->findElement($element)->click();
                 //$browser->screenshot('101-dialog');
                 $browser
-                    ->waitUntilMissing('@dialog-remove-transaction')
-                ;
+                    ->waitUntilMissing('@dialog-remove-transaction');
             })
             ->pause(1000)
             ->validateTransactionNotOnList($transaction);
-
-
     }
 
-    public function openCashFLowTab(Browser $browser) {
-
+    public function openCashFLowTab(Browser $browser)
+    {
         $browser
-            ->assertVisible("@tab-cash-flow-control")
+            ->assertVisible('@tab-cash-flow-control')
             ->click('@tab-cash-flow-control')
-            ->pause(500)
-            ;
-
+            ->pause(500);
     }
 
-    public function nextDateRange(Browser $browser) {
-
+    public function nextDateRange(Browser $browser)
+    {
         $browser->click('@btn-date-range-next-control');
         $browser->pause(500);
-
     }
-
 }

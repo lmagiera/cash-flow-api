@@ -16,23 +16,20 @@ class RegisterUserTest extends CashFlowAppTestCase
     /**
      * A Dusk test example.
      *
-     * @return void
      * @throws \Exception
      * @throws \Throwable
+     *
+     * @return void
      */
     public function testValidUserCanRegister()
     {
         $this->browse(function (Browser $browser) {
-
             $user = $this->makeUser();
 
             $browser
                 ->visit(new RegisterPage())
                 ->registerUser($user)
-                ->waitForText($user->name)
-            ;
-
-
+                ->waitForText($user->name);
         });
     }
 
@@ -40,14 +37,13 @@ class RegisterUserTest extends CashFlowAppTestCase
      * @throws \Exception
      * @throws \Throwable
      */
-    public function testInvalidUserSeeValidationMessages() {
-
+    public function testInvalidUserSeeValidationMessages()
+    {
         $this->browse(function (Browser $browser) {
-
             $user = $this->makeUser([
-                'email' => '',
-                'name' => '',
-                'password' => ''
+                'email'    => '',
+                'name'     => '',
+                'password' => '',
 
             ]);
 
@@ -56,12 +52,7 @@ class RegisterUserTest extends CashFlowAppTestCase
                 ->registerUser($user)
                 ->waitForText('The name field is required.')
                 ->waitForText('The email field is required.')
-                ->waitForText('The password field is required.')
-            ;
-
-
+                ->waitForText('The password field is required.');
         });
-
-
     }
 }
