@@ -10,7 +10,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" id="tab-graphs-tab" data-toggle="tab" href="#tab-graphs" dusk="tabtcashflow-control" >Cash Flow</a>
+                <a class="nav-link" id="tab-graphs-tab" data-toggle="tab" href="#tab-graphs" dusk="tab-cash-flow-control">Cash Flow</a>
             </li>
 
         </ul>
@@ -59,19 +59,15 @@
                 </table>
 
             </div>
+
             <div class="tab-pane fade" id="tab-graphs" role="tabpanel">
-
-
-                <div id="chart-canvas-contrainer" style="position: relative; width: 99%">
-                    <canvas id="chart-canvas">Canvas Text</canvas>
+                <div id="chart-canvas-container" style="position: relative; width: 99%" dusk="graph-cash-flow">
+                    <canvas id="chart-canvas"></canvas>
                 </div>
-
             </div>
 
         </div>
-
     </div>
-
 </template>
 
 <script>
@@ -85,7 +81,16 @@
             return {
                 transactions: [],
                 from: '',
-                to: ''
+                to: '',
+                cashflowData: {
+                    data: []
+                },
+                chart: {
+                    instance: null
+                }
+
+
+
             }
 
         },
@@ -96,22 +101,21 @@
 
         },
 
+
+
         methods: {
 
             refresh : function () {
 
                 let url = 'transaction';
 
-                if (this.from != '' && this.to != '') {
+                if (this.from !== '' && this.to !== '') {
                     url += '?from=' + this.from + '&to=' + this.to;
                 }
-
-                console.log('Refersh ' + url);
 
                 this.http.get(url).then(response => {
 
                     this.transactions = response.data;
-                    console.log(response.data);
 
                 }).catch(e => {
                     this.$notifier.danger("There was an error processing your request.<br>" + e.response.status + ": " + e.response.statusText);
@@ -123,17 +127,13 @@
 
                 let url = "cashflow";
 
-                if (this.from != '' && this.to != '') {
+                if (this.from !== '' && this.to !== '') {
                     url += '?from=' + this.from + '&to=' + this.to;
                 }
-
-                console.log('Refersh URL CASH FLOW' + url);
 
                 this.http.get(url).then(response => {
 
                     const mydata = response.data.data;
-
-                    console.log(mydata);
 
                     let labels = [];
                     let data = [];
@@ -152,45 +152,15 @@
                     labels.push(mydata.cash_flow_end.date);
                     data.push(mydata.cash_flow_end.amount);
 
-                    console.log(labels);
-                    console.log(data);
-
-
-
-                    let ctx = $("#chart-canvas");
-
-                    const myChart = new chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: labels,
-                            datasets: [{
-                                label: 'Cash Flow',
-                                data: data,
-                                backgroundColor: ['rgba(144, 248, 53, 0.42)']
-                            }]
-
-                        },
-                        options: {scales: {
-                                yAxes: [{
-                                    ticks: {
-                                        beginAtZero:true
-                                    }
-                                }]
-                            }}
-                    });
-
+                    this.chart.instance.data.labels = labels;
+                    this.chart.instance.data.datasets[0].data = data;
+                    this.chart.instance.update();
 
 
                 }).catch(e => {
                     console.log(e);
                     this.$notifier.danger("There was an error processing your request.<br>" + e.response.status + ": " + e.response.statusText);
                 })
-
-
-
-
-
-
 
 
             },
@@ -261,12 +231,38 @@
 
             const $list = this;
 
+
+            let ctx = $("#chart-canvas");
+
+            this.chart.instance = new chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: this.chart.labels,
+                    datasets: [{
+                        label: 'Cash Flow',
+                        data: this.chart.data,
+                        backgroundColor: ['rgba(144, 248, 53, 0.42)']
+                    }]
+
+                },
+                options: {scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true
+                            }
+                        }]
+                    }}
+            });
+
+
+
+            // hook tab changing and refresh cashflow view
+
             $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 
                 e.target // newly activated tab
                 e.relatedTarget // previous active tab
 
-                console.log();
 
                 if ( $(e.target).text().toLowerCase() != "cash flow") {
                     return;
