@@ -29,7 +29,6 @@ abstract class CashFlowAppUserLoggedInTestCase extends CashFlowAppTestCase
                 $this->currentUser = $this->createUser();
                 $browser->resize(1600, 1200);
                 $browser->loginAs($this->currentUser);
-
             });
         } catch (\Exception $e) {
             throw $e;
