@@ -28,8 +28,6 @@ class SelectDateRangeTest extends CashFlowAppUserLoggedInTestCase
             $from = Carbon::now()->startOfMonth()->format('Y-m-d');
             $to = Carbon::now()->endOfMonth()->format('Y-m-d');
 
-            $user = $this->currentUser;
-
             // add few transactions within tested dates
 
             $transactions = [];
@@ -51,7 +49,7 @@ class SelectDateRangeTest extends CashFlowAppUserLoggedInTestCase
             $browser
                 ->visit(new HomePage())
                 ->selectValidDateRange(['from' => $from, 'to' => $to])
-                ->pause(500)
+                ->pause(1500)
                 ->validateTransactionsOnList(collect($transactions))
                 ->validateTransactionNotOnList($transaction);
         });
