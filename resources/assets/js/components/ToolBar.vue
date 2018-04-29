@@ -71,22 +71,6 @@
 
         </div>
 
-        <!--
-        <div class="form-group" dusk="input-actual-on">
-            <label for="transaction-actual-on" class="col-form-label">Date Actual At:</label>
-            <input type="text" class="form-control" id="transaction-actual-on"
-                    v-model="transaction.actual_on">
-            <div class="invalid-feedback"></div>
-        </div>
-
-        <div class="form-group" dusk="input-varying">
-            <div class="custom-control custom-checkbox">
-                <input type="checkbox" class="custom-control-input" id="transaction-varying">
-                <label class="custom-control-label" for="transaction-varying">Varying</label>
-            </div>
-        </div>
-        -->
-
         <div class="form-group" dusk="input-repeating">
             <repeat-selector v-bind:hasErrors="hasErrors"
                              v-bind:errors="errors"

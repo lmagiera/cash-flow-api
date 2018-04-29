@@ -13,11 +13,20 @@ require("./bootstrap");
 window.Vue = require("vue");
 
 
+/**
+ * Load Message Box plugin
+ */
 import MessageBox from "./components/MessageBox.plugin.js";
+/**
+ * Load AirbnbStyleDatepicker
+ */
+import AirbnbStyleDatepicker from "vue-airbnb-style-datepicker";
+import "vue-airbnb-style-datepicker/dist/styles.css";
 
 Vue.use(MessageBox);
 
-
+const datepickerOptions = {};
+window.Vue.use(AirbnbStyleDatepicker, datepickerOptions);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

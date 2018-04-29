@@ -3,34 +3,42 @@
 
         <form class="form-inline d-flex flex-row">
 
-            <h6 class="d-md-none d-sm-inline mr-4 text-primary">{{from}} - {{to}}</h6>
-
             <div>
 
-                <div class="input-group input-daterange float-right">
-
-
+                <div class="input-group float-right">
 
                     <div class="input-group-prepend">
-                        <button type="button" class="btn btn-outline-secondary"
+                        <button type="button" class="btn btn-outline-secondary mr-1"
                                 v-on:click="prev"
                                 dusk="btn-date-range-prev-control">
                             <i class="fa fa-lg fa-arrow-circle-left" aria-hidden="true"></i>
                         </button>
                     </div>
 
-                    <input name="from" id="input-date-from-control" type="text" class="d-none d-md-inline form-control" v-model="from" dusk="input-date-from-control">
-                    <div class="input-group-append d-none d-md-flex">
-                        <div class="input-group-text">
-                            <i class="fa fa-calendar" aria-hidden="true"></i>
-                        </div>
+                    <div class="datepicker-trigger">
+                        <button
+                                class="btn btn-outline-primary mr-1"
+                                type="text"
+                                id="datepicker-trigger"
+                                placeholder="Select dates"
+                                :value="formatDates(from, to)"
+                                dusk="btn-select-date-range-control"
+                        >{{from}} | {{to}}</button>
+
+                        <AirbnbStyleDatepicker
+
+                                :trigger-element-id="'datepicker-trigger'"
+                                :mode="'range'"
+                                :fullscreen-mobile="true"
+                                :date-one="from"
+                                :date-two="to"
+                                @date-one-selected="val => { from = val }"
+                                @date-two-selected="val => { to = val }"
+                                @apply="applyDateRange"
+                        />
+
                     </div>
-                    <input name="to" id="input-date-to-control" type="text" class="d-none d-md-inline form-control" v-model="to" dusk="input-date-to-control">
-                    <div class="input-group-append d-none d-md-flex">
-                        <div class="input-group-text">
-                            <i class="fa fa-calendar" aria-hidden="true"></i>
-                        </div>
-                    </div>
+
                     <div class="input-group-append">
                         <button type="button" class="btn btn-outline-secondary"
                                 v-on:click="next"
@@ -38,27 +46,20 @@
                             <i class="fa fa-lg fa-arrow-circle-right" aria-hidden="true"></i>
                         </button>
                     </div>
-                    <!--
-                    <div class="input-group-append">
-                        <button type="button" class="btn btn-primary" v-on:click="applyDateRange" dusk="btn-apply-control">
-                            <i class="fa fa-check" aria-hidden="true"></i>
-                        </button>
-                    </div>
-                    -->
                 </div>
             </div>
-
-
-
-
-
-
         </form>
+
+
     </div>
 </template>
 
 <script>
+
+    import format from 'date-fns/format';
+
     export default {
+
         name: "date-range-selector",
 
         props: ['http'],
@@ -67,38 +68,13 @@
 
             return {
                 from: '',
-                to: ''
+                to: '',
+                dateFormat: 'YYYY-MM-DD',
             }
         },
 
 
         mounted() {
-
-            let $this = this;
-
-            $('.input-daterange')
-                .datepicker({format: "yyyy-mm-dd", autoclose: true})
-                .on('changeDate', function(e) {
-
-
-                    console.log("Date Changed!");
-                    console.log(e.target);
-
-                    $this.from = $('#input-date-from-control').val();
-                    $this.to = $('#input-date-to-control').val();
-
-                    if (moment($this.from).diff($this.to) > 0) {
-                        $this.to = $this.from;
-                    }
-
-                    $this.applyDateRange();
-
-            });
-
-
-
-
-
 
             this.from = moment().startOf('month').format('YYYY-MM-DD');
             this.to = moment().endOf('month').format('YYYY-MM-DD');
@@ -110,13 +86,18 @@
 
         methods: {
 
+            formatDates(dateOne, dateTwo) {
+                let formattedDates = ''
+                if (dateOne) {
+                    formattedDates = format(dateOne, this.dateFormat)
+                }
+                if (dateTwo) {
+                    formattedDates += ' | ' + format(dateTwo, this.dateFormat)
+                }
+                return formattedDates
+            },
+
             applyDateRange: function() {
-
-                $('.input-daterange input[name="from"]').datepicker('update', this.from);
-                $('.input-daterange input[name="to"]').datepicker('update', this.to);
-
-
-
 
                 this.$bus.$emit('date-range-applied', {from: this.from, to: this.to});
 

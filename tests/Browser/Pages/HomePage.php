@@ -8,6 +8,7 @@ use Facebook\WebDriver\WebDriverBy;
 use Facebook\WebDriver\WebDriverExpectedCondition;
 use Illuminate\Support\Collection;
 use Laravel\Dusk\Browser;
+use Tests\Browser\Components\AirBnbStyleDateRangeSelector;
 
 class HomePage extends Page
 {
@@ -209,22 +210,9 @@ class HomePage extends Page
 
     public function selectValidDateRange(Browser $browser, array $dates)
     {
-        $browser->assertVisible('@input-date-from-control');
-        $browser->assertVisible('@input-date-to-control');
-
-        $browser->clear('@input-date-from-control');
-        $browser->type('@input-date-from-control', $dates['from']);
-        $browser->keys('@input-date-from-control', '{TAB}');
-        $browser->screenshot('001-value-from');
-
-        $browser->clear('@input-date-to-control');
-        $browser->type('@input-date-to-control', $dates['to']);
-        $browser->keys('@input-date-to-control', '{ENTER}');
-        $browser->keys('@input-date-to-control', '{TAB}');
-        $browser->screenshot('002-value-to');
-
-        $browser->assertVue('from', $dates['from'], '@date-range-selector-component');
-        $browser->assertVue('to', $dates['to'], '@date-range-selector-component');
+        $browser->within(new AirBnbStyleDateRangeSelector(), function (Browser $browser) use ($dates) {
+            $browser->selectDates($dates);
+        });
     }
 
     public function validateDateRangeIsOnCurrentMonth(Browser $browser)
@@ -237,8 +225,9 @@ class HomePage extends Page
             ->assertVue('from', $from, '@date-range-selector-component')
             ->assertVue('to', $to, '@date-range-selector-component')
 
-            ->assertValue('@input-date-from-control', $from)
-            ->assertValue('@input-date-to-control', $to);
+            ->within(new AirBnbStyleDateRangeSelector(), function (Browser $browser) use ($from, $to) {
+                $browser->assertValue('@btn-open-date-range-selector', $from.' | '.$to);
+            });
     }
 
     public function saveTransaction(Browser $browser, Transaction $transaction)
