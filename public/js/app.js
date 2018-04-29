@@ -33439,12 +33439,13 @@ window.Vue = __webpack_require__(151);
  * Load Message Box plugin
  */
 
-Vue.use(__WEBPACK_IMPORTED_MODULE_0__components_MessageBox_plugin_js__["a" /* default */]);
-
 /**
  * Load AirbnbStyleDatepicker
  */
 
+
+
+Vue.use(__WEBPACK_IMPORTED_MODULE_0__components_MessageBox_plugin_js__["a" /* default */]);
 
 var datepickerOptions = {};
 window.Vue.use(__WEBPACK_IMPORTED_MODULE_1_vue_airbnb_style_datepicker__["a" /* default */], datepickerOptions);

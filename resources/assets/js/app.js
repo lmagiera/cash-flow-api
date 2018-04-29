@@ -20,8 +20,8 @@ import MessageBox from "./components/MessageBox.plugin.js";
 /**
  * Load AirbnbStyleDatepicker
  */
-import AirbnbStyleDatepicker from "vue-airbnb-style-datepicker"
-import "vue-airbnb-style-datepicker/dist/styles.css"
+import AirbnbStyleDatepicker from "vue-airbnb-style-datepicker";
+import "vue-airbnb-style-datepicker/dist/styles.css";
 
 Vue.use(MessageBox);
 
