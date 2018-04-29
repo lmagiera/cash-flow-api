@@ -14,8 +14,21 @@ window.Vue = require("vue");
 
 
 import MessageBox from "./components/MessageBox.plugin.js";
+// import component and stylesheet
+import AirbnbStyleDatepicker from 'vue-airbnb-style-datepicker'
+import 'vue-airbnb-style-datepicker/dist/styles.css'
 
 Vue.use(MessageBox);
+
+
+// see docs for available options
+const datepickerOptions = {}
+// make sure we can use it in our components
+window.Vue.use(AirbnbStyleDatepicker, datepickerOptions)
+
+
+
+
 
 
 
