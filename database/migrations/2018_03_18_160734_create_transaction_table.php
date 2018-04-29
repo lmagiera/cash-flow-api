@@ -14,10 +14,7 @@ class CreateTransactionTable extends Migration
     public function up()
     {
         Schema::create('transactions', function (Blueprint $table) {
-
-
             $table->increments('id');
-
 
             $table->string('description', 150);
             $table->decimal('amount', 15, 2);
@@ -34,8 +31,6 @@ class CreateTransactionTable extends Migration
                 ->references('id')->on('users')
                 ->onDelete('restrict')
                 ->inUpdate('cascade');
-
-
         });
     }
 

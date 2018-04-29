@@ -10,7 +10,7 @@
             </li>
 
             <li class="nav-item">
-                <a class="nav-link" id="tab-graphs-tab" data-toggle="tab" href="#tab-graphs" dusk="tabtcashflow-control" >Cash Flow</a>
+                <a class="nav-link" id="tab-graphs-tab" data-toggle="tab" href="#tab-graphs" dusk="tab-cash-flow-control">Cash Flow</a>
             </li>
 
         </ul>
@@ -19,11 +19,6 @@
             <div class="tab-pane show fade active" id="tab-transaction-list" role="tabpanel">
 
                 <h5 class="d-none d-md-block display-5 p-2">Transaction List</h5>
-
-
-
-
-
 
 
                 <table class="table table-sm table-striped" dusk="table-transaction-list">
@@ -59,19 +54,43 @@
                 </table>
 
             </div>
+
             <div class="tab-pane fade" id="tab-graphs" role="tabpanel">
-
-
-                <div id="chart-canvas-contrainer" style="position: relative; width: 99%">
-                    <canvas id="chart-canvas">Canvas Text</canvas>
+                <div id="chart-canvas-container" style="position: relative; width: 100%" dusk="graph-cash-flow">
+                    <canvas id="chart-canvas"></canvas>
                 </div>
-
+                <table class="table table-sm table-striped" dusk="table-cash-flow">
+                    <thead class="thead-dark font-weight-bold">
+                    <tr>
+                        <td scope="col" class="d-none d-md-block">Date</td>
+                        <td scope="col" class="text-right">Sum</td>
+                        <td scope="col" class="text-right">Balance</td>
+                    </tr>
+                    <tr>
+                        <td scope="col">{{cashFlowStart.date}}</td>
+                        <td scope="col"><span class="d-none d-md-inline">Beginning of the period</span></td>
+                        <td scope="col" class="text-right">{{cashFlowStart.amount}}</td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr  v-for="(item, index) in cashFlowData">
+                            <td>{{item.date}}</td>
+                            <td class="text-right">{{item.amount}}</td>
+                            <td class="text-right"> {{item.saldo}}</td>
+                        </tr>
+                    </tbody>
+                    <tfoot class="thead-dark font-weight-bold">
+                        <tr>
+                            <td>{{cashFlowEnd.date}}</td>
+                            <td><span class="d-none d-md-inline">End of the period</span></td>
+                            <td class="text-right"> {{cashFlowEnd.amount}}</td>
+                        </tr>
+                    </tfoot>
+                </table>
             </div>
 
         </div>
-
     </div>
-
 </template>
 
 <script>
@@ -85,7 +104,16 @@
             return {
                 transactions: [],
                 from: '',
-                to: ''
+                to: '',
+                cashFlowStart: {date:null, amount:0},
+                cashFlowEnd: {date:null, amount:0},
+                cashFlowData: [],
+                chart: {
+                    instance: null
+                }
+
+
+
             }
 
         },
@@ -96,22 +124,21 @@
 
         },
 
+
+
         methods: {
 
             refresh : function () {
 
                 let url = 'transaction';
 
-                if (this.from != '' && this.to != '') {
+                if (this.from !== '' && this.to !== '') {
                     url += '?from=' + this.from + '&to=' + this.to;
                 }
-
-                console.log('Refersh ' + url);
 
                 this.http.get(url).then(response => {
 
                     this.transactions = response.data;
-                    console.log(response.data);
 
                 }).catch(e => {
                     this.$notifier.danger("There was an error processing your request.<br>" + e.response.status + ": " + e.response.statusText);
@@ -123,23 +150,23 @@
 
                 let url = "cashflow";
 
-                if (this.from != '' && this.to != '') {
+                if (this.from !== '' && this.to !== '') {
                     url += '?from=' + this.from + '&to=' + this.to;
                 }
-
-                console.log('Refersh URL CASH FLOW' + url);
 
                 this.http.get(url).then(response => {
 
                     const mydata = response.data.data;
-
-                    console.log(mydata);
 
                     let labels = [];
                     let data = [];
 
                     labels.push(mydata.cash_flow_start.date);
                     data.push(mydata.cash_flow_start.amount);
+
+                    this.cashFlowStart = mydata.cash_flow_start;
+
+
 
                     $(mydata.cash_flow_data).each(function(key, item){
 
@@ -148,49 +175,23 @@
 
                     });
 
+                    this.cashFlowData = mydata.cash_flow_data;
+                    console.log(this.cashFlowData);
 
                     labels.push(mydata.cash_flow_end.date);
                     data.push(mydata.cash_flow_end.amount);
 
-                    console.log(labels);
-                    console.log(data);
+                    this.cashFlowEnd = mydata.cash_flow_end;
 
-
-
-                    let ctx = $("#chart-canvas");
-
-                    const myChart = new chart(ctx, {
-                        type: 'line',
-                        data: {
-                            labels: labels,
-                            datasets: [{
-                                label: 'Cash Flow',
-                                data: data,
-                                backgroundColor: ['rgba(144, 248, 53, 0.42)']
-                            }]
-
-                        },
-                        options: {scales: {
-                                yAxes: [{
-                                    ticks: {
-                                        beginAtZero:true
-                                    }
-                                }]
-                            }}
-                    });
-
+                    this.chart.instance.data.labels = labels;
+                    this.chart.instance.data.datasets[0].data = data;
+                    this.chart.instance.update();
 
 
                 }).catch(e => {
                     console.log(e);
                     this.$notifier.danger("There was an error processing your request.<br>" + e.response.status + ": " + e.response.statusText);
                 })
-
-
-
-
-
-
 
 
             },
@@ -261,12 +262,38 @@
 
             const $list = this;
 
+
+            let ctx = $("#chart-canvas");
+
+            this.chart.instance = new chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: this.chart.labels,
+                    datasets: [{
+                        label: 'Cash Flow',
+                        data: this.chart.data,
+                        backgroundColor: ['rgba(144, 248, 53, 0.42)']
+                    }]
+
+                },
+                options: {scales: {
+                        yAxes: [{
+                            ticks: {
+                                beginAtZero:true
+                            }
+                        }]
+                    }}
+            });
+
+
+
+            // hook tab changing and refresh cashflow view
+
             $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
 
                 e.target // newly activated tab
                 e.relatedTarget // previous active tab
 
-                console.log();
 
                 if ( $(e.target).text().toLowerCase() != "cash flow") {
                     return;

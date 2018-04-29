@@ -21,7 +21,8 @@ class RegisterPage extends Page
     /**
      * Assert that the browser is on the page.
      *
-     * @param  Browser  $browser
+     * @param Browser $browser
+     *
      * @return void
      */
     public function assert(Browser $browser)
@@ -43,20 +44,16 @@ class RegisterPage extends Page
 
     /**
      * @param Browser $browser
-     * @param User $user
+     * @param User    $user
+     *
      * @return void
      */
-    public function registerUser(Browser $browser, User $user) {
-
-        $browser->within(new RegisterForm(), function(Browser $browser) use ($user) {
-
+    public function registerUser(Browser $browser, User $user)
+    {
+        $browser->within(new RegisterForm(), function (Browser $browser) use ($user) {
             $browser
                 ->setUser($user)
-                ->submit()
-                ;
-
+                ->submit();
         });
-
     }
-
 }

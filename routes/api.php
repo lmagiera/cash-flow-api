@@ -13,9 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-
 Route::apiResource('user', 'API\UserController')->only('index');
 Route::apiResource('transaction', 'API\TransactionController');
 Route::apiResource('cashflow', 'API\CashFlowController')->only('index');
-
-
