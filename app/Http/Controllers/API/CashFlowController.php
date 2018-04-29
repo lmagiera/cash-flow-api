@@ -7,7 +7,6 @@ use App\Http\Resources\CashFlowResource;
 
 class CashFlowController extends Controller
 {
-
     public function __construct()
     {
         $this->middleware('auth:api');
@@ -22,5 +21,4 @@ class CashFlowController extends Controller
     {
         return new CashFlowResource([]);
     }
-
 }

@@ -10,23 +10,19 @@ use Tests\CashFlowAppTestCase;
 
 class CFA16Test extends CashFlowAppTestCase
 {
-
-
     use DatabaseMigrations, RefreshDatabase;
 
-
     /**
-     * CFA-16 After saving new transaction and creating new one modal box shows data from old transaction
+     * CFA-16 After saving new transaction and creating new one modal box shows data from old transaction.
      *
-     * @return void
      * @throws \Exception
      * @throws \Throwable
+     *
+     * @return void
      */
     public function testCFA16()
     {
         $this->browse(function (Browser $browser) {
-
-
             $user = $this->createUser();
             $transaction = $this->makeTransaction();
 
@@ -37,11 +33,7 @@ class CFA16Test extends CashFlowAppTestCase
                 ->openNewTransactionModal()
                 ->assertValue('@input-description-control', '')
                 ->assertValue('@input-amount-control', '0')
-                ->assertValue('@input-planned-on-control', '')
-
-                ;
-
-            
+                ->assertValue('@input-planned-on-control', '');
         });
     }
 }

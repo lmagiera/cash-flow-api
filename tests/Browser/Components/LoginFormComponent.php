@@ -21,7 +21,8 @@ class LoginFormComponent extends BaseComponent
     /**
      * Assert that the browser page contains the component.
      *
-     * @param  Browser  $browser
+     * @param Browser $browser
+     *
      * @return void
      */
     public function assert(Browser $browser)
@@ -37,35 +38,29 @@ class LoginFormComponent extends BaseComponent
     public function elements()
     {
         return [
-            '@element' => '#selector',
+            '@element'                 => '#selector',
             '@input-user-name-control' => '#email',
-            '@input-user-password' => '#password',
-            '@btn-login-control' => '#btn-login',
-            '@chk-remember-me-control' => '#checkbox-remember-me'
+            '@input-user-password'     => '#password',
+            '@btn-login-control'       => '#btn-login',
+            '@chk-remember-me-control' => '#checkbox-remember-me',
 
         ];
     }
 
-    public function enterCredentials(Browser $browser, User $user, $rememberMe = false) {
-
+    public function enterCredentials(Browser $browser, User $user, $rememberMe = false)
+    {
         $browser
             ->value('@input-user-name-control', $user->email)
-            ->value('@input-user-password', 'secret')
-            ;
+            ->value('@input-user-password', 'secret');
 
         if ($rememberMe) {
-
             $browser->check('@chk-remember-me-control');
-
         }
-
     }
 
-    public function submit(Browser $browser) {
-
+    public function submit(Browser $browser)
+    {
         $browser
-            ->click('@btn-login-control')
-            ;
-
+            ->click('@btn-login-control');
     }
 }

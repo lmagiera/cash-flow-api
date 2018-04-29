@@ -15,13 +15,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class TransactionController extends Controller
 {
-
     /**
      * TransactionController constructor.
      */
     public function __construct()
     {
-
         $this->middleware('auth:api');
     }
 
@@ -29,23 +27,22 @@ class TransactionController extends Controller
      * Display a listing of the resource.
      *
      * @param Request $request
+     *
      * @return TransactionCollection
      */
     public function index(Request $request)
     {
         $getRequest = new GetTransactionsRequest();
 
-
         $validator = Validator::make($request->query(), $getRequest->rules());
 
         $dateStart = $request->query('from');
         $dateEnd = $request->query('to');
 
-        if ( !$validator->validate() ) {
+        if (!$validator->validate()) {
             $dateStart = \Carbon\Carbon::now()->startOfMonth()->subMonth(6);
             $dateEnd = \Carbon\Carbon::now()->endOfMonth()->addMonth(6);
         }
-
 
         $transactions = Transaction::between($dateStart, $dateEnd)->ordered()->get();
 
@@ -56,6 +53,7 @@ class TransactionController extends Controller
      * Store a newly created resource in storage.
      *
      * @param PostTransactionRequest $request
+     *
      * @return TransactionResource
      */
     public function store(PostTransactionRequest $request)
@@ -70,19 +68,18 @@ class TransactionController extends Controller
             $transaction->saveRepeating();
         }
 
-
         return new TransactionResource($transaction);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Transaction $transaction
+     * @param \App\Transaction $transaction
+     *
      * @return TransactionResource
      */
     public function show(Transaction $transaction)
     {
-
         return new TransactionResource($transaction);
     }
 
@@ -90,7 +87,8 @@ class TransactionController extends Controller
      * Update the specified resource in storage.
      *
      * @param PutTransactionRequest $request
-     * @param  \App\Transaction $transaction
+     * @param \App\Transaction      $transaction
+     *
      * @return TransactionResource
      */
     public function update(PutTransactionRequest $request, Transaction $transaction)
@@ -105,34 +103,28 @@ class TransactionController extends Controller
         $transaction->save();
 
         if ($transactionData['update_all'] == true) {
-
             $repeatingId = $transaction->repeating_id;
             $repeatingInterval = $transactionData['repeating_interval'];
 
-            if ( $repeatingInterval === 0) {
-
+            if ($repeatingInterval === 0) {
                 Transaction::repeating($repeatingId, $oldPlannedOn)->withoutKey($transaction->id)->delete();
-                return new TransactionResource($transaction);
 
+                return new TransactionResource($transaction);
             }
 
             if ($repeatingInterval != $oldRepitingInterval && $repeatingInterval != 0) {
-
                 Transaction::repeating($repeatingId, $oldPlannedOn)->withoutKey($transaction->id)->delete();
                 $transaction->saveRepeating();
 
                 return new TransactionResource($transaction);
-
             }
 
-            if ( $oldPlannedOn == $transactionData['planned_on']) {
-
+            if ($oldPlannedOn == $transactionData['planned_on']) {
                 $execptDate = collect($fillables)->except('planned_on')->toArray();
                 Transaction::repeating($repeatingId, $oldPlannedOn)->update($execptDate);
+
                 return new TransactionResource($transaction);
-
             }
-
         }
 
         return new TransactionResource($transaction);
@@ -141,27 +133,27 @@ class TransactionController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param Request $request
-     * @param  \App\Transaction $transaction
-     * @return TransactionResource
+     * @param Request          $request
+     * @param \App\Transaction $transaction
+     *
      * @throws \Exception
+     *
+     * @return TransactionResource
      */
     public function destroy(Request $request, Transaction $transaction)
     {
-
-
-        if ( $request->has('all') ) {
+        if ($request->has('all')) {
             $transaction->repeating($transaction->repeating_id, $transaction->planned_on)->delete();
+
             return new TransactionResource($transaction);
         }
 
-        if ( !$transaction->exists ) {
-            throw new NotFoundHttpException("Transaction not found");
+        if (!$transaction->exists) {
+            throw new NotFoundHttpException('Transaction not found');
         }
 
         $transaction->delete();
 
         return new TransactionResource($transaction);
-
     }
 }

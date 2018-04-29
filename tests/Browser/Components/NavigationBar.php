@@ -20,7 +20,8 @@ class NavigationBar extends BaseComponent
     /**
      * Assert that the browser page contains the component.
      *
-     * @param  Browser  $browser
+     * @param Browser $browser
+     *
      * @return void
      */
     public function assert(Browser $browser)
@@ -36,21 +37,19 @@ class NavigationBar extends BaseComponent
     public function elements()
     {
         return [
-            '@text-app-name' => '.navbar-brand',
-            '@nav-profile-links' => '#navbarDropdown'
+            '@text-app-name'     => '.navbar-brand',
+            '@nav-profile-links' => '#navbarDropdown',
         ];
     }
 
-    public function openProfileDropDown(Browser $browser) {
+    public function openProfileDropDown(Browser $browser)
+    {
         $browser->click('@nav-profile-links');
     }
 
-    public function logout(Browser $browser) {
-
+    public function logout(Browser $browser)
+    {
         $browser->openProfileDropDown();
         $browser->clickLink('Logout');
-
-        ;
-
     }
 }

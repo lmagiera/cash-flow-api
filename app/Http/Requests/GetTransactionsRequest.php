@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 class GetTransactionsRequest extends Request
 {
-
     protected $method = 'GET';
 
     /**
@@ -18,7 +17,7 @@ class GetTransactionsRequest extends Request
     {
         return [
             'from' => 'date_format:"Y-m-d"|before_or_equal:to',
-            'to' => 'date_format:"Y-m-d"|after_or_equal:from'
+            'to'   => 'date_format:"Y-m-d"|after_or_equal:from',
         ];
     }
 }
