@@ -21,7 +21,8 @@ class AirBnbStyleDateRangeSelector extends BaseComponent
     /**
      * Assert that the browser page contains the component.
      *
-     * @param  Browser  $browser
+     * @param Browser $browser
+     *
      * @return void
      */
     public function assert(Browser $browser)
@@ -37,26 +38,26 @@ class AirBnbStyleDateRangeSelector extends BaseComponent
     public function elements()
     {
         return [
-            '@month-name' => '.asd__month-name',
-            '@btn-next-month-control' => '.asd__change-month-button--next button',
-            '@btn-prev-month-control' => '.asd__change-month-button--previous button',
+            '@month-name'                       => '.asd__month-name',
+            '@btn-next-month-control'           => '.asd__change-month-button--next button',
+            '@btn-prev-month-control'           => '.asd__change-month-button--previous button',
             '@elem-date-range-selector-wrapper' => '.asd__wrapper',
-            '@btn-open-date-range-selector' => '#datepicker-trigger',
-            '@btn-apply-control' => 'div.asd__action-buttons > button:nth-child(2)'
+            '@btn-open-date-range-selector'     => '#datepicker-trigger',
+            '@btn-apply-control'                => 'div.asd__action-buttons > button:nth-child(2)',
 
         ];
     }
 
-    public function selectDates(Browser $browser, array $dates) {
-
+    public function selectDates(Browser $browser, array $dates)
+    {
         $dateFrom = $dates['from'];
         $dateTo = $dates['to'];
 
         $currentDateRangeValue = $browser->value('@btn-open-date-range-selector');
 
-        list($currentDateFrom, $currentDateTo) = explode(" | ", $currentDateRangeValue);
+        list($currentDateFrom, $currentDateTo) = explode(' | ', $currentDateRangeValue);
 
-        if ( $currentDateFrom == $dateFrom && $currentDateTo == $dateTo) {
+        if ($currentDateFrom == $dateFrom && $currentDateTo == $dateTo) {
             // already set!
             return;
         }
@@ -70,14 +71,16 @@ class AirBnbStyleDateRangeSelector extends BaseComponent
         $monthDiffFrom = (new Carbon($currentDateFrom))->startOfMonth()->diffInMonths((new Carbon($dateFrom))->endOfMonth(), false);
 
         $moveFromForward = $monthDiffFrom > 0 ? true : false;
-        $btnSelector = $moveFromForward ? "@btn-next-month-control": "@btn-prev-month-control";
+        $btnSelector = $moveFromForward ? '@btn-next-month-control' : '@btn-prev-month-control';
 
-        if ($moveFromForward) $monthDiffFrom -= 1;
+        if ($moveFromForward) {
+            $monthDiffFrom -= 1;
+        }
 
-        for ($c = 0; $c<=abs($monthDiffFrom); $c++) {
+        for ($c = 0; $c <= abs($monthDiffFrom); $c++) {
             $browser->click($btnSelector);
             $addMonths = $moveFromForward ? ($c + 1) : ($c + 1) * -1;
-            $monthNow = (new Carbon($currentDateFrom))->addMonths($addMonths)->startOfMonth()->format("Y-m-d");
+            $monthNow = (new Carbon($currentDateFrom))->addMonths($addMonths)->startOfMonth()->format('Y-m-d');
             $daySelector = '*[date="'.$monthNow.'"]';
             $browser->screenshot('select-from-before-wait');
             $browser->waitFor($daySelector);
@@ -97,14 +100,14 @@ class AirBnbStyleDateRangeSelector extends BaseComponent
         $monthDiffTo = (new Carbon($currentDateFrom))->startOfMonth()->diffInMonths((new Carbon($dateTo))->endOfMonth(), false);
 
         $moveToForward = $monthDiffTo > 0 ? true : false;
-        $btnSelector = $moveToForward ? "@btn-next-month-control": "@btn-prev-month-control";
+        $btnSelector = $moveToForward ? '@btn-next-month-control' : '@btn-prev-month-control';
 
         //if ($moveToForward) $monthDiffTo -= 1;
 
         for ($c = 0; $c < abs($monthDiffTo); $c++) {
             $browser->click($btnSelector);
             $addMonths = $moveToForward ? ($c + 1) : ($c + 1) * -1;
-            $monthNow = (new Carbon($currentDateFrom))->addMonths($addMonths)->startOfMonth()->format("Y-m-d");
+            $monthNow = (new Carbon($currentDateFrom))->addMonths($addMonths)->startOfMonth()->format('Y-m-d');
             $daySelector = '*[date="'.$monthNow.'"]';
             $browser->waitFor($daySelector);
         }
@@ -125,8 +128,6 @@ class AirBnbStyleDateRangeSelector extends BaseComponent
 
         $browser->screenshot('selected-both');
 
-        $browser->assertValue('@btn-open-date-range-selector', $dateFrom." | ".$dateTo);
-
-
+        $browser->assertValue('@btn-open-date-range-selector', $dateFrom.' | '.$dateTo);
     }
 }
