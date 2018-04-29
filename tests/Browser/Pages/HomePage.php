@@ -208,15 +208,11 @@ class HomePage extends Page
         });
     }
 
-    public function selectValidDateRange(Browser $browser, array $dates) {
-
+    public function selectValidDateRange(Browser $browser, array $dates)
+    {
         $browser->within(new AirBnbStyleDateRangeSelector(), function (Browser $browser) use ($dates) {
-
             $browser->selectDates($dates);
-
         });
-
-
     }
 
     public function validateDateRangeIsOnCurrentMonth(Browser $browser)
@@ -230,13 +226,8 @@ class HomePage extends Page
             ->assertVue('to', $to, '@date-range-selector-component')
 
             ->within(new AirBnbStyleDateRangeSelector(), function (Browser $browser) use ($from, $to) {
-
-              $browser->assertValue('@btn-open-date-range-selector', $from." | ".$to);
-
-            })
-            ;
-
-
+                $browser->assertValue('@btn-open-date-range-selector', $from.' | '.$to);
+            });
     }
 
     public function saveTransaction(Browser $browser, Transaction $transaction)
