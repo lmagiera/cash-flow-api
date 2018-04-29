@@ -33435,15 +33435,18 @@ __webpack_require__(160);
 /* global Vue, axios */
 window.Vue = __webpack_require__(151);
 
+/**
+ * Load Message Box plugin
+ */
 
 Vue.use(__WEBPACK_IMPORTED_MODULE_0__components_MessageBox_plugin_js__["a" /* default */]);
 
-// import component and stylesheet
+/**
+ * Load AirbnbStyleDatepicker
+ */
 
 
-// see docs for available options
 var datepickerOptions = {};
-// make sure we can use it in our components
 window.Vue.use(__WEBPACK_IMPORTED_MODULE_1_vue_airbnb_style_datepicker__["a" /* default */], datepickerOptions);
 
 /**
