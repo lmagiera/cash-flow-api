@@ -9,19 +9,21 @@ use Tests\CashFlowAppUserLoggedInTestCase;
 class HomeLinkTest extends CashFlowAppUserLoggedInTestCase
 {
     /**
-     * @return void
      * @throws \Exception
      * @throws \Throwable
+     *
+     * @return void
      */
     public function testUserCanSeeLoginLink() {
 
         $this->browse(function (Browser $browser) {
 
-            $browser->visit("/")
+            $browser->visit('/')
                 ->assertSee('HOME')
-                ->clickLink("Home")
+                ->clickLink('Home')
                 ->on(new HomePage())
-                ;
+
+            ;
 
         });
 
