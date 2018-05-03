@@ -14,19 +14,14 @@ class HomeLinkTest extends CashFlowAppUserLoggedInTestCase
      *
      * @return void
      */
-    public function testUserCanSeeLoginLink() {
+    public function testUserCanSeeLoginLink()
+    {
 
         $this->browse(function (Browser $browser) {
-
             $browser->visit('/')
                 ->assertSee('HOME')
                 ->clickLink('Home')
-                ->on(new HomePage())
-
-            ;
-
+                ->on(new HomePage());
         });
-
-
     }
 }
