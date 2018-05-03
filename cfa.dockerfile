@@ -28,9 +28,11 @@ RUN php composer.phar install --optimize-autoloader --no-dev \
     && mkdir -p storage/framework/sessions \
     && mkdir -p storage/framework/cache \
     && mkdir -p storage/framework/views \
-    && php artisan key:generate \
-    && php artisan migrate --force \
-    && php artisan passport:install
+    && php artisan key:generate
+
+
+# && php artisan migrate --force \
+# && php artisan passport:install
 
 
 USER root
